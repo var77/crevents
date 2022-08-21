@@ -64,7 +64,7 @@ contract Event is Ownable {
     address public parentContractAddr;
 
     constructor(Utils.EventStruct memory eventData, address owner, uint256 fee) {        
-        if (maxParticipants == 0 || start == 0 || end == 0) {
+        if (eventData.maxParticipants == 0 || eventData.start == 0 || eventData.end == 0) {
             revert ProvideRequiredArguments();
         }
 

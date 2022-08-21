@@ -1,0 +1,133 @@
+html, body, #root, .App {
+  text-align: center;
+  background-color: #78bafd !important;
+}
+#root p {
+  font-family: cursive;
+}
+* {
+  font-family: 'Ropa Sans', sans-serif;
+    
+}
+
+.root {
+  background: linear-gradient(180deg, #6DBEF3 0%, #A5D9F8 40.68%, rgba(214, 238, 252, 0.17) 70.57%, rgba(255, 255, 255, 0) 94.1%);
+  position: sticky;
+  display: flex;
+  flex-direction: column;
+  align-items: center
+}
+.root {
+  height: 100vh;
+}
+
+.mintContainer {
+  margin-top: 124px;
+}
+
+.HeaderContainer {
+  background: linear-gradient(180deg, #6DBEF3 0%, #A5D9F8 40.68%, rgba(214, 238, 252, 0.17) 70.57%, rgba(255, 255, 255, 0) 94.1%);
+}
+
+.connectBtn {
+  background: #05235B;
+  border-radius: 41px;
+  color: white;
+  font-family: Roboto;
+  width: 215px;
+  height: 46px;
+  font-size: 21px;
+}
+
+.mintButton {
+  background: #05235B;
+  border-radius: 41px;
+  color: white;
+  font-family: Roboto;
+  width: 215px;
+  height: 46px;
+  font-size: 21px;
+  margin-left: 24px;
+}
+
+.headerLogo {
+  width: 700px;
+}
+@media screen and (max-width: 602px) {
+    
+  .mintContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    }
+
+    .notifText {
+      width: 200px;
+    }
+ }
+
+ .plane {
+  animation: shake 6s ease-out infinite;
+  position: absolute;
+  width: 250px;
+  margin-top: -420px;
+  transform: rotate(8deg);
+}
+
+.planeContainer {
+  position: initial;
+}
+
+.headerLogo {
+  width: 700px;
+}
+
+.headerContainer {
+  position: initial;
+}
+
+@keyframes shake {
+
+  65% { transform: translateY(-5px) rotate(5deg) }
+  65% { transform: translateY(-5px) rotate(-5deg) }
+    35% {
+        transform: translate(5px, 20px);
+     }
+  
+  }
+
+  @media only screen and (max-width: 600px) {
+    .plane {
+        left: initial;
+        width: 155px;
+        margin-top: -244px;
+    }
+  
+    .headerContainer{
+        width: initial;
+        position: initial;
+    }
+  
+    .headerLogo {
+        width: 550px;
+    }
+    .root {
+        height: 100vh;
+        position: sticky;
+        display: flex;
+        flex-direction: initial; 
+        align-items: center;
+        flex-direction: column;
+    }
+  
+    .sunny {
+      top: 41px;
+      left: -85px;
+      position: absolute;
+      width: 190px;
+      z-index: -4;
+  }
+  .logoContainer {
+    margin-top: 230px;
+  }}

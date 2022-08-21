@@ -1,7 +1,7 @@
 {
   "name": "hardhat-project",
   "scripts": {
-    "build:contracts": "hardhat run --network localhost scripts/deploy.js",
+    "build:contracts": "hardhat run --network localhost scripts/deploy.ts",
     "build:contracts:mumbai": "hardhat run --network mumbai scripts/deploy.js",
     "build:contracts:rinkeby": "hardhat run --network rinkeby scripts/deploy.js",
     "dev": "hardhat node"
