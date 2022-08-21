@@ -1,3 +1,5 @@
+@import '~antd/dist/antd.css';
+
 html, body, #root, .App {
   text-align: center;
   background-color: #78bafd !important;
@@ -7,7 +9,6 @@ html, body, #root, .App {
 }
 * {
   font-family: 'Ropa Sans', sans-serif;
-    
 }
 
 .root {
