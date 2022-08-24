@@ -2,7 +2,11 @@ import React from 'react';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 import { Button, Layout, Form, Input, Card, DatePicker } from 'antd';
-import { loadEventContract } from '../../../utils/helpers';
+import { loadEventContract } from '../../utils/helpers';
+import { useDispatch } from 'react-redux';
+import { selectCreatorContract } from '../../store/creatorContractSlice';
+import { useSelector } from 'react-redux';
+import { setEventContract } from '../../store/eventContractSlice';
 
 const { RangePicker } = DatePicker;
 
@@ -19,9 +23,11 @@ const defaultEvent = {
     preSaleTicketPrice: 9000,
 };
 
-function EventRegistration({ app: { creatorContract, setEventContract }}) {
+function EventRegistration() {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
-    console.log('createEvent', creatorContract)
+    const creatorContract = useSelector(selectCreatorContract)
+
     const createEvent = (data) => {
         console.log('createEvent: data', data, creatorContract)
         if (!creatorContract) {
@@ -40,7 +46,7 @@ function EventRegistration({ app: { creatorContract, setEventContract }}) {
                 const eventAddress = receipt.events.EventCreated.returnValues.addr;
                 const eventContract = loadEventContract(eventAddress)
                 window.eventContract = eventContract;
-                setEventContract(eventContract);
+                dispatch(setEventContract(eventContract))
                 navigate(`/event/${eventAddress}`);
             }
         });

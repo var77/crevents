@@ -4,20 +4,23 @@ import {
     connectToMetamask,
     loadContracts,
     loadWeb3
-} from '../../utils/helpers';
+} from '../utils/helpers';
+import { useDispatch } from 'react-redux'
+import { setEventContract } from '../store/eventContractSlice';
+import { setCreatorContract } from '../store/creatorContractSlice';
 
 function useInitializeApp(){
-    const [isConnected, setConnected] = useState(false);
-    const [networkNotSupported, setNetworkNotSupported] = useState(false);
-    const [eventContract, setEventContract] = useState(null);
+    const dispatch = useDispatch()
     const [isLoading, setLoading] = useState(false);
-    const [creatorContract, setCreatorContract] = useState(null);
+    const [isWalletConnected, setWalletConnected] = useState(false);
+    const [networkNotSupported, setNetworkNotSupported] = useState(false);
 
-    const initializeApp = async () => {
-        setLoading(true);
+    const initializeApp = useCallback(async () => {
+      setLoading(true);
+      try {
         await loadWeb3();
-        const [status, address] = await connectToMetamask(true);
-        setConnected(status);
+        const [status] = await connectToMetamask(true);
+        setWalletConnected(status);
         if (!status) {
           setLoading(false);
           return;
@@ -25,21 +28,26 @@ function useInitializeApp(){
         const [creatorContract, eventContract] = await loadContracts();
         if (!creatorContract) {
           setNetworkNotSupported(true);
-          return setLoading(false);
+          setLoading(false)
+          return;
         }
         setNetworkNotSupported(false);
-        setCreatorContract(creatorContract);
-        setEventContract(eventContract);
+        dispatch(setEventContract(eventContract))
+        dispatch(setCreatorContract(creatorContract))
+      } catch(error){
+        console.log('initializeApp: error', error);
+      } finally {
         setLoading(false);
-      };
+      }
+    }, [dispatch]);
 
-    const handleConnect = useCallback(async () => {
+    const handleWalletConnect = useCallback(async () => {
         const [status, _address] = await connectToMetamask();
-        setConnected(status);
+        setWalletConnected(status);
         if (status) {
           initializeApp();
         }
-      }, []);
+      }, [initializeApp]);
 
     useEffect(() => {
         initializeApp();
@@ -51,16 +59,13 @@ function useInitializeApp(){
             initializeApp();
             });
         }
-      }, []);
+      }, [initializeApp]);
 
     return {
-        isConnected,
-        handleConnect,
+        isWalletConnected,
         networkNotSupported,
         isLoading,
-        creatorContract,
-        eventContract,
-        setEventContract
+        handleWalletConnect,
     }
 }
 
