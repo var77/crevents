@@ -16,6 +16,20 @@ library Utils {
         uint256 ticketPrice;
         uint256 preSaleTicketPrice;
     }
+
+    struct EventInfoStruct {
+        string name;
+        string description;
+        string link;
+        uint256 maxParticipants;
+        uint256 registrationEnd;
+        uint256 start;
+        uint256 end;
+        uint256 ticketPrice;
+        uint256 preSaleTicketPrice;
+        bool registrationOpen;
+        bool onlyWhitelistRegistration;
+    }
 }
 
 error EventNotStarted();
@@ -64,7 +78,7 @@ contract Event is Ownable {
     address public parentContractAddr;
 
     constructor(Utils.EventStruct memory eventData, address owner, uint256 fee) {        
-        if (eventData.maxParticipants == 0 || eventData.start == 0 || eventData.end == 0) {
+        if (eventData.start == 0 || eventData.end == 0) {
             revert ProvideRequiredArguments();
         }
 
@@ -90,17 +104,29 @@ contract Event is Ownable {
     }
 
     modifier isRegistrationOpen() {
-        uint256 currTimestamp = block.timestamp;
-        console.log("Time %s %s", currTimestamp, start);
-        if (currTimestamp > start)
+        uint8 status = getRegistrationOpen(block.timestamp);
+        if (status == 1)
             revert EventAlreadyStarted();
-        if (!registrationOpen || currTimestamp > registrationEnd)
+        if (status == 2)
             revert RegistrationClosed();
-        if (participants[msg.sender])
+        if (status == 3)
             revert AlreadyRegistered();
-        if (registeredParticipantCount == maxParticipants)
+        if (status == 4)
             revert NoSeatsAvailable();
         _;
+    }
+
+    function getRegistrationOpen(uint256 currTimestamp) public view returns(uint8) {
+        if (currTimestamp > start)
+            return 1;
+        if (!registrationOpen || currTimestamp > registrationEnd)
+            return 2;
+        if (participants[msg.sender])
+            return 3;
+        if (maxParticipants > 0 && registeredParticipantCount == maxParticipants)
+            return 4;
+
+        return 0;
     }
 
     modifier onlyModerators() {
@@ -175,6 +201,22 @@ contract Event is Ownable {
     function toggleRegistration(bool _isOpen, bool _onlyWhitelist) external onlyOwner {
         registrationOpen = _isOpen;
         onlyWhitelistRegistration = _onlyWhitelist;
+    }
+
+    function getEventInfo(uint256 currTimestamp) external view returns(Utils.EventInfoStruct memory) {
+        Utils.EventInfoStruct memory evt;
+        evt.start = start;
+        evt.end = end;
+        evt.registrationEnd = registrationEnd;
+        evt.name = name;
+        evt.description = description;
+        evt.maxParticipants = maxParticipants;
+        evt.ticketPrice = ticketPrice;
+        evt.preSaleTicketPrice = preSaleTicketPrice;
+        evt.link = link;
+        evt.registrationOpen = getRegistrationOpen(currTimestamp) > 0;
+
+        return evt;
     }
 
   // whithdraw contract balance

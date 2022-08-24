@@ -25,4 +25,17 @@ contract EventCreator is Ownable {
 
         payable(owner()).transfer(contractBalance);
     }
+
+    function getEvents(uint256 offset, uint256 limit, uint256 currTimestamp) external view returns(Utils.EventInfoStruct[] memory) {
+      Utils.EventInfoStruct[] memory res;
+      uint256 maxLen = events.length;
+      for(uint256 i = offset; i < offset + limit; i++) {
+        if (i >= maxLen) break;
+        Event evt = Event(events[i]);
+        res[i] = evt.getEventInfo(currTimestamp);
+      }
+
+      return res;
+
+    }
 }
