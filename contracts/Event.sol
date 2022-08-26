@@ -27,8 +27,13 @@ library Utils {
         uint256 end;
         uint256 ticketPrice;
         uint256 preSaleTicketPrice;
+        uint256 registeredParticipantCount;
+        uint256 checkedParticipantCount;
         bool registrationOpen;
         bool onlyWhitelistRegistration;
+        bool isRegistered;
+        bool isChecked;
+        address addr;
     }
 }
 
@@ -141,8 +146,7 @@ contract Event is Ownable {
         emit ParticipantRegistered(addr);
     }
 
-    function publicRegister(bytes32) external payable isRegistrationOpen {
-        console.log("here");
+    function publicRegister() external payable isRegistrationOpen {
         if (onlyWhitelistRegistration)
             revert AddressNotWhitelisted();
         if (msg.value < ticketPrice)
@@ -215,6 +219,11 @@ contract Event is Ownable {
         evt.preSaleTicketPrice = preSaleTicketPrice;
         evt.link = link;
         evt.registrationOpen = getRegistrationOpen(currTimestamp) > 0;
+        evt.isRegistered = participants[msg.sender];
+        evt.isChecked = checkedParticipants[msg.sender];
+        evt.registeredParticipantCount = registeredParticipantCount;
+        evt.checkedParticipantCount = checkedParticipantCount;
+        evt.addr = address(this);
 
         return evt;
     }

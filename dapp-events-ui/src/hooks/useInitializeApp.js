@@ -43,6 +43,7 @@ function useInitializeApp(){
 
     const handleWalletConnect = useCallback(async () => {
         const [status, _address] = await connectToMetamask();
+        console.log({ status, _address });
         setWalletConnected(status);
         if (status) {
           initializeApp();

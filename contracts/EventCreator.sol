@@ -26,13 +26,43 @@ contract EventCreator is Ownable {
         payable(owner()).transfer(contractBalance);
     }
 
+    // getting events with offset, limit in reversed order
     function getEvents(uint256 offset, uint256 limit, uint256 currTimestamp) external view returns(Utils.EventInfoStruct[] memory) {
-      Utils.EventInfoStruct[] memory res;
       uint256 maxLen = events.length;
-      for(uint256 i = offset; i < offset + limit; i++) {
-        if (i >= maxLen) break;
+      uint256 arrLength;
+      uint256 iterLimit; 
+      uint256 reversedIndex;
+
+      // getting the length for result array
+      if (offset >= maxLen) {
+        arrLength = 0;
+      } else if ((maxLen - offset) < limit) {
+        arrLength = maxLen - offset;
+      } else {
+        arrLength = limit;
+      }
+      
+      Utils.EventInfoStruct[] memory res = new Utils.EventInfoStruct[](arrLength);
+
+      if (arrLength == 0) return res;
+
+      // getting the max iteration index
+      iterLimit = maxLen - arrLength;
+
+      // getting reversed index
+      if (arrLength > 0) {
+        reversedIndex = arrLength - 1;
+      }
+
+      uint256 i = reversedIndex;
+
+      while (true) {
         Event evt = Event(events[i]);
-        res[i] = evt.getEventInfo(currTimestamp);
+        res[reversedIndex - i] = evt.getEventInfo(currTimestamp);
+
+        if (reversedIndex - i == arrLength - 1 || i == 0) break;
+
+        i--;
       }
 
       return res;

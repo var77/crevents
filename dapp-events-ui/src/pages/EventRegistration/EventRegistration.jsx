@@ -99,7 +99,6 @@ function EventRegistration() {
                     <Form.Item
                         label="Max participants"
                         name="maxParticipants"
-                        rules={[{ required: true, message: 'Field is required!' }]}
                         >
                         <Input />
                     </Form.Item>
@@ -108,7 +107,7 @@ function EventRegistration() {
                         name="registrationEnd"
                         >
                         <DatePicker
-                            defaultValue={moment('2015/01/01', dateFormat)}
+                            defaultValue={moment(new Date(), dateFormat)}
                             format={dateFormat}
                         />
                     </Form.Item>
@@ -117,7 +116,7 @@ function EventRegistration() {
                         name="registrationEnd"
                         >
                         <RangePicker
-                            defaultValue={[moment('2015/01/01', dateFormat), moment('2015/01/01', dateFormat)]}
+                            defaultValue={[moment(new Date(), dateFormat), moment(new Date(), dateFormat)]}
                             format={dateFormat}
                         />
                     </Form.Item>

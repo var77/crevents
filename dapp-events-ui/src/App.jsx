@@ -23,7 +23,7 @@ function App() {
   const {
     isLoading,
     networkNotSupported,
-    isConnected,
+    isWalletConnected,
     handleWalletConnect,
   } = useInitializeApp();
 
@@ -51,7 +51,7 @@ function App() {
     )
   }
 
-  if(!isConnected){
+  if(!isWalletConnected){
     return (
       <CenterLayout>
         <img src={walletLoader} width="10%" alt="wallet-loader" />
