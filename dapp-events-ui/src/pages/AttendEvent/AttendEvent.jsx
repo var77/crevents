@@ -16,19 +16,19 @@ function AttendEvent(){
       const info = await eventContract.methods.getEventInfo(Math.floor(Date.now() / 1000)).call();
       setEventInfo({
         description: info.description,
-        end: new Date(+info.end),
+        end: new Date(+info.end * 1000),
         link: info.link,
         maxParticipants: +info.maxParticipants,
         name: info.name,
         onlyWhitelistRegistration: info.onlyWhitelistRegistration,
         preSaleTicketPrice: window.web3Instance.utils.fromWei(info.preSaleTicketPrice),
-        registrationEnd: new Date(+info.registrationEnd),
+        registrationEnd: new Date(+info.registrationEnd * 1000),
         registrationOpen: info.registrationOpen,
         registeredParticipantCount: info.registeredParticipantCount,
         checkedParticipantCount: info.checkedParticipantCount,
         isRegistered: info.isRegistered,
         isChecked: info.isChecked,
-        start: new Date(+info.start),
+        start: new Date(+info.start * 1000),
         ticketPrice: window.web3Instance.utils.fromWei(info.ticketPrice)
       });
       setContract(eventContract);

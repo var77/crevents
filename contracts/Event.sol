@@ -218,7 +218,7 @@ contract Event is Ownable {
         evt.ticketPrice = ticketPrice;
         evt.preSaleTicketPrice = preSaleTicketPrice;
         evt.link = link;
-        evt.registrationOpen = getRegistrationOpen(currTimestamp) > 0;
+        evt.registrationOpen = getRegistrationOpen(currTimestamp) == 0;
         evt.isRegistered = participants[msg.sender];
         evt.isChecked = checkedParticipants[msg.sender];
         evt.registeredParticipantCount = registeredParticipantCount;

@@ -16,9 +16,9 @@ const defaultEvent = {
     description: "test description",
     link: "https://example.com",
     maxParticipants: 10,
-    registrationEnd: Date.now() + 100000,
-    start: Date.now() + 200000,
-    end: Date.now() + 40000,
+    registrationEnd: Math.floor((Date.now() + 100000) / 1000),
+    start: Math.floor((Date.now() + 200000) / 1000),
+    end: Math.floor((Date.now() + 400000) / 1000),
     ticketPrice: 10000,
     preSaleTicketPrice: 9000,
 };
