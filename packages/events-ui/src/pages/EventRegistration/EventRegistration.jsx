@@ -15,10 +15,12 @@ const defaultEvent = {
     name: "Test event",
     description: "test description",
     link: "https://example.com",
+    tokenUri: "http://localhost:3333",
+    image: "https://user-images.githubusercontent.com/17221195/223807313-9953d73e-f8a8-42a6-ba74-96efb1da1c0c.png",
     maxParticipants: 10,
-    registrationEnd: Math.floor((Date.now() + 100000) / 1000),
-    start: Math.floor((Date.now() + 200000) / 1000),
-    end: Math.floor((Date.now() + 400000) / 1000),
+    registrationEnd: Math.floor((Date.now() + 1000000) / 1000),
+    start: Math.floor((Date.now() + 2000000) / 1000),
+    end: Math.floor((Date.now() + 4000000) / 1000),
     ticketPrice: 10000,
     preSaleTicketPrice: 9000,
 };
@@ -36,10 +38,10 @@ function EventRegistration() {
         console.log('after if')
         creatorContract.methods.createEvent({
             ...defaultEvent,
-            name: data.name,
-            description: data.description,
-            link: data.link,
-            maxParticipants: Number(data.maxParticipants),
+      //      name: data.name,
+      //      description: data.description,
+      //      link: data.link,
+      //      maxParticipants: Number(data.maxParticipants),
         }).send({ from: window.selectedAddress }).on('confirmation', async (confirmationNumber, receipt) => {
             console.log('confirmationNumber, receipt', confirmationNumber, receipt)
             if (confirmationNumber === 1) {
@@ -77,7 +79,7 @@ function EventRegistration() {
                     onFinish={onFinish}
                     onFinishFailed={onFinishFailed}
                 >
-                    <Form.Item
+      {/*                    <Form.Item
                         label="Event name"
                         name="name"
                         rules={[{ required: true, message: 'Please input event name' }]}
@@ -89,7 +91,7 @@ function EventRegistration() {
                         name="description"
                         >
                         <Input />
-                    </Form.Item>
+                    </Form.Item> */}
                     <Form.Item
                         label="Link"
                         name="link"
@@ -111,7 +113,7 @@ function EventRegistration() {
                             format={dateFormat}
                         />
                     </Form.Item>
-                    <Form.Item
+      {/*            <Form.Item
                         label="Start and end event date"
                         name="registrationEnd"
                         >
@@ -120,6 +122,7 @@ function EventRegistration() {
                             format={dateFormat}
                         />
                     </Form.Item>
+        */}
                     <Form.Item
                         label="Ticket price"
                         name="ticketPrice"

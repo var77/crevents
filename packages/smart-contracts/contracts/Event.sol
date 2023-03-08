@@ -2,7 +2,6 @@
 pragma solidity ^0.8.17;
 import '@openzeppelin/contracts/access/Ownable.sol';
 import '@openzeppelin/contracts/utils/cryptography/MerkleProof.sol';
-import '@openzeppelin/contracts/utils/cryptography/ECDSA.sol';
 import 'hardhat/console.sol';
 import 'erc721a-sbt/ERC721A-SBT.sol';
 
@@ -12,6 +11,7 @@ library Utils {
     string description;
     string link;
     string tokenUri;
+    string image;
     uint256 maxParticipants;
     uint256 registrationEnd;
     uint256 start;
@@ -24,6 +24,7 @@ library Utils {
     string name;
     string description;
     string link;
+    string image;
     uint256 maxParticipants;
     uint256 registrationEnd;
     uint256 start;
@@ -37,6 +38,7 @@ library Utils {
     bool isRegistered;
     bool isChecked;
     address addr;
+    address organizer;
   }
 }
 
@@ -76,6 +78,7 @@ contract Event is Ownable, ERC721A_SBT {
   string public description;
   string public link;
   string public tokenUri;
+  string public image;
 
   mapping(address => bool) public participants;
   mapping(address => bool) public checkedParticipants;
@@ -98,6 +101,7 @@ contract Event is Ownable, ERC721A_SBT {
     description = eventData.description;
     link = eventData.link;
     tokenUri = eventData.tokenUri;
+    image = eventData.image;
     maxParticipants = eventData.maxParticipants;
     start = eventData.start;
     end = eventData.end;
@@ -152,7 +156,8 @@ contract Event is Ownable, ERC721A_SBT {
   function publicRegister() external payable isRegistrationOpen {
     if (onlyWhitelistRegistration) revert AddressNotWhitelisted();
     if (msg.value < ticketPrice) revert ValueNotEnough();
-    _register(msg.sender); }
+    _register(msg.sender); 
+  }
 
   function whitelistRegister(
     bytes32[] calldata _proof
@@ -238,6 +243,8 @@ contract Event is Ownable, ERC721A_SBT {
     evt.ticketPrice = ticketPrice;
     evt.preSaleTicketPrice = preSaleTicketPrice;
     evt.link = link;
+    evt.image = image;
+    evt.organizer = owner();
     evt.registrationOpen = getRegistrationOpen(currTimestamp) == 0;
     evt.isRegistered = participants[msg.sender];
     evt.isChecked = checkedParticipants[msg.sender];
@@ -249,8 +256,7 @@ contract Event is Ownable, ERC721A_SBT {
   }
 
   // verify participant ticket with signed message
-  function verifyTicket(bytes32 _hash, bytes memory _signature) external view returns(bool) {
-    address owner = ECDSA.recover(_hash, _signature);
+  function verifyTicket(address owner) external view returns(bool) {
     return participants[owner];
   }
 

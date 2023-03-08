@@ -21,7 +21,7 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface EventCreatorInterface extends ethers.utils.Interface {
   functions: {
-    "createEvent((string,string,string,string,uint256,uint256,uint256,uint256,uint256,uint256))": FunctionFragment;
+    "createEvent((string,string,string,string,string,uint256,uint256,uint256,uint256,uint256,uint256))": FunctionFragment;
     "events(uint256)": FunctionFragment;
     "fee()": FunctionFragment;
     "getEvents(uint256,uint256,uint256)": FunctionFragment;
@@ -39,6 +39,7 @@ interface EventCreatorInterface extends ethers.utils.Interface {
         description: string;
         link: string;
         tokenUri: string;
+        image: string;
         maxParticipants: BigNumberish;
         registrationEnd: BigNumberish;
         start: BigNumberish;
@@ -151,6 +152,7 @@ export class EventCreator extends BaseContract {
         description: string;
         link: string;
         tokenUri: string;
+        image: string;
         maxParticipants: BigNumberish;
         registrationEnd: BigNumberish;
         start: BigNumberish;
@@ -176,6 +178,7 @@ export class EventCreator extends BaseContract {
           string,
           string,
           string,
+          string,
           BigNumber,
           BigNumber,
           BigNumber,
@@ -188,11 +191,13 @@ export class EventCreator extends BaseContract {
           boolean,
           boolean,
           boolean,
+          string,
           string
         ] & {
           name: string;
           description: string;
           link: string;
+          image: string;
           maxParticipants: BigNumber;
           registrationEnd: BigNumber;
           start: BigNumber;
@@ -206,6 +211,7 @@ export class EventCreator extends BaseContract {
           isRegistered: boolean;
           isChecked: boolean;
           addr: string;
+          organizer: string;
         })[]
       ]
     >;
@@ -232,6 +238,7 @@ export class EventCreator extends BaseContract {
       description: string;
       link: string;
       tokenUri: string;
+      image: string;
       maxParticipants: BigNumberish;
       registrationEnd: BigNumberish;
       start: BigNumberish;
@@ -256,6 +263,7 @@ export class EventCreator extends BaseContract {
       string,
       string,
       string,
+      string,
       BigNumber,
       BigNumber,
       BigNumber,
@@ -268,11 +276,13 @@ export class EventCreator extends BaseContract {
       boolean,
       boolean,
       boolean,
+      string,
       string
     ] & {
       name: string;
       description: string;
       link: string;
+      image: string;
       maxParticipants: BigNumber;
       registrationEnd: BigNumber;
       start: BigNumber;
@@ -286,6 +296,7 @@ export class EventCreator extends BaseContract {
       isRegistered: boolean;
       isChecked: boolean;
       addr: string;
+      organizer: string;
     })[]
   >;
 
@@ -311,6 +322,7 @@ export class EventCreator extends BaseContract {
         description: string;
         link: string;
         tokenUri: string;
+        image: string;
         maxParticipants: BigNumberish;
         registrationEnd: BigNumberish;
         start: BigNumberish;
@@ -335,6 +347,7 @@ export class EventCreator extends BaseContract {
         string,
         string,
         string,
+        string,
         BigNumber,
         BigNumber,
         BigNumber,
@@ -347,11 +360,13 @@ export class EventCreator extends BaseContract {
         boolean,
         boolean,
         boolean,
+        string,
         string
       ] & {
         name: string;
         description: string;
         link: string;
+        image: string;
         maxParticipants: BigNumber;
         registrationEnd: BigNumber;
         start: BigNumber;
@@ -365,6 +380,7 @@ export class EventCreator extends BaseContract {
         isRegistered: boolean;
         isChecked: boolean;
         addr: string;
+        organizer: string;
       })[]
     >;
 
@@ -411,6 +427,7 @@ export class EventCreator extends BaseContract {
         description: string;
         link: string;
         tokenUri: string;
+        image: string;
         maxParticipants: BigNumberish;
         registrationEnd: BigNumberish;
         start: BigNumberish;
@@ -455,6 +472,7 @@ export class EventCreator extends BaseContract {
         description: string;
         link: string;
         tokenUri: string;
+        image: string;
         maxParticipants: BigNumberish;
         registrationEnd: BigNumberish;
         start: BigNumberish;

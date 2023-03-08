@@ -35,6 +35,7 @@ interface EventInterface extends ethers.utils.Interface {
     "end()": FunctionFragment;
     "getEventInfo(uint256)": FunctionFragment;
     "getRegistrationOpen(uint256)": FunctionFragment;
+    "image()": FunctionFragment;
     "link()": FunctionFragment;
     "maxParticipants()": FunctionFragment;
     "moderators(address)": FunctionFragment;
@@ -60,7 +61,7 @@ interface EventInterface extends ethers.utils.Interface {
     "tokenUri()": FunctionFragment;
     "totalSupply()": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
-    "verifyTicket(bytes32,bytes)": FunctionFragment;
+    "verifyTicket(address)": FunctionFragment;
     "whitelistRegister(bytes32[])": FunctionFragment;
     "whitelistRoot()": FunctionFragment;
     "withdraw()": FunctionFragment;
@@ -109,6 +110,7 @@ interface EventInterface extends ethers.utils.Interface {
     functionFragment: "getRegistrationOpen",
     values: [BigNumberish]
   ): string;
+  encodeFunctionData(functionFragment: "image", values?: undefined): string;
   encodeFunctionData(functionFragment: "link", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "maxParticipants",
@@ -190,7 +192,7 @@ interface EventInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "verifyTicket",
-    values: [BytesLike, BytesLike]
+    values: [string]
   ): string;
   encodeFunctionData(
     functionFragment: "whitelistRegister",
@@ -245,6 +247,7 @@ interface EventInterface extends ethers.utils.Interface {
     functionFragment: "getRegistrationOpen",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "image", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "link", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "maxParticipants",
@@ -463,6 +466,7 @@ export class Event extends BaseContract {
           string,
           string,
           string,
+          string,
           BigNumber,
           BigNumber,
           BigNumber,
@@ -475,11 +479,13 @@ export class Event extends BaseContract {
           boolean,
           boolean,
           boolean,
+          string,
           string
         ] & {
           name: string;
           description: string;
           link: string;
+          image: string;
           maxParticipants: BigNumber;
           registrationEnd: BigNumber;
           start: BigNumber;
@@ -493,6 +499,7 @@ export class Event extends BaseContract {
           isRegistered: boolean;
           isChecked: boolean;
           addr: string;
+          organizer: string;
         }
       ]
     >;
@@ -501,6 +508,8 @@ export class Event extends BaseContract {
       currTimestamp: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[number]>;
+
+    image(overrides?: CallOverrides): Promise<[string]>;
 
     link(overrides?: CallOverrides): Promise<[string]>;
 
@@ -572,11 +581,7 @@ export class Event extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    verifyTicket(
-      _hash: BytesLike,
-      _signature: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
+    verifyTicket(owner: string, overrides?: CallOverrides): Promise<[boolean]>;
 
     whitelistRegister(
       _proof: BytesLike[],
@@ -647,6 +652,7 @@ export class Event extends BaseContract {
       string,
       string,
       string,
+      string,
       BigNumber,
       BigNumber,
       BigNumber,
@@ -659,11 +665,13 @@ export class Event extends BaseContract {
       boolean,
       boolean,
       boolean,
+      string,
       string
     ] & {
       name: string;
       description: string;
       link: string;
+      image: string;
       maxParticipants: BigNumber;
       registrationEnd: BigNumber;
       start: BigNumber;
@@ -677,6 +685,7 @@ export class Event extends BaseContract {
       isRegistered: boolean;
       isChecked: boolean;
       addr: string;
+      organizer: string;
     }
   >;
 
@@ -684,6 +693,8 @@ export class Event extends BaseContract {
     currTimestamp: BigNumberish,
     overrides?: CallOverrides
   ): Promise<number>;
+
+  image(overrides?: CallOverrides): Promise<string>;
 
   link(overrides?: CallOverrides): Promise<string>;
 
@@ -749,11 +760,7 @@ export class Event extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  verifyTicket(
-    _hash: BytesLike,
-    _signature: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
+  verifyTicket(owner: string, overrides?: CallOverrides): Promise<boolean>;
 
   whitelistRegister(
     _proof: BytesLike[],
@@ -821,6 +828,7 @@ export class Event extends BaseContract {
         string,
         string,
         string,
+        string,
         BigNumber,
         BigNumber,
         BigNumber,
@@ -833,11 +841,13 @@ export class Event extends BaseContract {
         boolean,
         boolean,
         boolean,
+        string,
         string
       ] & {
         name: string;
         description: string;
         link: string;
+        image: string;
         maxParticipants: BigNumber;
         registrationEnd: BigNumber;
         start: BigNumber;
@@ -851,6 +861,7 @@ export class Event extends BaseContract {
         isRegistered: boolean;
         isChecked: boolean;
         addr: string;
+        organizer: string;
       }
     >;
 
@@ -858,6 +869,8 @@ export class Event extends BaseContract {
       currTimestamp: BigNumberish,
       overrides?: CallOverrides
     ): Promise<number>;
+
+    image(overrides?: CallOverrides): Promise<string>;
 
     link(overrides?: CallOverrides): Promise<string>;
 
@@ -919,11 +932,7 @@ export class Event extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    verifyTicket(
-      _hash: BytesLike,
-      _signature: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
+    verifyTicket(owner: string, overrides?: CallOverrides): Promise<boolean>;
 
     whitelistRegister(
       _proof: BytesLike[],
@@ -1047,6 +1056,8 @@ export class Event extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    image(overrides?: CallOverrides): Promise<BigNumber>;
+
     link(overrides?: CallOverrides): Promise<BigNumber>;
 
     maxParticipants(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1117,11 +1128,7 @@ export class Event extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    verifyTicket(
-      _hash: BytesLike,
-      _signature: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    verifyTicket(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     whitelistRegister(
       _proof: BytesLike[],
@@ -1199,6 +1206,8 @@ export class Event extends BaseContract {
       currTimestamp: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    image(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     link(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -1285,8 +1294,7 @@ export class Event extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     verifyTicket(
-      _hash: BytesLike,
-      _signature: BytesLike,
+      owner: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
