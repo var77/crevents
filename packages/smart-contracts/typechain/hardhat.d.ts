@@ -24,6 +24,18 @@ declare module "hardhat/types/runtime" {
       name: "EventCreator",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.EventCreator__factory>;
+    getContractFactory(
+      name: "ERC721ASBTIERC721Receiver",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC721ASBTIERC721Receiver__factory>;
+    getContractFactory(
+      name: "ERC721ASBT",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC721ASBT__factory>;
+    getContractFactory(
+      name: "IERC721ASBT",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC721ASBT__factory>;
 
     getContractAt(
       name: "Ownable",
@@ -40,6 +52,21 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.EventCreator>;
+    getContractAt(
+      name: "ERC721ASBTIERC721Receiver",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ERC721ASBTIERC721Receiver>;
+    getContractAt(
+      name: "ERC721ASBT",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ERC721ASBT>;
+    getContractAt(
+      name: "IERC721ASBT",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IERC721ASBT>;
 
     // default types
     getContractFactory(

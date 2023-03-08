@@ -23,8 +23,9 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 interface EventInterface extends ethers.utils.Interface {
   functions: {
     "addModerator(address,bool)": FunctionFragment;
+    "balanceOf(address)": FunctionFragment;
     "changeEventDates(uint256,uint256,uint256)": FunctionFragment;
-    "changeEventInfo(string,string,string,uint256)": FunctionFragment;
+    "changeEventInfo(string,string,uint256)": FunctionFragment;
     "changeTicketPrices(uint256,uint256)": FunctionFragment;
     "changeWhitelistRoot(bytes32)": FunctionFragment;
     "checkIn(address)": FunctionFragment;
@@ -40,6 +41,7 @@ interface EventInterface extends ethers.utils.Interface {
     "name()": FunctionFragment;
     "onlyWhitelistRegistration()": FunctionFragment;
     "owner()": FunctionFragment;
+    "ownerOf(uint256)": FunctionFragment;
     "parentContractAddr()": FunctionFragment;
     "parentContractFee()": FunctionFragment;
     "participants(address)": FunctionFragment;
@@ -50,9 +52,15 @@ interface EventInterface extends ethers.utils.Interface {
     "registrationOpen()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "start()": FunctionFragment;
+    "supportsInterface(bytes4)": FunctionFragment;
+    "symbol()": FunctionFragment;
     "ticketPrice()": FunctionFragment;
     "toggleRegistration(bool,bool)": FunctionFragment;
+    "tokenURI(uint256)": FunctionFragment;
+    "tokenUri()": FunctionFragment;
+    "totalSupply()": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
+    "verifyTicket(bytes32,bytes)": FunctionFragment;
     "whitelistRegister(bytes32[])": FunctionFragment;
     "whitelistRoot()": FunctionFragment;
     "withdraw()": FunctionFragment;
@@ -62,13 +70,14 @@ interface EventInterface extends ethers.utils.Interface {
     functionFragment: "addModerator",
     values: [string, boolean]
   ): string;
+  encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
   encodeFunctionData(
     functionFragment: "changeEventDates",
     values: [BigNumberish, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "changeEventInfo",
-    values: [string, string, string, BigNumberish]
+    values: [string, string, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "changeTicketPrices",
@@ -113,6 +122,10 @@ interface EventInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
+    functionFragment: "ownerOf",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "parentContractAddr",
     values?: undefined
   ): string;
@@ -150,6 +163,11 @@ interface EventInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "start", values?: undefined): string;
   encodeFunctionData(
+    functionFragment: "supportsInterface",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
+  encodeFunctionData(
     functionFragment: "ticketPrice",
     values?: undefined
   ): string;
@@ -158,8 +176,21 @@ interface EventInterface extends ethers.utils.Interface {
     values: [boolean, boolean]
   ): string;
   encodeFunctionData(
+    functionFragment: "tokenURI",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(functionFragment: "tokenUri", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "totalSupply",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "transferOwnership",
     values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "verifyTicket",
+    values: [BytesLike, BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: "whitelistRegister",
@@ -175,6 +206,7 @@ interface EventInterface extends ethers.utils.Interface {
     functionFragment: "addModerator",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "changeEventDates",
     data: BytesLike
@@ -225,6 +257,7 @@ interface EventInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "parentContractAddr",
     data: BytesLike
@@ -263,6 +296,11 @@ interface EventInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "start", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "supportsInterface",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
+  decodeFunctionResult(
     functionFragment: "ticketPrice",
     data: BytesLike
   ): Result;
@@ -270,8 +308,18 @@ interface EventInterface extends ethers.utils.Interface {
     functionFragment: "toggleRegistration",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "tokenURI", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "tokenUri", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "totalSupply",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "transferOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "verifyTicket",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -288,11 +336,13 @@ interface EventInterface extends ethers.utils.Interface {
     "OwnershipTransferred(address,address)": EventFragment;
     "ParticipantChecked(address)": EventFragment;
     "ParticipantRegistered(address)": EventFragment;
+    "Transfer(address,address,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ParticipantChecked"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ParticipantRegistered"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
 }
 
 export type OwnershipTransferredEvent = TypedEvent<
@@ -305,6 +355,10 @@ export type ParticipantCheckedEvent = TypedEvent<
 
 export type ParticipantRegisteredEvent = TypedEvent<
   [string] & { participant: string }
+>;
+
+export type TransferEvent = TypedEvent<
+  [string, string, BigNumber] & { from: string; to: string; tokenId: BigNumber }
 >;
 
 export class Event extends BaseContract {
@@ -357,6 +411,8 @@ export class Event extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    balanceOf(owner: string, overrides?: CallOverrides): Promise<[BigNumber]>;
+
     changeEventDates(
       _start: BigNumberish,
       _end: BigNumberish,
@@ -365,7 +421,6 @@ export class Event extends BaseContract {
     ): Promise<ContractTransaction>;
 
     changeEventInfo(
-      _name: string,
       _description: string,
       _link: string,
       _maxParticipants: BigNumberish,
@@ -459,6 +514,11 @@ export class Event extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
+    ownerOf(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
     parentContractAddr(overrides?: CallOverrides): Promise<[string]>;
 
     parentContractFee(overrides?: CallOverrides): Promise<[BigNumber]>;
@@ -483,6 +543,13 @@ export class Event extends BaseContract {
 
     start(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    supportsInterface(
+      interfaceId: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
+
+    symbol(overrides?: CallOverrides): Promise<[string]>;
+
     ticketPrice(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     toggleRegistration(
@@ -491,10 +558,25 @@ export class Event extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    tokenURI(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
+    tokenUri(overrides?: CallOverrides): Promise<[string]>;
+
+    totalSupply(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    verifyTicket(
+      _hash: BytesLike,
+      _signature: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
 
     whitelistRegister(
       _proof: BytesLike[],
@@ -514,6 +596,8 @@ export class Event extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
+
   changeEventDates(
     _start: BigNumberish,
     _end: BigNumberish,
@@ -522,7 +606,6 @@ export class Event extends BaseContract {
   ): Promise<ContractTransaction>;
 
   changeEventInfo(
-    _name: string,
     _description: string,
     _link: string,
     _maxParticipants: BigNumberish,
@@ -614,6 +697,8 @@ export class Event extends BaseContract {
 
   owner(overrides?: CallOverrides): Promise<string>;
 
+  ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
   parentContractAddr(overrides?: CallOverrides): Promise<string>;
 
   parentContractFee(overrides?: CallOverrides): Promise<BigNumber>;
@@ -638,6 +723,13 @@ export class Event extends BaseContract {
 
   start(overrides?: CallOverrides): Promise<BigNumber>;
 
+  supportsInterface(
+    interfaceId: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
+  symbol(overrides?: CallOverrides): Promise<string>;
+
   ticketPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
   toggleRegistration(
@@ -646,10 +738,22 @@ export class Event extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  tokenURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+  tokenUri(overrides?: CallOverrides): Promise<string>;
+
+  totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
+
   transferOwnership(
     newOwner: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  verifyTicket(
+    _hash: BytesLike,
+    _signature: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
 
   whitelistRegister(
     _proof: BytesLike[],
@@ -669,6 +773,8 @@ export class Event extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
+
     changeEventDates(
       _start: BigNumberish,
       _end: BigNumberish,
@@ -677,7 +783,6 @@ export class Event extends BaseContract {
     ): Promise<void>;
 
     changeEventInfo(
-      _name: string,
       _description: string,
       _link: string,
       _maxParticipants: BigNumberish,
@@ -766,6 +871,8 @@ export class Event extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<string>;
 
+    ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
     parentContractAddr(overrides?: CallOverrides): Promise<string>;
 
     parentContractFee(overrides?: CallOverrides): Promise<BigNumber>;
@@ -786,6 +893,13 @@ export class Event extends BaseContract {
 
     start(overrides?: CallOverrides): Promise<BigNumber>;
 
+    supportsInterface(
+      interfaceId: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    symbol(overrides?: CallOverrides): Promise<string>;
+
     ticketPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
     toggleRegistration(
@@ -794,10 +908,22 @@ export class Event extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    tokenURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+    tokenUri(overrides?: CallOverrides): Promise<string>;
+
+    totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
+
     transferOwnership(
       newOwner: string,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    verifyTicket(
+      _hash: BytesLike,
+      _signature: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
 
     whitelistRegister(
       _proof: BytesLike[],
@@ -841,6 +967,24 @@ export class Event extends BaseContract {
     ParticipantRegistered(
       participant?: null
     ): TypedEventFilter<[string], { participant: string }>;
+
+    "Transfer(address,address,uint256)"(
+      from?: string | null,
+      to?: string | null,
+      tokenId?: BigNumberish | null
+    ): TypedEventFilter<
+      [string, string, BigNumber],
+      { from: string; to: string; tokenId: BigNumber }
+    >;
+
+    Transfer(
+      from?: string | null,
+      to?: string | null,
+      tokenId?: BigNumberish | null
+    ): TypedEventFilter<
+      [string, string, BigNumber],
+      { from: string; to: string; tokenId: BigNumber }
+    >;
   };
 
   estimateGas: {
@@ -850,6 +994,8 @@ export class Event extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
+
     changeEventDates(
       _start: BigNumberish,
       _end: BigNumberish,
@@ -858,7 +1004,6 @@ export class Event extends BaseContract {
     ): Promise<BigNumber>;
 
     changeEventInfo(
-      _name: string,
       _description: string,
       _link: string,
       _maxParticipants: BigNumberish,
@@ -914,6 +1059,11 @@ export class Event extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
+    ownerOf(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     parentContractAddr(overrides?: CallOverrides): Promise<BigNumber>;
 
     parentContractFee(overrides?: CallOverrides): Promise<BigNumber>;
@@ -938,6 +1088,13 @@ export class Event extends BaseContract {
 
     start(overrides?: CallOverrides): Promise<BigNumber>;
 
+    supportsInterface(
+      interfaceId: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    symbol(overrides?: CallOverrides): Promise<BigNumber>;
+
     ticketPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
     toggleRegistration(
@@ -946,9 +1103,24 @@ export class Event extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    tokenURI(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    tokenUri(overrides?: CallOverrides): Promise<BigNumber>;
+
+    totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
+
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    verifyTicket(
+      _hash: BytesLike,
+      _signature: BytesLike,
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     whitelistRegister(
@@ -970,6 +1142,11 @@ export class Event extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    balanceOf(
+      owner: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     changeEventDates(
       _start: BigNumberish,
       _end: BigNumberish,
@@ -978,7 +1155,6 @@ export class Event extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     changeEventInfo(
-      _name: string,
       _description: string,
       _link: string,
       _maxParticipants: BigNumberish,
@@ -1041,6 +1217,11 @@ export class Event extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    ownerOf(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     parentContractAddr(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
@@ -1074,6 +1255,13 @@ export class Event extends BaseContract {
 
     start(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    supportsInterface(
+      interfaceId: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    symbol(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     ticketPrice(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     toggleRegistration(
@@ -1082,9 +1270,24 @@ export class Event extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    tokenURI(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    tokenUri(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    totalSupply(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    verifyTicket(
+      _hash: BytesLike,
+      _signature: BytesLike,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     whitelistRegister(

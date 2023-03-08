@@ -38,9 +38,9 @@ function moveAbis(contractAddress: string) {
   const eventContractAbi = require('../artifacts/contracts/Event.sol/Event.json');
   // @ts-ignore
   const contractData = JSON.stringify({ abi: contractAbi, networks: { [NETWORK_IDS[NETWORK]]: { address: contractAddress } } });
-  fs.writeFileSync(path.resolve(__dirname, `../dapp-events-ui/src/abis/Creator-${NETWORK}.json`), contractData);
-  fs.writeFileSync(path.resolve(__dirname, '../dapp-events-ui/src/abis/Creator.json'), contractData);
-  fs.writeFileSync(path.resolve(__dirname, '../dapp-events-ui/src/abis/Event.json'), JSON.stringify(eventContractAbi));
+  fs.writeFileSync(path.resolve(__dirname, `../../events-ui/src/abis/Creator-${NETWORK}.json`), contractData);
+  fs.writeFileSync(path.resolve(__dirname, '../../events-ui/src/abis/Creator.json'), contractData);
+  fs.writeFileSync(path.resolve(__dirname, '../../events-ui/src/abis/Event.json'), JSON.stringify(eventContractAbi));
 }
 
 // We recommend this pattern to be able to use async/await everywhere

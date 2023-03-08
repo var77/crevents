@@ -81,15 +81,15 @@
       ]
     },
     "/Users/varikmatevosyan/Documents/projects/web3-events/packages/smart-contracts/contracts/Event.sol": {
-      "lastModificationDate": 1678266567925,
-      "contentHash": "6fdae54f767a80b4d44c1dbef6725f73",
+      "lastModificationDate": 1678273751445,
+      "contentHash": "61f6d30a5a64a0444fa3b024508e6230",
       "sourceName": "contracts/Event.sol",
       "solcConfig": {
-        "version": "0.8.13",
+        "version": "0.8.17",
         "settings": {
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 1000
           },
           "outputSelection": {
             "*": {
@@ -110,10 +110,12 @@
       "imports": [
         "@openzeppelin/contracts/access/Ownable.sol",
         "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol",
-        "hardhat/console.sol"
+        "@openzeppelin/contracts/utils/cryptography/ECDSA.sol",
+        "hardhat/console.sol",
+        "erc721a-sbt/ERC721A-SBT.sol"
       ],
       "versionPragmas": [
-        "^0.8.13"
+        "^0.8.17"
       ],
       "artifacts": [
         "Event",
@@ -125,11 +127,11 @@
       "contentHash": "4ff3cd2f6272c9a6516e9ee4f2b967d3",
       "sourceName": "hardhat/console.sol",
       "solcConfig": {
-        "version": "0.8.13",
+        "version": "0.8.17",
         "settings": {
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 1000
           },
           "outputSelection": {
             "*": {
@@ -160,11 +162,11 @@
       "contentHash": "a75542fc722f3c5c883583228040bbfe",
       "sourceName": "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol",
       "solcConfig": {
-        "version": "0.8.13",
+        "version": "0.8.17",
         "settings": {
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 1000
           },
           "outputSelection": {
             "*": {
@@ -195,11 +197,11 @@
       "contentHash": "e436cea06129be2c73cda4b1acc848b5",
       "sourceName": "@openzeppelin/contracts/access/Ownable.sol",
       "solcConfig": {
-        "version": "0.8.13",
+        "version": "0.8.17",
         "settings": {
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 1000
           },
           "outputSelection": {
             "*": {
@@ -232,11 +234,11 @@
       "contentHash": "5f2c5c4b6af2dd4551027144797bc8be",
       "sourceName": "@openzeppelin/contracts/utils/Context.sol",
       "solcConfig": {
-        "version": "0.8.13",
+        "version": "0.8.17",
         "settings": {
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 1000
           },
           "outputSelection": {
             "*": {
@@ -263,15 +265,15 @@
       ]
     },
     "/Users/varikmatevosyan/Documents/projects/web3-events/packages/smart-contracts/contracts/EventCreator.sol": {
-      "lastModificationDate": 1678266567925,
-      "contentHash": "64eaadffd02398c8c37399fbd4334f1b",
+      "lastModificationDate": 1678273004376,
+      "contentHash": "cedd6de6be825df6336a892bbbe666e9",
       "sourceName": "contracts/EventCreator.sol",
       "solcConfig": {
-        "version": "0.8.13",
+        "version": "0.8.17",
         "settings": {
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 1000
           },
           "outputSelection": {
             "*": {
@@ -295,10 +297,156 @@
         "./Event.sol"
       ],
       "versionPragmas": [
-        "^0.8.13"
+        "^0.8.17"
       ],
       "artifacts": [
         "EventCreator"
+      ]
+    },
+    "/Users/varikmatevosyan/Documents/projects/web3-events/node_modules/erc721a-sbt/ERC721A-SBT.sol": {
+      "lastModificationDate": 1678269783320,
+      "contentHash": "42642d36c310903dc8b16e02be98698c",
+      "sourceName": "erc721a-sbt/ERC721A-SBT.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 1000
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.17"
+      ],
+      "artifacts": [
+        "ERC721A_SBT",
+        "ERC721A_SBT__IERC721Receiver",
+        "IERC721A_SBT"
+      ]
+    },
+    "/Users/varikmatevosyan/Documents/projects/web3-events/node_modules/@openzeppelin/contracts/utils/cryptography/ECDSA.sol": {
+      "lastModificationDate": 1678266948847,
+      "contentHash": "fe1190dbb6431c2464246925713f0f7f",
+      "sourceName": "@openzeppelin/contracts/utils/cryptography/ECDSA.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 1000
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../Strings.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "ECDSA"
+      ]
+    },
+    "/Users/varikmatevosyan/Documents/projects/web3-events/node_modules/@openzeppelin/contracts/utils/Strings.sol": {
+      "lastModificationDate": 1678266949363,
+      "contentHash": "396031251978f8febfd90cb62cb240ec",
+      "sourceName": "@openzeppelin/contracts/utils/Strings.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 1000
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./math/Math.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Strings"
+      ]
+    },
+    "/Users/varikmatevosyan/Documents/projects/web3-events/node_modules/@openzeppelin/contracts/utils/math/Math.sol": {
+      "lastModificationDate": 1678266949308,
+      "contentHash": "b9c58920ce74d6dc819161786112e7ee",
+      "sourceName": "@openzeppelin/contracts/utils/math/Math.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 1000
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Math"
       ]
     }
   }
