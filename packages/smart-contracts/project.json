@@ -1,0 +1,29 @@
+{
+  "name": "smart-contracts",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/smart-contracts/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "command": "cd packages/smart-contracts && npx hardhat run --network localhost scripts/deploy.ts"
+    },
+    "serve": {
+      "command": "cd packages/smart-contracts &&  npx hardhat node"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "packages/smart-contracts/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    }
+  },
+  "tags": []
+}

@@ -1,0 +1,305 @@
+{
+  "_format": "hh-sol-cache-2",
+  "files": {
+    "/Users/varikmatevosyan/Documents/projects/dapp-events/contracts/Event.sol": {
+      "lastModificationDate": 1661981580183,
+      "contentHash": "6fdae54f767a80b4d44c1dbef6725f73",
+      "sourceName": "contracts/Event.sol",
+      "solcConfig": {
+        "version": "0.8.13",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/access/Ownable.sol",
+        "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol",
+        "hardhat/console.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.13"
+      ],
+      "artifacts": [
+        "Event",
+        "Utils"
+      ]
+    },
+    "/Users/varikmatevosyan/Documents/projects/dapp-events/contracts/EventCreator.sol": {
+      "lastModificationDate": 1661980599506,
+      "contentHash": "64eaadffd02398c8c37399fbd4334f1b",
+      "sourceName": "contracts/EventCreator.sol",
+      "solcConfig": {
+        "version": "0.8.13",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "hardhat/console.sol",
+        "@openzeppelin/contracts/access/Ownable.sol",
+        "./Event.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.13"
+      ],
+      "artifacts": [
+        "EventCreator"
+      ]
+    },
+    "/Users/varikmatevosyan/Documents/projects/web3-events/packages/smart-contracts/contracts/Event.sol": {
+      "lastModificationDate": 1678266567925,
+      "contentHash": "6fdae54f767a80b4d44c1dbef6725f73",
+      "sourceName": "contracts/Event.sol",
+      "solcConfig": {
+        "version": "0.8.13",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/access/Ownable.sol",
+        "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol",
+        "hardhat/console.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.13"
+      ],
+      "artifacts": [
+        "Event",
+        "Utils"
+      ]
+    },
+    "/Users/varikmatevosyan/Documents/projects/web3-events/node_modules/hardhat/console.sol": {
+      "lastModificationDate": 1678266950092,
+      "contentHash": "4ff3cd2f6272c9a6516e9ee4f2b967d3",
+      "sourceName": "hardhat/console.sol",
+      "solcConfig": {
+        "version": "0.8.13",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">= 0.4.22 <0.9.0"
+      ],
+      "artifacts": [
+        "console"
+      ]
+    },
+    "/Users/varikmatevosyan/Documents/projects/web3-events/node_modules/@openzeppelin/contracts/utils/cryptography/MerkleProof.sol": {
+      "lastModificationDate": 1678266949313,
+      "contentHash": "a75542fc722f3c5c883583228040bbfe",
+      "sourceName": "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol",
+      "solcConfig": {
+        "version": "0.8.13",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "MerkleProof"
+      ]
+    },
+    "/Users/varikmatevosyan/Documents/projects/web3-events/node_modules/@openzeppelin/contracts/access/Ownable.sol": {
+      "lastModificationDate": 1678266949318,
+      "contentHash": "e436cea06129be2c73cda4b1acc848b5",
+      "sourceName": "@openzeppelin/contracts/access/Ownable.sol",
+      "solcConfig": {
+        "version": "0.8.13",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../utils/Context.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Ownable"
+      ]
+    },
+    "/Users/varikmatevosyan/Documents/projects/web3-events/node_modules/@openzeppelin/contracts/utils/Context.sol": {
+      "lastModificationDate": 1678266947954,
+      "contentHash": "5f2c5c4b6af2dd4551027144797bc8be",
+      "sourceName": "@openzeppelin/contracts/utils/Context.sol",
+      "solcConfig": {
+        "version": "0.8.13",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Context"
+      ]
+    },
+    "/Users/varikmatevosyan/Documents/projects/web3-events/packages/smart-contracts/contracts/EventCreator.sol": {
+      "lastModificationDate": 1678266567925,
+      "contentHash": "64eaadffd02398c8c37399fbd4334f1b",
+      "sourceName": "contracts/EventCreator.sol",
+      "solcConfig": {
+        "version": "0.8.13",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "hardhat/console.sol",
+        "@openzeppelin/contracts/access/Ownable.sol",
+        "./Event.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.13"
+      ],
+      "artifacts": [
+        "EventCreator"
+      ]
+    }
+  }
+}
