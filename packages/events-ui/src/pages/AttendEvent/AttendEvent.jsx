@@ -1,9 +1,9 @@
 import { Button, Layout } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import QRCode from "react-qr-code";
+import QRCode from 'react-qr-code';
 import { loadEventContract } from '../../utils/helpers';
-import underConstruction from './under-construction.gif';
+import { createIcon } from '@download/blockies';
 
 function AttendEvent() {
   const navigate = useNavigate();
@@ -35,6 +35,13 @@ function AttendEvent() {
       isChecked: info.isChecked,
       start: new Date(+info.start * 1000),
       ticketPrice: window.web3Instance.utils.fromWei(info.ticketPrice),
+      organizer: info.organizer,
+      image: info.image,
+//      organizerIcon: createIcon({
+//        seed: info.organizer,
+//        size: 16,
+//        scale: 8,
+//      }).toDataURL(),
     });
     setContract(eventContract);
   };
