@@ -81,8 +81,8 @@
       ]
     },
     "/Users/varikmatevosyan/Documents/projects/web3-events/packages/smart-contracts/contracts/Event.sol": {
-      "lastModificationDate": 1678300914863,
-      "contentHash": "159bbaf1c288d56ecf5903370c3e692f",
+      "lastModificationDate": 1678392991806,
+      "contentHash": "9fe8f0ce31a015d0bf86e63090daf451",
       "sourceName": "contracts/Event.sol",
       "solcConfig": {
         "version": "0.8.17",
@@ -264,8 +264,8 @@
       ]
     },
     "/Users/varikmatevosyan/Documents/projects/web3-events/packages/smart-contracts/contracts/EventCreator.sol": {
-      "lastModificationDate": 1678273004376,
-      "contentHash": "cedd6de6be825df6336a892bbbe666e9",
+      "lastModificationDate": 1678392944436,
+      "contentHash": "8c90dfb60850917f9d7f3cbfcf04e752",
       "sourceName": "contracts/EventCreator.sol",
       "solcConfig": {
         "version": "0.8.17",

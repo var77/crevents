@@ -73,7 +73,7 @@ function HomePage() {
       <div
         style={{
           display: 'flex',
-          justifyContent: 'center',
+          justifyContent: 'space-around',
           alignItems: 'center',
           height: '100%',
         }}

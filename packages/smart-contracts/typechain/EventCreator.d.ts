@@ -21,12 +21,13 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface EventCreatorInterface extends ethers.utils.Interface {
   functions: {
-    "createEvent((string,string,string,string,string,uint256,uint256,uint256,uint256,uint256,uint256))": FunctionFragment;
+    "createEvent((string,string,string,string,uint256,uint256,uint256,uint256,uint256,uint256))": FunctionFragment;
     "events(uint256)": FunctionFragment;
     "fee()": FunctionFragment;
     "getEvents(uint256,uint256,uint256)": FunctionFragment;
     "owner()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
+    "setTokenUri(string)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "withdraw()": FunctionFragment;
   };
@@ -38,7 +39,6 @@ interface EventCreatorInterface extends ethers.utils.Interface {
         name: string;
         description: string;
         link: string;
-        tokenUri: string;
         image: string;
         maxParticipants: BigNumberish;
         registrationEnd: BigNumberish;
@@ -63,6 +63,7 @@ interface EventCreatorInterface extends ethers.utils.Interface {
     functionFragment: "renounceOwnership",
     values?: undefined
   ): string;
+  encodeFunctionData(functionFragment: "setTokenUri", values: [string]): string;
   encodeFunctionData(
     functionFragment: "transferOwnership",
     values: [string]
@@ -79,6 +80,10 @@ interface EventCreatorInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setTokenUri",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -151,7 +156,6 @@ export class EventCreator extends BaseContract {
         name: string;
         description: string;
         link: string;
-        tokenUri: string;
         image: string;
         maxParticipants: BigNumberish;
         registrationEnd: BigNumberish;
@@ -222,6 +226,11 @@ export class EventCreator extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    setTokenUri(
+      uri: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -237,7 +246,6 @@ export class EventCreator extends BaseContract {
       name: string;
       description: string;
       link: string;
-      tokenUri: string;
       image: string;
       maxParticipants: BigNumberish;
       registrationEnd: BigNumberish;
@@ -306,6 +314,11 @@ export class EventCreator extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  setTokenUri(
+    uri: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   transferOwnership(
     newOwner: string,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -321,7 +334,6 @@ export class EventCreator extends BaseContract {
         name: string;
         description: string;
         link: string;
-        tokenUri: string;
         image: string;
         maxParticipants: BigNumberish;
         registrationEnd: BigNumberish;
@@ -388,6 +400,8 @@ export class EventCreator extends BaseContract {
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
+    setTokenUri(uri: string, overrides?: CallOverrides): Promise<void>;
+
     transferOwnership(
       newOwner: string,
       overrides?: CallOverrides
@@ -426,7 +440,6 @@ export class EventCreator extends BaseContract {
         name: string;
         description: string;
         link: string;
-        tokenUri: string;
         image: string;
         maxParticipants: BigNumberish;
         registrationEnd: BigNumberish;
@@ -455,6 +468,11 @@ export class EventCreator extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    setTokenUri(
+      uri: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -471,7 +489,6 @@ export class EventCreator extends BaseContract {
         name: string;
         description: string;
         link: string;
-        tokenUri: string;
         image: string;
         maxParticipants: BigNumberish;
         registrationEnd: BigNumberish;
@@ -500,6 +517,11 @@ export class EventCreator extends BaseContract {
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     renounceOwnership(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setTokenUri(
+      uri: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

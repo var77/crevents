@@ -10,7 +10,6 @@ library Utils {
     string name;
     string description;
     string link;
-    string tokenUri;
     string image;
     uint256 maxParticipants;
     uint256 registrationEnd;
@@ -92,7 +91,8 @@ contract Event is Ownable, ERC721A_SBT {
   constructor(
     Utils.EventStruct memory eventData,
     address owner,
-    uint256 fee
+    uint256 fee,
+    string memory _tokenUri
   ) ERC721A_SBT(eventData.name, 'EVN') {
     if (eventData.start == 0 || eventData.end == 0) {
       revert ProvideRequiredArguments();
@@ -100,7 +100,7 @@ contract Event is Ownable, ERC721A_SBT {
 
     description = eventData.description;
     link = eventData.link;
-    tokenUri = eventData.tokenUri;
+    tokenUri = _tokenUri;
     image = eventData.image;
     maxParticipants = eventData.maxParticipants;
     start = eventData.start;
