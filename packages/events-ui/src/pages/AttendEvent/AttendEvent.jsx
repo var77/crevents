@@ -1,9 +1,13 @@
-import { Button, Layout } from 'antd';
+import { Avatar, Button, Layout } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import QRCode from 'react-qr-code';
+import { Card, Typography, Divider } from 'antd';
+
+const { Title, Text } = Typography;
 import { loadEventContract } from '../../utils/helpers';
 import { createIcon } from '@download/blockies';
+import './AttendEvent.css';
 
 function AttendEvent() {
   const navigate = useNavigate();
@@ -19,7 +23,7 @@ function AttendEvent() {
       .call({ from: window.selectedAddress });
     setEventInfo({
       description: info.description,
-      end: new Date(+info.end * 1000),
+      end: new Date(+info.end * 1000).toDateString(),
       link: info.link,
       maxParticipants: +info.maxParticipants,
       name: info.name,
@@ -27,21 +31,21 @@ function AttendEvent() {
       preSaleTicketPrice: window.web3Instance.utils.fromWei(
         info.preSaleTicketPrice
       ),
-      registrationEnd: new Date(+info.registrationEnd * 1000),
+      registrationEnd: new Date(+info.registrationEnd * 1000).toDateString(),
       registrationOpen: info.registrationOpen,
       registeredParticipantCount: info.registeredParticipantCount,
       checkedParticipantCount: info.checkedParticipantCount,
       isRegistered: info.isRegistered,
       isChecked: info.isChecked,
-      start: new Date(+info.start * 1000),
+      start: new Date(+info.start * 1000).toDateString(),
       ticketPrice: window.web3Instance.utils.fromWei(info.ticketPrice),
       organizer: info.organizer,
       image: info.image,
-//      organizerIcon: createIcon({
-//        seed: info.organizer,
-//        size: 16,
-//        scale: 8,
-//      }).toDataURL(),
+      organizerIcon: createIcon({
+        seed: info.organizer,
+        size: 16,
+        scale: 8,
+      }).toDataURL(),
     });
     setContract(eventContract);
   };
@@ -80,53 +84,68 @@ function AttendEvent() {
   };
 
   return (
-    <Layout
-      style={{
-        backgroundColor: 'white',
-        width: '100%',
-        height: '100vh',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
+    <Card
+      className="event-details"
+      title={
+        <Title className="event-details-title" level={2}>
+          {eventInfo.name}
+        </Title>
+      }
+      cover={
+        <img
+          className="event-details-image"
+          alt="event cover"
+          src={eventInfo.image}
+        />
+      }
+      extra={
+        <Text type="secondary">
+          Registration Ends: {eventInfo.registrationEnd}
+        </Text>
+      }
     >
       {ticketData && (
-        <div
-          style={{
-            height: 'auto',
-            margin: '0 auto',
-            maxWidth: 256,
-            width: '100%',
-          }}
-        >
-          <QRCode
-            size={256}
-            style={{ height: 'auto', maxWidth: '100%', width: '100%' }}
-            value={ticketData}
-            viewBox={`0 0 256 256`}
-          />
-        </div>
+        <>
+          <QRCode value={ticketData} /> <Divider />
+        </>
       )}
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        {JSON.stringify(eventInfo, null, 2)}
-      </div>
-      <Button type="primary" onClick={attendEvent}>
-        Attend
-      </Button>
-      {eventInfo?.isRegistered && (
-        <Button type="primary" onClick={showTicket}>
-          Show Ticket
-        </Button>
+      <Text className="event-details-description">{eventInfo.description}</Text>
+      <Divider />
+      <Text>Date and Time: {eventInfo.start}</Text>
+      <Divider />
+      <Text>Location: {eventInfo.address}</Text>
+      <Divider />
+      <Text>
+        Organizer: <Avatar src={eventInfo.organizerIcon} />{' '}
+        {eventInfo.organizer}
+      </Text>
+      <Divider />
+      <Text>
+        Ticket Prices: {eventInfo.preSaleTicketPrice} (Pre-Sale) /{' '}
+        {eventInfo.ticketPrice} (Regular)
+      </Text>
+      <Divider />
+      <Text>Max Participants: {eventInfo.maxParticipants}</Text>
+      <Divider />
+      <Text>
+        Registered Participants: {eventInfo.registeredParticipantCount}{' '}
+        {eventInfo.isRegistered && (
+          <Text type="success">(You are registered)</Text>
+        )}
+      </Text>
+      <Divider />
+      <Text>
+        Registration: {eventInfo.registrationOpen ? 'Open' : 'Closed'}
+      </Text>
+      <Divider />
+      <Text>Link: {eventInfo.link}</Text>
+      <Divider />
+      {eventInfo.isRegistered ? (
+        <Button onClick={showTicket}>Show Ticket </Button>
+      ) : (
+        <Button onClick={attendEvent}>Buy {eventInfo.ticketPrice} eth</Button>
       )}
-      <Button type="primary" onClick={onGoBack}>
-        Home
-      </Button>
-    </Layout>
+    </Card>
   );
 }
 
