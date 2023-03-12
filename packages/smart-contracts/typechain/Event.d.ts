@@ -465,27 +465,29 @@ export class Event extends BaseContract {
         [
           string,
           string,
+          boolean,
+          boolean,
+          boolean,
+          boolean,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber,
           string,
           string,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          boolean,
-          boolean,
-          boolean,
-          boolean,
           string,
           string
         ] & {
-          name: string;
-          description: string;
-          link: string;
-          image: string;
+          addr: string;
+          organizer: string;
+          registrationOpen: boolean;
+          onlyWhitelistRegistration: boolean;
+          isRegistered: boolean;
+          isChecked: boolean;
           maxParticipants: BigNumber;
           registrationEnd: BigNumber;
           start: BigNumber;
@@ -494,12 +496,10 @@ export class Event extends BaseContract {
           preSaleTicketPrice: BigNumber;
           registeredParticipantCount: BigNumber;
           checkedParticipantCount: BigNumber;
-          registrationOpen: boolean;
-          onlyWhitelistRegistration: boolean;
-          isRegistered: boolean;
-          isChecked: boolean;
-          addr: string;
-          organizer: string;
+          name: string;
+          description: string;
+          link: string;
+          image: string;
         }
       ]
     >;
@@ -651,27 +651,29 @@ export class Event extends BaseContract {
     [
       string,
       string,
+      boolean,
+      boolean,
+      boolean,
+      boolean,
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber,
       string,
       string,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      boolean,
-      boolean,
-      boolean,
-      boolean,
       string,
       string
     ] & {
-      name: string;
-      description: string;
-      link: string;
-      image: string;
+      addr: string;
+      organizer: string;
+      registrationOpen: boolean;
+      onlyWhitelistRegistration: boolean;
+      isRegistered: boolean;
+      isChecked: boolean;
       maxParticipants: BigNumber;
       registrationEnd: BigNumber;
       start: BigNumber;
@@ -680,12 +682,10 @@ export class Event extends BaseContract {
       preSaleTicketPrice: BigNumber;
       registeredParticipantCount: BigNumber;
       checkedParticipantCount: BigNumber;
-      registrationOpen: boolean;
-      onlyWhitelistRegistration: boolean;
-      isRegistered: boolean;
-      isChecked: boolean;
-      addr: string;
-      organizer: string;
+      name: string;
+      description: string;
+      link: string;
+      image: string;
     }
   >;
 
@@ -827,27 +827,29 @@ export class Event extends BaseContract {
       [
         string,
         string,
+        boolean,
+        boolean,
+        boolean,
+        boolean,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
         string,
         string,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        boolean,
-        boolean,
-        boolean,
-        boolean,
         string,
         string
       ] & {
-        name: string;
-        description: string;
-        link: string;
-        image: string;
+        addr: string;
+        organizer: string;
+        registrationOpen: boolean;
+        onlyWhitelistRegistration: boolean;
+        isRegistered: boolean;
+        isChecked: boolean;
         maxParticipants: BigNumber;
         registrationEnd: BigNumber;
         start: BigNumber;
@@ -856,12 +858,10 @@ export class Event extends BaseContract {
         preSaleTicketPrice: BigNumber;
         registeredParticipantCount: BigNumber;
         checkedParticipantCount: BigNumber;
-        registrationOpen: boolean;
-        onlyWhitelistRegistration: boolean;
-        isRegistered: boolean;
-        isChecked: boolean;
-        addr: string;
-        organizer: string;
+        name: string;
+        description: string;
+        link: string;
+        image: string;
       }
     >;
 

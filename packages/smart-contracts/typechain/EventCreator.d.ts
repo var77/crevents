@@ -21,7 +21,7 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface EventCreatorInterface extends ethers.utils.Interface {
   functions: {
-    "createEvent((string,string,string,string,uint256,uint256,uint256,uint256,uint256,uint256))": FunctionFragment;
+    "createEvent((uint256,uint256,uint256,uint256,uint256,uint256,string,string,string,string))": FunctionFragment;
     "events(uint256)": FunctionFragment;
     "fee()": FunctionFragment;
     "getEvents(uint256,uint256,uint256)": FunctionFragment;
@@ -36,16 +36,16 @@ interface EventCreatorInterface extends ethers.utils.Interface {
     functionFragment: "createEvent",
     values: [
       {
-        name: string;
-        description: string;
-        link: string;
-        image: string;
         maxParticipants: BigNumberish;
         registrationEnd: BigNumberish;
         start: BigNumberish;
         end: BigNumberish;
         ticketPrice: BigNumberish;
         preSaleTicketPrice: BigNumberish;
+        name: string;
+        description: string;
+        link: string;
+        image: string;
       }
     ]
   ): string;
@@ -153,16 +153,16 @@ export class EventCreator extends BaseContract {
   functions: {
     createEvent(
       _eventData: {
-        name: string;
-        description: string;
-        link: string;
-        image: string;
         maxParticipants: BigNumberish;
         registrationEnd: BigNumberish;
         start: BigNumberish;
         end: BigNumberish;
         ticketPrice: BigNumberish;
         preSaleTicketPrice: BigNumberish;
+        name: string;
+        description: string;
+        link: string;
+        image: string;
       },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -181,27 +181,29 @@ export class EventCreator extends BaseContract {
         ([
           string,
           string,
+          boolean,
+          boolean,
+          boolean,
+          boolean,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber,
           string,
           string,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          boolean,
-          boolean,
-          boolean,
-          boolean,
           string,
           string
         ] & {
-          name: string;
-          description: string;
-          link: string;
-          image: string;
+          addr: string;
+          organizer: string;
+          registrationOpen: boolean;
+          onlyWhitelistRegistration: boolean;
+          isRegistered: boolean;
+          isChecked: boolean;
           maxParticipants: BigNumber;
           registrationEnd: BigNumber;
           start: BigNumber;
@@ -210,12 +212,10 @@ export class EventCreator extends BaseContract {
           preSaleTicketPrice: BigNumber;
           registeredParticipantCount: BigNumber;
           checkedParticipantCount: BigNumber;
-          registrationOpen: boolean;
-          onlyWhitelistRegistration: boolean;
-          isRegistered: boolean;
-          isChecked: boolean;
-          addr: string;
-          organizer: string;
+          name: string;
+          description: string;
+          link: string;
+          image: string;
         })[]
       ]
     >;
@@ -243,16 +243,16 @@ export class EventCreator extends BaseContract {
 
   createEvent(
     _eventData: {
-      name: string;
-      description: string;
-      link: string;
-      image: string;
       maxParticipants: BigNumberish;
       registrationEnd: BigNumberish;
       start: BigNumberish;
       end: BigNumberish;
       ticketPrice: BigNumberish;
       preSaleTicketPrice: BigNumberish;
+      name: string;
+      description: string;
+      link: string;
+      image: string;
     },
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -270,27 +270,29 @@ export class EventCreator extends BaseContract {
     ([
       string,
       string,
+      boolean,
+      boolean,
+      boolean,
+      boolean,
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber,
       string,
       string,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      boolean,
-      boolean,
-      boolean,
-      boolean,
       string,
       string
     ] & {
-      name: string;
-      description: string;
-      link: string;
-      image: string;
+      addr: string;
+      organizer: string;
+      registrationOpen: boolean;
+      onlyWhitelistRegistration: boolean;
+      isRegistered: boolean;
+      isChecked: boolean;
       maxParticipants: BigNumber;
       registrationEnd: BigNumber;
       start: BigNumber;
@@ -299,12 +301,10 @@ export class EventCreator extends BaseContract {
       preSaleTicketPrice: BigNumber;
       registeredParticipantCount: BigNumber;
       checkedParticipantCount: BigNumber;
-      registrationOpen: boolean;
-      onlyWhitelistRegistration: boolean;
-      isRegistered: boolean;
-      isChecked: boolean;
-      addr: string;
-      organizer: string;
+      name: string;
+      description: string;
+      link: string;
+      image: string;
     })[]
   >;
 
@@ -331,16 +331,16 @@ export class EventCreator extends BaseContract {
   callStatic: {
     createEvent(
       _eventData: {
-        name: string;
-        description: string;
-        link: string;
-        image: string;
         maxParticipants: BigNumberish;
         registrationEnd: BigNumberish;
         start: BigNumberish;
         end: BigNumberish;
         ticketPrice: BigNumberish;
         preSaleTicketPrice: BigNumberish;
+        name: string;
+        description: string;
+        link: string;
+        image: string;
       },
       overrides?: CallOverrides
     ): Promise<string>;
@@ -358,27 +358,29 @@ export class EventCreator extends BaseContract {
       ([
         string,
         string,
+        boolean,
+        boolean,
+        boolean,
+        boolean,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
         string,
         string,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        boolean,
-        boolean,
-        boolean,
-        boolean,
         string,
         string
       ] & {
-        name: string;
-        description: string;
-        link: string;
-        image: string;
+        addr: string;
+        organizer: string;
+        registrationOpen: boolean;
+        onlyWhitelistRegistration: boolean;
+        isRegistered: boolean;
+        isChecked: boolean;
         maxParticipants: BigNumber;
         registrationEnd: BigNumber;
         start: BigNumber;
@@ -387,12 +389,10 @@ export class EventCreator extends BaseContract {
         preSaleTicketPrice: BigNumber;
         registeredParticipantCount: BigNumber;
         checkedParticipantCount: BigNumber;
-        registrationOpen: boolean;
-        onlyWhitelistRegistration: boolean;
-        isRegistered: boolean;
-        isChecked: boolean;
-        addr: string;
-        organizer: string;
+        name: string;
+        description: string;
+        link: string;
+        image: string;
       })[]
     >;
 
@@ -437,16 +437,16 @@ export class EventCreator extends BaseContract {
   estimateGas: {
     createEvent(
       _eventData: {
-        name: string;
-        description: string;
-        link: string;
-        image: string;
         maxParticipants: BigNumberish;
         registrationEnd: BigNumberish;
         start: BigNumberish;
         end: BigNumberish;
         ticketPrice: BigNumberish;
         preSaleTicketPrice: BigNumberish;
+        name: string;
+        description: string;
+        link: string;
+        image: string;
       },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -486,16 +486,16 @@ export class EventCreator extends BaseContract {
   populateTransaction: {
     createEvent(
       _eventData: {
-        name: string;
-        description: string;
-        link: string;
-        image: string;
         maxParticipants: BigNumberish;
         registrationEnd: BigNumberish;
         start: BigNumberish;
         end: BigNumberish;
         ticketPrice: BigNumberish;
         preSaleTicketPrice: BigNumberish;
+        name: string;
+        description: string;
+        link: string;
+        image: string;
       },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;

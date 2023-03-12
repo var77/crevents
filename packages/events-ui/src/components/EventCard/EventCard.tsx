@@ -1,12 +1,13 @@
 import { Avatar, Card } from 'antd';
 const { Meta } = Card;
 
-export default function EventCard({ eventInfo, onAttendEvent }) {
+export default function EventCard({ eventInfo, onAttendEvent, loading }) {
   return (
     <Card
-      hoverable
+      loading={loading}
+      hoverable={!loading}
       title={eventInfo.name}
-      style={{ width: 300 }}
+      style={{ width: 300, minHeight: 300 }}
       cover={<img alt={eventInfo.name} src={eventInfo.image} />}
       onClick={() => onAttendEvent(eventInfo.address)}
     >

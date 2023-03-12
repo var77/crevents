@@ -19,4 +19,8 @@
 .create-event-btn {
   position: absolute;
   top: 250px;
-} 
+}
+
+.page-title {
+  font-family: 'Noto Sans Bassa Vah', sans-serif;
+}

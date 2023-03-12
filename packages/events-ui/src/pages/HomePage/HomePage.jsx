@@ -3,22 +3,35 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 import { createIcon } from '@download/blockies';
+import EventRegistrationModal from '../../components/EventRegistrationModal/EventRegistrationModal';
 import EventCard from '../../components/EventCard/EventCard';
+import CreateEventCard from '../../components/EventCard/CreateEventCard';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 
+function CardsSkeleton() {
+  return (
+    <>
+      <EventCard eventInfo={{}} loading={true} />
+      <EventCard eventInfo={{}} loading={true} />
+      <EventCard eventInfo={{}} loading={true} />
+    </>
+  );
+}
+
 function HomePage() {
   const navigate = useNavigate();
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showEventRegistration, setShowEventRegistration] = useState(false);
 
   const onAttendEvent = (address) => {
     navigate(`/event/${address}`);
   };
 
   const onRegisterEvent = () => {
-    navigate('/event-registration');
+    setShowEventRegistration(true);
   };
-
-  const [events, setEvents] = useState([]);
 
   const initialize = async () => {
     const eventsInfo = await window.creatorContract.methods
@@ -55,6 +68,7 @@ function HomePage() {
         }).toDataURL(),
       }))
     );
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -70,22 +84,32 @@ function HomePage() {
       }}
     >
       <Header onRegisterEvent={onRegisterEvent} />
+      <EventRegistrationModal
+        open={showEventRegistration}
+        handleCancel={() => setShowEventRegistration(false)}
+      />
       <div
         style={{
           display: 'flex',
           justifyContent: 'space-around',
           alignItems: 'center',
-          margin: '16px 0px',
-          flexWrap: 'wrap',
+          height: 'calc(100vh - 55px)',
         }}
       >
-        {events.map((eventInfo) => (
-          <EventCard
-            key={eventInfo.address}
-            eventInfo={eventInfo}
-            onAttendEvent={onAttendEvent}
-          />
-        ))}
+        {loading ? (
+          <CardsSkeleton />
+        ) : (
+          <>
+            <CreateEventCard onRegisterEvent={onRegisterEvent} />
+            {events.map((eventInfo) => (
+              <EventCard
+                key={eventInfo.address}
+                eventInfo={eventInfo}
+                onAttendEvent={onAttendEvent}
+              />
+            ))}
+          </>
+        )}
       </div>
       <Footer />
     </Layout>

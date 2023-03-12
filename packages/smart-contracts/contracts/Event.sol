@@ -7,23 +7,25 @@ import 'erc721a-sbt/ERC721A-SBT.sol';
 
 library Utils {
   struct EventStruct {
-    string name;
-    string description;
-    string link;
-    string image;
     uint256 maxParticipants;
     uint256 registrationEnd;
     uint256 start;
     uint256 end;
     uint256 ticketPrice;
     uint256 preSaleTicketPrice;
-  }
-
-  struct EventInfoStruct {
     string name;
     string description;
     string link;
     string image;
+  }
+
+  struct EventInfoStruct {
+    address addr;
+    address organizer;
+    bool registrationOpen;
+    bool onlyWhitelistRegistration;
+    bool isRegistered;
+    bool isChecked;
     uint256 maxParticipants;
     uint256 registrationEnd;
     uint256 start;
@@ -32,12 +34,10 @@ library Utils {
     uint256 preSaleTicketPrice;
     uint256 registeredParticipantCount;
     uint256 checkedParticipantCount;
-    bool registrationOpen;
-    bool onlyWhitelistRegistration;
-    bool isRegistered;
-    bool isChecked;
-    address addr;
-    address organizer;
+    string name;
+    string description;
+    string link;
+    string image;
   }
 }
 
@@ -60,6 +60,7 @@ error TransferFailed();
 contract Event is Ownable, ERC721A_SBT {
   bool public onlyWhitelistRegistration;
   bool public registrationOpen = true;
+  address public parentContractAddr;
 
   uint256 public maxParticipants;
   uint256 public registrationEnd;
@@ -85,8 +86,6 @@ contract Event is Ownable, ERC721A_SBT {
 
   event ParticipantRegistered(address participant);
   event ParticipantChecked(address participant);
-
-  address public parentContractAddr;
 
   constructor(
     Utils.EventStruct memory eventData,
@@ -156,7 +155,7 @@ contract Event is Ownable, ERC721A_SBT {
   function publicRegister() external payable isRegistrationOpen {
     if (onlyWhitelistRegistration) revert AddressNotWhitelisted();
     if (msg.value < ticketPrice) revert ValueNotEnough();
-    _register(msg.sender); 
+    _register(msg.sender);
   }
 
   function whitelistRegister(
@@ -256,7 +255,7 @@ contract Event is Ownable, ERC721A_SBT {
   }
 
   // verify participant ticket with signed message
-  function verifyTicket(address owner) external view returns(bool) {
+  function verifyTicket(address owner) external view returns (bool) {
     return participants[owner];
   }
 

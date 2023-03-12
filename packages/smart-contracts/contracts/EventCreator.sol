@@ -6,9 +6,10 @@ import '@openzeppelin/contracts/access/Ownable.sol';
 import './Event.sol';
 
 contract EventCreator is Ownable {
-  address[] public events;
   uint256 public fee = 1;
   string private tokenUriServer = 'http://localhost:3333';
+  address[] public events;
+
   event EventCreated(address addr);
 
   function createEvent(
