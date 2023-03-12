@@ -1,4 +1,4 @@
-import { Avatar, Button, Layout } from 'antd';
+import { Avatar, Button, Layout, Modal } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import QRCode from 'react-qr-code';
@@ -7,12 +7,16 @@ import { loadEventContract } from '../../utils/helpers';
 import { createIcon } from '@download/blockies';
 import { GlobalOutlined } from '@ant-design/icons';
 import Navbar from '../../components/Navbar/Navbar'
+import domtoimage from 'dom-to-image';
+import saveAs from 'file-saver';
 import './AttendEvent.css';
+import dayjs from 'dayjs';
 
 const { Title, Text } = Typography;
 
 function AttendEvent() {
   const navigate = useNavigate();
+  
   const { address: contractAddress } = useParams();
   const [contract, setContract] = useState(null);
   const [eventInfo, setEventInfo] = useState({});
@@ -42,7 +46,7 @@ function AttendEvent() {
       start: new Date(+info.start * 1000).toDateString(),
       ticketPrice: window.web3Instance.utils.fromWei(info.ticketPrice),
       organizer: info.organizer,
-      image: info.image,
+      image: 'https://image-hots-crevent.s3.us-east-1.amazonaws.com/D4RK7ET_background_for_website_where_you_create_events_and_user_b3e46a28-3201-4bad-8655-c9e019954a06.png' || info.image,
       organizerIcon: createIcon({
         seed: info.organizer,
         size: 16,
@@ -78,6 +82,12 @@ function AttendEvent() {
     }
   };
 
+  const handleDownloadTicket = async() => {
+   const blob = await domtoimage.toBlob(document.getElementById('ticket'))
+    saveAs(blob, 'ticket.png');
+    setTicketData(null);
+  };
+
   useEffect(() => {
     initialize();
   }, []);
@@ -105,11 +115,6 @@ function AttendEvent() {
         </Text>
       }
     >
-      {ticketData && (
-        <>
-          <QRCode value={ticketData} /> <Divider />
-        </>
-      )}
       <div className='event-container'>
         <div className='event-content'>
         <div className='event-details-header'>
@@ -161,6 +166,20 @@ function AttendEvent() {
         </div>
       </div>
     </Card>
+    <Modal  open={ticketData} onCancel={() => setTicketData(null)} closable={false} footer={<><Button onClick={handleDownloadTicket}>Download</Button></>}>
+        <div className='ticket-modal' id='ticket' >
+          <div className='ticket-modal-background' style={{ backgroundImage:`url(${eventInfo.image})` }}/>
+          <div className='ticket-modal-info-cont'>
+          <div className='ticket-modal-info'>
+            <Text className="ticket-modal-info-title">{eventInfo.name}</Text>
+            <Text className='ticket-modal-info-starttime'>{dayjs(eventInfo.start).format('dddd MMM DD YYYY HH:mm')}</Text>
+          </div>
+          <div>
+          <QRCode size={128} value={ticketData} />
+          </div>
+          </div>
+        </div>
+      </Modal>
     </div>
 
   );
