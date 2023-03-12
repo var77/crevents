@@ -4,9 +4,17 @@ import { Upload } from 'antd';
 import type { UploadChangeParam } from 'antd/es/upload';
 import type { UploadFile, UploadProps } from 'antd/es/upload/interface';
 
-const FileUpload: React.FC = ({ imageUrl, setImageUrl }) => {
+
+type FileUploadTypes = {
+  imageUrl: string,
+  setImageUrl: (el: string) => void
+}
+
+const FileUpload: React.FC<FileUploadTypes> = ( { imageUrl, setImageUrl} ) => {
   const [loading, setLoading] = useState(false);
 
+  console.log(imageUrl, 'asdasdasd');
+  
   const handleChange: UploadProps['onChange'] = (
     info: UploadChangeParam<UploadFile>
   ) => {
@@ -38,7 +46,7 @@ const FileUpload: React.FC = ({ imageUrl, setImageUrl }) => {
       onChange={handleChange}
     >
       {imageUrl ? (
-        <img src={imageUrl} alt="avatar" style={{ width: '100%' }} />
+        <img src={imageUrl}  alt="avatar" style={{ width: '100%' }} />
       ) : (
         uploadButton
       )}

@@ -3,11 +3,13 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import QRCode from 'react-qr-code';
 import { Card, Typography, Divider } from 'antd';
-
-const { Title, Text } = Typography;
 import { loadEventContract } from '../../utils/helpers';
 import { createIcon } from '@download/blockies';
+import { GlobalOutlined } from '@ant-design/icons';
+import Navbar from '../../components/Navbar/Navbar'
 import './AttendEvent.css';
+
+const { Title, Text } = Typography;
 
 function AttendEvent() {
   const navigate = useNavigate();
@@ -83,14 +85,13 @@ function AttendEvent() {
     navigate('/');
   };
 
+  const availableTickets = eventInfo.maxParticipants - eventInfo.registeredParticipantCount
   return (
+    <div>
+    <Navbar />
     <Card
       className="event-details"
-      title={
-        <Title className="event-details-title" level={2}>
-          {eventInfo.name}
-        </Title>
-      }
+
       cover={
         <img
           className="event-details-image"
@@ -109,43 +110,59 @@ function AttendEvent() {
           <QRCode value={ticketData} /> <Divider />
         </>
       )}
-      <Text className="event-details-description">{eventInfo.description}</Text>
-      <Divider />
-      <Text>Date and Time: {eventInfo.start}</Text>
-      <Divider />
-      <Text>Location: {eventInfo.address}</Text>
-      <Divider />
-      <Text>
-        Organizer: <Avatar src={eventInfo.organizerIcon} />{' '}
-        {eventInfo.organizer}
-      </Text>
-      <Divider />
-      <Text>
-        Ticket Prices: {eventInfo.preSaleTicketPrice} (Pre-Sale) /{' '}
-        {eventInfo.ticketPrice} (Regular)
-      </Text>
-      <Divider />
-      <Text>Max Participants: {eventInfo.maxParticipants}</Text>
-      <Divider />
-      <Text>
-        Registered Participants: {eventInfo.registeredParticipantCount}{' '}
-        {eventInfo.isRegistered && (
-          <Text type="success">(You are registered)</Text>
-        )}
-      </Text>
-      <Divider />
-      <Text>
-        Registration: {eventInfo.registrationOpen ? 'Open' : 'Closed'}
-      </Text>
-      <Divider />
-      <Text>Link: {eventInfo.link}</Text>
-      <Divider />
-      {eventInfo.isRegistered ? (
-        <Button onClick={showTicket}>Show Ticket </Button>
-      ) : (
-        <Button onClick={attendEvent}>Buy {eventInfo.ticketPrice} eth</Button>
-      )}
+      <div className='event-container'>
+        <div className='event-content'>
+        <div className='event-details-header'>
+          <div className='event-details-section'>
+            <Text className='event-details-startTime'>{eventInfo.start}</Text>
+            <Text className="event-details-title">{eventInfo.name}</Text>
+          </div>
+            <Text>
+              Registration: {eventInfo.registrationOpen ? 'Open' : 'Closed'}
+            </Text>
+        </div>
+        <div className='event-details-section'>
+          <Text className='event-details-section-header'> About this event</Text>
+          <Text className="event-details-about-description">{eventInfo.description}</Text>
+        </div>
+        <div className='event-details-section'>
+        <Text className='event-details-section-header'>Location</Text>
+          <div className='event-details-location-info'>
+            <GlobalOutlined className='event-details-icons' />
+            <Text>{eventInfo.address || 'YEREVAN CITADEL'}</Text>
+          </div>
+        </div>
+        <Divider />
+        <Text>
+          Organizer: <Avatar src={eventInfo.organizerIcon} />{' '}
+          {eventInfo.organizer}
+        </Text>
+        <Divider />
+        <Text>
+          Ticket Prices: {eventInfo.preSaleTicketPrice} (Pre-Sale) /{' '}
+          {eventInfo.ticketPrice} (Regular)
+        </Text>
+        <Divider />
+        <Text>Link: {eventInfo.link}</Text>
+        </div>
+        <div className='event-checkout-section'>
+            <Text className='event-checkout-section-title'> 
+              {eventInfo.isRegistered ? (
+                <Text type="success">(You are registered)</Text>
+              ) :(
+                <Text>Avaialble tickets {availableTickets} </Text>
+              ) } 
+          </Text>
+          {eventInfo.isRegistered ? (
+            <Button onClick={showTicket}>Show Ticket </Button>
+          ) : (
+            <Button onClick={attendEvent}>Buy</Button>
+          )}
+        </div>
+      </div>
     </Card>
+    </div>
+
   );
 }
 

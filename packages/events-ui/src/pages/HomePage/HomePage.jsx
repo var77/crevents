@@ -75,7 +75,8 @@ function HomePage() {
           display: 'flex',
           justifyContent: 'space-around',
           alignItems: 'center',
-          height: '100%',
+          margin: '16px 0px',
+          flexWrap: 'wrap',
         }}
       >
         {events.map((eventInfo) => (

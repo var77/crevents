@@ -66,6 +66,7 @@
     "url-loader": "^4.1.1"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.0.1",
     "@download/blockies": "^1.0.3",
     "@openzeppelin/contracts": "^4.5.0",
     "@reduxjs/toolkit": "^1.9.3",

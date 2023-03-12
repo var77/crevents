@@ -1,4 +1,5 @@
 .footer {
-  width: 100vw;
-  height: 10vw;
+  height: 20;
+  display: flex;
+  justify-content: center;
 }

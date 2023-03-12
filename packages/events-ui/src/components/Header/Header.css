@@ -1,11 +1,13 @@
 .header {
-  width: 100vw;
-  height: 30%;
   justify-content: center;
   display: flex;
-  align-items: center;
   flex-direction: column;
   background: #f5f5f5;
+  align-items: center;
+}
+
+.header .ant-carousel {
+  width: 100%;
 }
 
 .page-header {
@@ -13,3 +15,8 @@
   text-align: center;
   margin-bottom: 5vw;
 }
+
+.create-event-btn {
+  position: absolute;
+  top: 250px;
+} 
