@@ -21,7 +21,7 @@ const FileUpload: React.FC<FileUploadTypes> = ({ imageUrl, setImageUrl }) => {
     } else {
       setLoading(false);
       setImageUrl(
-        'https://user-images.githubusercontent.com/17221195/223807313-9953d73e-f8a8-42a6-ba74-96efb1da1c0c.png'
+        'https://image-hots-crevent.s3.us-east-1.amazonaws.com/D4RK7ET_background_for_website_where_you_create_events_and_user_b3e46a28-3201-4bad-8655-c9e019954a06.png'
       );
     }
   };

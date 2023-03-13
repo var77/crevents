@@ -17,6 +17,7 @@ library Utils {
     string description;
     string link;
     string image;
+    string location;
   }
 
   struct EventInfoStruct {
@@ -38,6 +39,7 @@ library Utils {
     string description;
     string link;
     string image;
+    string location;
   }
 }
 
@@ -243,6 +245,7 @@ contract Event is Ownable, ERC721A_SBT {
     evt.preSaleTicketPrice = preSaleTicketPrice;
     evt.link = link;
     evt.image = image;
+    evt.location = location;
     evt.organizer = owner();
     evt.registrationOpen = getRegistrationOpen(currTimestamp) == 0;
     evt.isRegistered = participants[msg.sender];

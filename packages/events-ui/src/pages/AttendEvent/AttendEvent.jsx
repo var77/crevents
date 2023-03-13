@@ -1,26 +1,59 @@
-import { Avatar, Button, Layout, Modal } from 'antd';
+import { Avatar, Button, Layout, Modal, QRCode } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import QRCode from 'react-qr-code';
-import { Card, Typography, Divider } from 'antd';
+import { Typography, Divider } from 'antd';
 import { loadEventContract } from '../../utils/helpers';
 import { createIcon } from '@download/blockies';
-import { GlobalOutlined } from '@ant-design/icons';
-import Navbar from '../../components/Navbar/Navbar'
+import Navbar from '../../components/Navbar/Navbar';
 import domtoimage from 'dom-to-image';
 import saveAs from 'file-saver';
 import './AttendEvent.css';
 import dayjs from 'dayjs';
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
+
+function TicketModal({
+  ticketData,
+  setTicketData,
+  handleDownloadTicket,
+  eventInfo,
+}) {
+  return (
+    <Modal
+      open={ticketData}
+      onCancel={() => setTicketData(null)}
+      closable={false}
+      footer={<Button onClick={handleDownloadTicket}>Download</Button>}
+    >
+      <div className="ticket-modal" id="ticket">
+        <div
+          className="ticket-modal-background"
+          style={{ backgroundImage: `url(${eventInfo.image})` }}
+        />
+        <div className="ticket-modal-info-cont">
+          <div className="ticket-modal-info">
+            <Text className="ticket-modal-info-title">{eventInfo.name}</Text>
+            <Text className="ticket-modal-info-starttime">
+              {dayjs(eventInfo.start).format('dddd MMM DD YYYY HH:mm')}
+            </Text>
+          </div>
+          <div>
+            <QRCode size={128} value={ticketData} />
+          </div>
+        </div>
+      </div>
+    </Modal>
+  );
+}
 
 function AttendEvent() {
   const navigate = useNavigate();
-  
+
   const { address: contractAddress } = useParams();
   const [contract, setContract] = useState(null);
   const [eventInfo, setEventInfo] = useState({});
   const [ticketData, setTicketData] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const initialize = async () => {
     const eventContract = loadEventContract(contractAddress);
@@ -43,10 +76,10 @@ function AttendEvent() {
       checkedParticipantCount: info.checkedParticipantCount,
       isRegistered: info.isRegistered,
       isChecked: info.isChecked,
-      start: new Date(+info.start * 1000).toDateString(),
+      start: new Date(+info.start * 1000),
       ticketPrice: window.web3Instance.utils.fromWei(info.ticketPrice),
       organizer: info.organizer,
-      image: 'https://image-hots-crevent.s3.us-east-1.amazonaws.com/D4RK7ET_background_for_website_where_you_create_events_and_user_b3e46a28-3201-4bad-8655-c9e019954a06.png' || info.image,
+      image: info.image,
       organizerIcon: createIcon({
         seed: info.organizer,
         size: 16,
@@ -57,10 +90,24 @@ function AttendEvent() {
   };
 
   const attendEvent = async () => {
-    await contract.methods.publicRegister().send({
-      from: window.selectedAddress,
-      value: window.web3Instance.utils.toWei(eventInfo.ticketPrice),
-    });
+    try {
+      setLoading(true);
+      await contract.methods
+        .publicRegister()
+        .send({
+          from: window.selectedAddress,
+          value: window.web3Instance.utils.toWei(eventInfo.ticketPrice),
+        })
+        .on('confirmation', async (confirmationNumber, receipt) => {
+          if (confirmationNumber === 1) {
+            await initialize();
+            setLoading(false);
+          }
+        });
+    } catch (err) {
+      console.error(err);
+      setLoading(false);
+    }
   };
 
   const getMyTicket = async () => {
@@ -82,8 +129,8 @@ function AttendEvent() {
     }
   };
 
-  const handleDownloadTicket = async() => {
-   const blob = await domtoimage.toBlob(document.getElementById('ticket'))
+  const handleDownloadTicket = async () => {
+    const blob = await domtoimage.toBlob(document.getElementById('ticket'));
     saveAs(blob, 'ticket.png');
     setTicketData(null);
   };
@@ -91,97 +138,79 @@ function AttendEvent() {
   useEffect(() => {
     initialize();
   }, []);
+
   const onGoBack = () => {
     navigate('/');
   };
 
-  const availableTickets = eventInfo.maxParticipants - eventInfo.registeredParticipantCount
+  const availableTickets =
+    eventInfo.maxParticipants - eventInfo.registeredParticipantCount;
   return (
-    <div>
-    <Navbar />
-    <Card
-      className="event-details"
-
-      cover={
-        <img
-          className="event-details-image"
-          alt="event cover"
-          src={eventInfo.image}
-        />
-      }
-      extra={
-        <Text type="secondary">
-          Registration Ends: {eventInfo.registrationEnd}
-        </Text>
-      }
-    >
-      <div className='event-container'>
-        <div className='event-content'>
-        <div className='event-details-header'>
-          <div className='event-details-section'>
-            <Text className='event-details-startTime'>{eventInfo.start}</Text>
-            <Text className="event-details-title">{eventInfo.name}</Text>
+    <>
+      <Navbar />
+      <Layout className="event-layout">
+        <div className="event-header-container">
+          <div
+            className="event-header-big"
+            style={{ backgroundImage: `url(${eventInfo.image})` }}
+          />
+          <img
+            src={eventInfo.image}
+            alt={eventInfo.name}
+            className="event-info-image"
+          />
+        </div>
+        <div className="event-info-container">
+          <div className="event-details-container">
+            <div className="event-title-info">
+              <Text className="event-title-text">{eventInfo.name}</Text>
+            </div>
+            <Divider />
+            <div className="event-organizer-info">
+              <h3>Organizer</h3>
+              <div>
+                <Avatar src={eventInfo.organizerIcon} />
+                <Text className="event-organizer-text">
+                  {' ' + eventInfo.organizer}
+                </Text>
+              </div>
+            </div>
+            <h3>When and Where</h3>
+            <div className="event-date-location-container">
+              <div className="event-date-info">
+                {dayjs(eventInfo.start).format('dddd MMM DD YYYY HH:mm')}
+              </div>
+              <Divider type="vertical" />
+              <div className="event-location-info">{eventInfo.address}</div>
+            </div>
+            <Divider />
+            <div className="event-about-container">
+              <h3>About This Event</h3>
+              <Text>{eventInfo.description}</Text>
+            </div>
           </div>
-            <Text>
-              Registration: {eventInfo.registrationOpen ? 'Open' : 'Closed'}
+          <div className="event-checkout-section">
+            <Text className="event-checkout-section-title">
+              {!eventInfo.isRegistered && <Text>Avaialble tickets {availableTickets} </Text>}
             </Text>
-        </div>
-        <div className='event-details-section'>
-          <Text className='event-details-section-header'> About this event</Text>
-          <Text className="event-details-about-description">{eventInfo.description}</Text>
-        </div>
-        <div className='event-details-section'>
-        <Text className='event-details-section-header'>Location</Text>
-          <div className='event-details-location-info'>
-            <GlobalOutlined className='event-details-icons' />
-            <Text>{eventInfo.address || 'YEREVAN CITADEL'}</Text>
+            {eventInfo.isRegistered ? (
+              <Button onClick={showTicket}>Show Ticket </Button>
+            ) : (
+              <Button onClick={attendEvent} loading={loading}>
+                Buy
+              </Button>
+            )}
           </div>
         </div>
-        <Divider />
-        <Text>
-          Organizer: <Avatar src={eventInfo.organizerIcon} />{' '}
-          {eventInfo.organizer}
-        </Text>
-        <Divider />
-        <Text>
-          Ticket Prices: {eventInfo.preSaleTicketPrice} (Pre-Sale) /{' '}
-          {eventInfo.ticketPrice} (Regular)
-        </Text>
-        <Divider />
-        <Text>Link: {eventInfo.link}</Text>
-        </div>
-        <div className='event-checkout-section'>
-            <Text className='event-checkout-section-title'> 
-              {eventInfo.isRegistered ? (
-                <Text type="success">(You are registered)</Text>
-              ) :(
-                <Text>Avaialble tickets {availableTickets} </Text>
-              ) } 
-          </Text>
-          {eventInfo.isRegistered ? (
-            <Button onClick={showTicket}>Show Ticket </Button>
-          ) : (
-            <Button onClick={attendEvent}>Buy</Button>
-          )}
-        </div>
-      </div>
-    </Card>
-    <Modal  open={ticketData} onCancel={() => setTicketData(null)} closable={false} footer={<><Button onClick={handleDownloadTicket}>Download</Button></>}>
-        <div className='ticket-modal' id='ticket' >
-          <div className='ticket-modal-background' style={{ backgroundImage:`url(${eventInfo.image})` }}/>
-          <div className='ticket-modal-info-cont'>
-          <div className='ticket-modal-info'>
-            <Text className="ticket-modal-info-title">{eventInfo.name}</Text>
-            <Text className='ticket-modal-info-starttime'>{dayjs(eventInfo.start).format('dddd MMM DD YYYY HH:mm')}</Text>
-          </div>
-          <div>
-          <QRCode size={128} value={ticketData} />
-          </div>
-          </div>
-        </div>
-      </Modal>
-    </div>
+      </Layout>
 
+      <TicketModal
+        ticketData={ticketData}
+        setTicketData={setTicketData}
+        handleDownloadTicket={handleDownloadTicket}
+        eventInfo={eventInfo}
+      />
+    </>
   );
 }
 
