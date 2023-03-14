@@ -1,7 +1,15 @@
-import { Avatar, Button, Layout, Modal, QRCode } from 'antd';
+import {
+  Avatar,
+  Button,
+  Layout,
+  Modal,
+  QRCode,
+  Typography,
+  Divider,
+} from 'antd';
+import { CalendarOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Typography, Divider } from 'antd';
 import { loadEventContract } from '../../utils/helpers';
 import { createIcon } from '@download/blockies';
 import Navbar from '../../components/Navbar/Navbar';
@@ -9,8 +17,14 @@ import domtoimage from 'dom-to-image';
 import saveAs from 'file-saver';
 import './AttendEvent.css';
 import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import Footer from '../../components/Footer/Footer';
 
-const { Text } = Typography;
+const { Text, Paragraph } = Typography;
+
+dayjs.extend(duration);
+dayjs.extend(relativeTime);
 
 function TicketModal({
   ticketData,
@@ -24,6 +38,7 @@ function TicketModal({
       onCancel={() => setTicketData(null)}
       closable={false}
       footer={<Button onClick={handleDownloadTicket}>Download</Button>}
+      centered
     >
       <div className="ticket-modal" id="ticket">
         <div
@@ -56,6 +71,7 @@ function AttendEvent() {
   const [loading, setLoading] = useState(false);
 
   const initialize = async () => {
+    console.log(dayjs);
     const eventContract = loadEventContract(contractAddress);
     const info = await eventContract.methods
       .getEventInfo(Math.floor(Date.now() / 1000))
@@ -80,6 +96,9 @@ function AttendEvent() {
       ticketPrice: window.web3Instance.utils.fromWei(info.ticketPrice),
       organizer: info.organizer,
       image: info.image,
+      duration: dayjs
+        .duration(dayjs(info.end * 1000).diff(dayjs(+info.start * 1000)))
+        .humanize(),
       organizerIcon: createIcon({
         seed: info.organizer,
         size: 16,
@@ -167,31 +186,65 @@ function AttendEvent() {
             </div>
             <Divider />
             <div className="event-organizer-info">
-              <h3>Organizer</h3>
+              <Text className="event-info-section-title">Organizer</Text>
               <div>
-                <Avatar src={eventInfo.organizerIcon} />
+                <Avatar src={eventInfo.organizerIcon} size={50} />
                 <Text className="event-organizer-text">
-                  {' ' + eventInfo.organizer}
+                  {eventInfo.organizer}
                 </Text>
               </div>
             </div>
-            <h3>When and Where</h3>
+            <Divider />
+            <Text className="event-info-section-title">When and Where</Text>
             <div className="event-date-location-container">
               <div className="event-date-info">
-                {dayjs(eventInfo.start).format('dddd MMM DD YYYY HH:mm')}
+                <div className="event-date-info-container">
+                  <div>
+                    <CalendarOutlined style={{ fontSize: 50 }} />
+                  </div>
+                  <div className="event-date-text-container">
+                    <Text className="event-date-title">Date and time</Text>
+                    <Text className="event-date-text">
+                      {dayjs(eventInfo.start).format('dddd MMM DD YYYY HH:mm')}
+                    </Text>
+                  </div>
+                </div>
               </div>
-              <Divider type="vertical" />
-              <div className="event-location-info">{eventInfo.address}</div>
+              <Divider className="event-date-divider" type="vertical" />
+              <div className="event-date-info-container">
+                <div>
+                  <img
+                    src="/assets/location.png"
+                    width={50}
+                    height={50}
+                    alt="location"
+                  />
+                </div>
+                <div className="event-date-text-container">
+                  <Text className="event-date-title">Location</Text>
+                  <Text className="event-date-text event-location-info">
+                    {eventInfo.location || 'Not Specified'}
+                  </Text>
+                </div>
+              </div>
             </div>
             <Divider />
             <div className="event-about-container">
-              <h3>About This Event</h3>
-              <Text>{eventInfo.description}</Text>
+              <Text className="event-info-section-title">About This Event</Text>
+              <div className="event-duration-container">
+                <ClockCircleOutlined style={{ fontSize: 40, color: 'gray' }} />
+                <Text className="event-duration-text">
+                  {eventInfo.duration}
+                </Text>
+              </div>
+              <Paragraph>{eventInfo.description}</Paragraph>
             </div>
           </div>
           <div className="event-checkout-section">
             <Text className="event-checkout-section-title">
-              {!eventInfo.isRegistered && <Text>Avaialble tickets {availableTickets} </Text>}
+              {!eventInfo.isRegistered && (
+                <Text>Avaialble tickets {availableTickets} </Text>
+              )}
             </Text>
             {eventInfo.isRegistered ? (
               <Button onClick={showTicket}>Show Ticket </Button>
@@ -202,6 +255,7 @@ function AttendEvent() {
             )}
           </div>
         </div>
+        <Footer />
       </Layout>
 
       <TicketModal
