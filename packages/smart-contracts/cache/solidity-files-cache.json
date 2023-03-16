@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/Users/varikmatevosyan/Documents/projects/web3-events/packages/smart-contracts/contracts/Event.sol": {
-      "lastModificationDate": 1678566547247,
-      "contentHash": "7705948fe4eb5ffc6df7e1faf2af7cc7",
+      "lastModificationDate": 1678991922137,
+      "contentHash": "057f1e7901802fa56fdc6549ed4c99e3",
       "sourceName": "contracts/Event.sol",
       "solcConfig": {
         "version": "0.8.17",

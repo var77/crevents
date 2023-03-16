@@ -24,9 +24,7 @@ interface EventInterface extends ethers.utils.Interface {
   functions: {
     "addModerator(address,bool)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
-    "changeEventDates(uint256,uint256,uint256)": FunctionFragment;
-    "changeEventInfo(string,string,uint256)": FunctionFragment;
-    "changeTicketPrices(uint256,uint256)": FunctionFragment;
+    "changeEventInfo((uint256,uint256,uint256,uint256,uint256,uint256,string,string,string,bool,bool))": FunctionFragment;
     "changeWhitelistRoot(bytes32)": FunctionFragment;
     "checkIn(address)": FunctionFragment;
     "checkedParticipantCount()": FunctionFragment;
@@ -37,6 +35,7 @@ interface EventInterface extends ethers.utils.Interface {
     "getRegistrationOpen(uint256)": FunctionFragment;
     "image()": FunctionFragment;
     "link()": FunctionFragment;
+    "location()": FunctionFragment;
     "maxParticipants()": FunctionFragment;
     "moderators(address)": FunctionFragment;
     "name()": FunctionFragment;
@@ -56,7 +55,6 @@ interface EventInterface extends ethers.utils.Interface {
     "supportsInterface(bytes4)": FunctionFragment;
     "symbol()": FunctionFragment;
     "ticketPrice()": FunctionFragment;
-    "toggleRegistration(bool,bool)": FunctionFragment;
     "tokenURI(uint256)": FunctionFragment;
     "tokenUri()": FunctionFragment;
     "totalSupply()": FunctionFragment;
@@ -73,16 +71,22 @@ interface EventInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
   encodeFunctionData(
-    functionFragment: "changeEventDates",
-    values: [BigNumberish, BigNumberish, BigNumberish]
-  ): string;
-  encodeFunctionData(
     functionFragment: "changeEventInfo",
-    values: [string, string, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "changeTicketPrices",
-    values: [BigNumberish, BigNumberish]
+    values: [
+      {
+        maxParticipants: BigNumberish;
+        registrationEnd: BigNumberish;
+        start: BigNumberish;
+        end: BigNumberish;
+        ticketPrice: BigNumberish;
+        preSaleTicketPrice: BigNumberish;
+        description: string;
+        link: string;
+        location: string;
+        registrationOpen: boolean;
+        onlyWhitelistRegistration: boolean;
+      }
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "changeWhitelistRoot",
@@ -112,6 +116,7 @@ interface EventInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "image", values?: undefined): string;
   encodeFunctionData(functionFragment: "link", values?: undefined): string;
+  encodeFunctionData(functionFragment: "location", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "maxParticipants",
     values?: undefined
@@ -174,10 +179,6 @@ interface EventInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "toggleRegistration",
-    values: [boolean, boolean]
-  ): string;
-  encodeFunctionData(
     functionFragment: "tokenURI",
     values: [BigNumberish]
   ): string;
@@ -210,15 +211,7 @@ interface EventInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "changeEventDates",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "changeEventInfo",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "changeTicketPrices",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -249,6 +242,7 @@ interface EventInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "image", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "link", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "location", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "maxParticipants",
     data: BytesLike
@@ -305,10 +299,6 @@ interface EventInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "ticketPrice",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "toggleRegistration",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "tokenURI", data: BytesLike): Result;
@@ -416,23 +406,20 @@ export class Event extends BaseContract {
 
     balanceOf(owner: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    changeEventDates(
-      _start: BigNumberish,
-      _end: BigNumberish,
-      _registrationEnd: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
     changeEventInfo(
-      _description: string,
-      _link: string,
-      _maxParticipants: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    changeTicketPrices(
-      _ticketPrice: BigNumberish,
-      _preSalePrice: BigNumberish,
+      eventData: {
+        maxParticipants: BigNumberish;
+        registrationEnd: BigNumberish;
+        start: BigNumberish;
+        end: BigNumberish;
+        ticketPrice: BigNumberish;
+        preSaleTicketPrice: BigNumberish;
+        description: string;
+        link: string;
+        location: string;
+        registrationOpen: boolean;
+        onlyWhitelistRegistration: boolean;
+      },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -480,6 +467,7 @@ export class Event extends BaseContract {
           string,
           string,
           string,
+          string,
           string
         ] & {
           addr: string;
@@ -500,6 +488,7 @@ export class Event extends BaseContract {
           description: string;
           link: string;
           image: string;
+          location: string;
         }
       ]
     >;
@@ -512,6 +501,8 @@ export class Event extends BaseContract {
     image(overrides?: CallOverrides): Promise<[string]>;
 
     link(overrides?: CallOverrides): Promise<[string]>;
+
+    location(overrides?: CallOverrides): Promise<[string]>;
 
     maxParticipants(overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -561,12 +552,6 @@ export class Event extends BaseContract {
 
     ticketPrice(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    toggleRegistration(
-      _isOpen: boolean,
-      _onlyWhitelist: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
     tokenURI(
       tokenId: BigNumberish,
       overrides?: CallOverrides
@@ -603,23 +588,20 @@ export class Event extends BaseContract {
 
   balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-  changeEventDates(
-    _start: BigNumberish,
-    _end: BigNumberish,
-    _registrationEnd: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
   changeEventInfo(
-    _description: string,
-    _link: string,
-    _maxParticipants: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  changeTicketPrices(
-    _ticketPrice: BigNumberish,
-    _preSalePrice: BigNumberish,
+    eventData: {
+      maxParticipants: BigNumberish;
+      registrationEnd: BigNumberish;
+      start: BigNumberish;
+      end: BigNumberish;
+      ticketPrice: BigNumberish;
+      preSaleTicketPrice: BigNumberish;
+      description: string;
+      link: string;
+      location: string;
+      registrationOpen: boolean;
+      onlyWhitelistRegistration: boolean;
+    },
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -666,6 +648,7 @@ export class Event extends BaseContract {
       string,
       string,
       string,
+      string,
       string
     ] & {
       addr: string;
@@ -686,6 +669,7 @@ export class Event extends BaseContract {
       description: string;
       link: string;
       image: string;
+      location: string;
     }
   >;
 
@@ -697,6 +681,8 @@ export class Event extends BaseContract {
   image(overrides?: CallOverrides): Promise<string>;
 
   link(overrides?: CallOverrides): Promise<string>;
+
+  location(overrides?: CallOverrides): Promise<string>;
 
   maxParticipants(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -743,12 +729,6 @@ export class Event extends BaseContract {
 
   ticketPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
-  toggleRegistration(
-    _isOpen: boolean,
-    _onlyWhitelist: boolean,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
   tokenURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
   tokenUri(overrides?: CallOverrides): Promise<string>;
@@ -782,23 +762,20 @@ export class Event extends BaseContract {
 
     balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    changeEventDates(
-      _start: BigNumberish,
-      _end: BigNumberish,
-      _registrationEnd: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     changeEventInfo(
-      _description: string,
-      _link: string,
-      _maxParticipants: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    changeTicketPrices(
-      _ticketPrice: BigNumberish,
-      _preSalePrice: BigNumberish,
+      eventData: {
+        maxParticipants: BigNumberish;
+        registrationEnd: BigNumberish;
+        start: BigNumberish;
+        end: BigNumberish;
+        ticketPrice: BigNumberish;
+        preSaleTicketPrice: BigNumberish;
+        description: string;
+        link: string;
+        location: string;
+        registrationOpen: boolean;
+        onlyWhitelistRegistration: boolean;
+      },
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -842,6 +819,7 @@ export class Event extends BaseContract {
         string,
         string,
         string,
+        string,
         string
       ] & {
         addr: string;
@@ -862,6 +840,7 @@ export class Event extends BaseContract {
         description: string;
         link: string;
         image: string;
+        location: string;
       }
     >;
 
@@ -873,6 +852,8 @@ export class Event extends BaseContract {
     image(overrides?: CallOverrides): Promise<string>;
 
     link(overrides?: CallOverrides): Promise<string>;
+
+    location(overrides?: CallOverrides): Promise<string>;
 
     maxParticipants(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -914,12 +895,6 @@ export class Event extends BaseContract {
     symbol(overrides?: CallOverrides): Promise<string>;
 
     ticketPrice(overrides?: CallOverrides): Promise<BigNumber>;
-
-    toggleRegistration(
-      _isOpen: boolean,
-      _onlyWhitelist: boolean,
-      overrides?: CallOverrides
-    ): Promise<void>;
 
     tokenURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
@@ -1005,23 +980,20 @@ export class Event extends BaseContract {
 
     balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    changeEventDates(
-      _start: BigNumberish,
-      _end: BigNumberish,
-      _registrationEnd: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     changeEventInfo(
-      _description: string,
-      _link: string,
-      _maxParticipants: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    changeTicketPrices(
-      _ticketPrice: BigNumberish,
-      _preSalePrice: BigNumberish,
+      eventData: {
+        maxParticipants: BigNumberish;
+        registrationEnd: BigNumberish;
+        start: BigNumberish;
+        end: BigNumberish;
+        ticketPrice: BigNumberish;
+        preSaleTicketPrice: BigNumberish;
+        description: string;
+        link: string;
+        location: string;
+        registrationOpen: boolean;
+        onlyWhitelistRegistration: boolean;
+      },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1059,6 +1031,8 @@ export class Event extends BaseContract {
     image(overrides?: CallOverrides): Promise<BigNumber>;
 
     link(overrides?: CallOverrides): Promise<BigNumber>;
+
+    location(overrides?: CallOverrides): Promise<BigNumber>;
 
     maxParticipants(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1108,12 +1082,6 @@ export class Event extends BaseContract {
 
     ticketPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
-    toggleRegistration(
-      _isOpen: boolean,
-      _onlyWhitelist: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     tokenURI(
       tokenId: BigNumberish,
       overrides?: CallOverrides
@@ -1154,23 +1122,20 @@ export class Event extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    changeEventDates(
-      _start: BigNumberish,
-      _end: BigNumberish,
-      _registrationEnd: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
     changeEventInfo(
-      _description: string,
-      _link: string,
-      _maxParticipants: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    changeTicketPrices(
-      _ticketPrice: BigNumberish,
-      _preSalePrice: BigNumberish,
+      eventData: {
+        maxParticipants: BigNumberish;
+        registrationEnd: BigNumberish;
+        start: BigNumberish;
+        end: BigNumberish;
+        ticketPrice: BigNumberish;
+        preSaleTicketPrice: BigNumberish;
+        description: string;
+        link: string;
+        location: string;
+        registrationOpen: boolean;
+        onlyWhitelistRegistration: boolean;
+      },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1210,6 +1175,8 @@ export class Event extends BaseContract {
     image(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     link(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    location(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     maxParticipants(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -1272,12 +1239,6 @@ export class Event extends BaseContract {
     symbol(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     ticketPrice(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    toggleRegistration(
-      _isOpen: boolean,
-      _onlyWhitelist: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
 
     tokenURI(
       tokenId: BigNumberish,

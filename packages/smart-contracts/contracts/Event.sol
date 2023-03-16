@@ -18,6 +18,22 @@ library Utils {
     string link;
     string image;
     string location;
+    bool registrationOpen;
+    bool onlyWhitelistRegistration;
+  }
+
+  struct EventUpdateStruct {
+    uint256 maxParticipants;
+    uint256 registrationEnd;
+    uint256 start;
+    uint256 end;
+    uint256 ticketPrice;
+    uint256 preSaleTicketPrice;
+    string description;
+    string link;
+    string location;
+    bool registrationOpen;
+    bool onlyWhitelistRegistration;
   }
 
   struct EventInfoStruct {
@@ -27,8 +43,7 @@ library Utils {
     bool onlyWhitelistRegistration;
     bool isRegistered;
     bool isChecked;
-    uint256 maxParticipants;
-    uint256 registrationEnd;
+    uint256 maxParticipants; uint256 registrationEnd;
     uint256 start;
     uint256 end;
     uint256 ticketPrice;
@@ -58,6 +73,8 @@ error CheckInNotAvailable();
 error AlreadyCheckedIn();
 error NotModerator();
 error TransferFailed();
+error BadRequest();
+error CanNotModifyStartedEvent();
 
 contract Event is Ownable, ERC721A_SBT {
   bool public onlyWhitelistRegistration;
@@ -95,7 +112,7 @@ contract Event is Ownable, ERC721A_SBT {
     address owner,
     uint256 fee,
     string memory _tokenUri
-  ) ERC721A_SBT(eventData.name, 'EVN') {
+  ) ERC721A_SBT(eventData.name, 'CREV') {
     if (eventData.start == 0 || eventData.end == 0) {
       revert ProvideRequiredArguments();
     }
@@ -110,6 +127,8 @@ contract Event is Ownable, ERC721A_SBT {
     ticketPrice = eventData.ticketPrice;
     preSaleTicketPrice = eventData.preSaleTicketPrice;
     location = eventData.location;
+    registrationOpen = eventData.registrationOpen;
+    onlyWhitelistRegistration = eventData.onlyWhitelistRegistration;
 
     if (eventData.registrationEnd == 0) {
       registrationEnd = eventData.start;
@@ -194,43 +213,28 @@ contract Event is Ownable, ERC721A_SBT {
   }
 
   function changeEventInfo(
-    string memory _description,
-    string memory _link,
-    uint256 _maxParticipants
+    Utils.EventUpdateStruct memory eventData
   ) external onlyOwner {
-    description = _description;
-    link = _link;
-    maxParticipants = _maxParticipants;
-  }
+    if (eventData.start < block.timestamp)
+      revert CanNotModifyStartedEvent();
+    if (eventData.maxParticipants < registeredParticipantCount || eventData.start > eventData.end) 
+      revert BadRequest();
 
-  function changeTicketPrices(
-    uint256 _ticketPrice,
-    uint256 _preSalePrice
-  ) external onlyOwner {
-    ticketPrice = _ticketPrice;
-    preSaleTicketPrice = _preSalePrice;
-  }
-
-  function changeEventDates(
-    uint256 _start,
-    uint256 _end,
-    uint256 _registrationEnd
-  ) external onlyOwner {
-    start = _start;
-    end = _end;
-    registrationEnd = _registrationEnd;
+    description = eventData.description;
+    link = eventData.link;
+    location = eventData.location;
+    maxParticipants = eventData.maxParticipants;
+    ticketPrice = eventData.ticketPrice;
+    preSaleTicketPrice = eventData.preSaleTicketPrice;
+    start = eventData.start;
+    end = eventData.end;
+    registrationEnd = eventData.registrationEnd;
+    registrationOpen = eventData.registrationOpen;
+    onlyWhitelistRegistration = eventData.onlyWhitelistRegistration;
   }
 
   function changeWhitelistRoot(bytes32 rootHash) external onlyOwner {
     whitelistRoot = rootHash;
-  }
-
-  function toggleRegistration(
-    bool _isOpen,
-    bool _onlyWhitelist
-  ) external onlyOwner {
-    registrationOpen = _isOpen;
-    onlyWhitelistRegistration = _onlyWhitelist;
   }
 
   function getEventInfo(

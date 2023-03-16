@@ -9,6 +9,7 @@ import {
   Spin,
   InputNumber,
   Modal,
+  Checkbox,
 } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import dayjs from 'dayjs';
@@ -35,13 +36,16 @@ const defaultEvent = {
   eventDates: [dayjs(Date.now() + 2000000), dayjs(Date.now() + 800000000)],
   ticketPrice: 0.001,
   preSaleTicketPrice: 0,
+  registrationOpen: true,
 };
 
 export default function EventRegistrationModal({ handleCancel, open }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const creatorContract = useSelector(selectCreatorContract);
-  const [imageUrl, setImageUrl] = useState(null);
+  const [imageUrl, setImageUrl] = useState(
+    'https://image-hots-crevent.s3.us-east-1.amazonaws.com/D4RK7ET_background_for_website_where_you_create_events_and_user_b3e46a28-3201-4bad-8655-c9e019954a06.png'
+  );
   const [loading, setLoading] = useState(false);
 
   const updateImageUrl = (url) => {
@@ -55,8 +59,8 @@ export default function EventRegistrationModal({ handleCancel, open }) {
     }
     let eventData = {
       name: data.name,
-      description: data.description || "",
-      link: data.link || "",
+      description: data.description || '',
+      link: data.link || '',
       image: imageUrl, //TODO
       maxParticipants: data.maxParticipants || 0,
       registrationEnd: data.eventDates[0] ? data.eventDates[0].unix() : 0,
@@ -67,9 +71,12 @@ export default function EventRegistrationModal({ handleCancel, open }) {
         : null,
       preSaleTicketPrice: data.preSaleTicketPrice || 0,
       location: data.location || null,
+      registrationOpen: !!data.registrationOpen,
+      onlyWhitelistRegistration: false,
     };
 
     eventData = omitBy(eventData, isNil);
+    console.log(eventData);
 
     setLoading(true);
     creatorContract.methods
@@ -100,7 +107,7 @@ export default function EventRegistrationModal({ handleCancel, open }) {
   return (
     <Modal
       open={open}
-      title="Create Event" 
+      title="Create Event"
       onCancel={handleCancel}
       bodyStyle={{
         padding: 50,
@@ -168,6 +175,13 @@ export default function EventRegistrationModal({ handleCancel, open }) {
           </Form.Item>
           <Form.Item label="Ticket price" name="ticketPrice">
             <InputNumber addonAfter="ETH" />
+          </Form.Item>
+          <Form.Item
+            label="Registration Open"
+            name="registrationOpen"
+            valuePropName="checked"
+          >
+            <Checkbox />
           </Form.Item>
         </Form>
       </Spin>

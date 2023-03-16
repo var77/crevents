@@ -21,7 +21,7 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface EventCreatorInterface extends ethers.utils.Interface {
   functions: {
-    "createEvent((uint256,uint256,uint256,uint256,uint256,uint256,string,string,string,string))": FunctionFragment;
+    "createEvent((uint256,uint256,uint256,uint256,uint256,uint256,string,string,string,string,string,bool,bool))": FunctionFragment;
     "events(uint256)": FunctionFragment;
     "fee()": FunctionFragment;
     "getEvents(uint256,uint256,uint256)": FunctionFragment;
@@ -46,6 +46,9 @@ interface EventCreatorInterface extends ethers.utils.Interface {
         description: string;
         link: string;
         image: string;
+        location: string;
+        registrationOpen: boolean;
+        onlyWhitelistRegistration: boolean;
       }
     ]
   ): string;
@@ -163,6 +166,9 @@ export class EventCreator extends BaseContract {
         description: string;
         link: string;
         image: string;
+        location: string;
+        registrationOpen: boolean;
+        onlyWhitelistRegistration: boolean;
       },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -196,6 +202,7 @@ export class EventCreator extends BaseContract {
           string,
           string,
           string,
+          string,
           string
         ] & {
           addr: string;
@@ -216,6 +223,7 @@ export class EventCreator extends BaseContract {
           description: string;
           link: string;
           image: string;
+          location: string;
         })[]
       ]
     >;
@@ -253,6 +261,9 @@ export class EventCreator extends BaseContract {
       description: string;
       link: string;
       image: string;
+      location: string;
+      registrationOpen: boolean;
+      onlyWhitelistRegistration: boolean;
     },
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -285,6 +296,7 @@ export class EventCreator extends BaseContract {
       string,
       string,
       string,
+      string,
       string
     ] & {
       addr: string;
@@ -305,6 +317,7 @@ export class EventCreator extends BaseContract {
       description: string;
       link: string;
       image: string;
+      location: string;
     })[]
   >;
 
@@ -341,6 +354,9 @@ export class EventCreator extends BaseContract {
         description: string;
         link: string;
         image: string;
+        location: string;
+        registrationOpen: boolean;
+        onlyWhitelistRegistration: boolean;
       },
       overrides?: CallOverrides
     ): Promise<string>;
@@ -373,6 +389,7 @@ export class EventCreator extends BaseContract {
         string,
         string,
         string,
+        string,
         string
       ] & {
         addr: string;
@@ -393,6 +410,7 @@ export class EventCreator extends BaseContract {
         description: string;
         link: string;
         image: string;
+        location: string;
       })[]
     >;
 
@@ -447,6 +465,9 @@ export class EventCreator extends BaseContract {
         description: string;
         link: string;
         image: string;
+        location: string;
+        registrationOpen: boolean;
+        onlyWhitelistRegistration: boolean;
       },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -496,6 +517,9 @@ export class EventCreator extends BaseContract {
         description: string;
         link: string;
         image: string;
+        location: string;
+        registrationOpen: boolean;
+        onlyWhitelistRegistration: boolean;
       },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
