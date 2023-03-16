@@ -168,6 +168,8 @@ function AttendEvent() {
     <>
       <Navbar />
       <Layout className="event-layout">
+        <div className='event-main-cont'>
+
         <div className="event-header-container">
           <div
             className="event-header-big"
@@ -232,7 +234,7 @@ function AttendEvent() {
             <div className="event-about-container">
               <Text className="event-info-section-title">About This Event</Text>
               <div className="event-duration-container">
-                <ClockCircleOutlined style={{ fontSize: 40, color: 'gray' }} />
+                <ClockCircleOutlined style={{ fontSize: 40, color: 'gray', marginRight: '10px' }} />
                 <Text className="event-duration-text">
                   {eventInfo.duration}
                 </Text>
@@ -255,6 +257,8 @@ function AttendEvent() {
             )}
           </div>
         </div>
+        </div>
+
         <Footer />
       </Layout>
 

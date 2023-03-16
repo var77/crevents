@@ -9,7 +9,6 @@ import {
   Spin,
   InputNumber,
   Modal,
-  Checkbox,
 } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import dayjs from 'dayjs';
@@ -36,16 +35,23 @@ const defaultEvent = {
   eventDates: [dayjs(Date.now() + 2000000), dayjs(Date.now() + 800000000)],
   ticketPrice: 0.001,
   preSaleTicketPrice: 0,
-  registrationOpen: true,
 };
 
-export default function EventRegistrationModal({ handleCancel, open }) {
+
+declare global {
+  interface Window { 
+    web3Instance?: any,
+    selectedAddress?: any,
+    eventContract?: any,
+  }
+}
+
+
+export default function EventRegistrationModal({ editEvent = false, handleCancel, open, title = "Create event", actionTitle="Create event" }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const creatorContract = useSelector(selectCreatorContract);
-  const [imageUrl, setImageUrl] = useState(
-    'https://image-hots-crevent.s3.us-east-1.amazonaws.com/D4RK7ET_background_for_website_where_you_create_events_and_user_b3e46a28-3201-4bad-8655-c9e019954a06.png'
-  );
+  const [imageUrl, setImageUrl] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const updateImageUrl = (url) => {
@@ -59,24 +65,21 @@ export default function EventRegistrationModal({ handleCancel, open }) {
     }
     let eventData = {
       name: data.name,
-      description: data.description || '',
-      link: data.link || '',
+      description: data.description || "",
+      link: data.link || "",
       image: imageUrl, //TODO
       maxParticipants: data.maxParticipants || 0,
       registrationEnd: data.eventDates[0] ? data.eventDates[0].unix() : 0,
       start: data.eventDates[0].unix(),
       end: data.eventDates[1].unix(),
       ticketPrice: data.ticketPrice
-        ? window.web3Instance.utils.toWei(data.ticketPrice.toString())
+      ? window.web3Instance.utils.toWei(data.ticketPrice.toString())
         : null,
       preSaleTicketPrice: data.preSaleTicketPrice || 0,
       location: data.location || null,
-      registrationOpen: !!data.registrationOpen,
-      onlyWhitelistRegistration: false,
     };
 
     eventData = omitBy(eventData, isNil);
-    console.log(eventData);
 
     setLoading(true);
     creatorContract.methods
@@ -107,7 +110,7 @@ export default function EventRegistrationModal({ handleCancel, open }) {
   return (
     <Modal
       open={open}
-      title="Create Event"
+      title={title} 
       onCancel={handleCancel}
       bodyStyle={{
         padding: 50,
@@ -130,7 +133,7 @@ export default function EventRegistrationModal({ handleCancel, open }) {
             htmlType="submit"
             disabled={loading}
           >
-            Create event
+            {actionTitle}
           </Button>
         </div>
       }
@@ -144,23 +147,23 @@ export default function EventRegistrationModal({ handleCancel, open }) {
           onFinishFailed={onFinishFailed}
           initialValues={defaultEvent}
         >
-          <Form.Item
+          {!editEvent && <Form.Item
             label="Event name"
             name="name"
             rules={[{ required: true, message: 'Please input event name' }]}
           >
             <Input />
-          </Form.Item>
+          </Form.Item>}
           <Form.Item label="Description" name="description">
             <Input />
           </Form.Item>
-          <Form.Item
+          {!editEvent && <Form.Item
             label="Image"
             name="image"
             getValueFromEvent={updateImageUrl}
           >
             <FileUpload imageUrl={imageUrl} setImageUrl={updateImageUrl} />
-          </Form.Item>
+          </Form.Item>}
           <Form.Item label="Link" name="link">
             <Input />
           </Form.Item>
@@ -175,13 +178,6 @@ export default function EventRegistrationModal({ handleCancel, open }) {
           </Form.Item>
           <Form.Item label="Ticket price" name="ticketPrice">
             <InputNumber addonAfter="ETH" />
-          </Form.Item>
-          <Form.Item
-            label="Registration Open"
-            name="registrationOpen"
-            valuePropName="checked"
-          >
-            <Checkbox />
           </Form.Item>
         </Form>
       </Spin>

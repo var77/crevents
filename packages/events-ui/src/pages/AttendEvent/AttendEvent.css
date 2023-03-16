@@ -7,7 +7,7 @@ body,
   margin: 0 20px;
   height: 100%;
   position: sticky;
-  width: 400px;
+  width: 270px;
   border: 1px solid #dbd9d9;
   height: 100px;
   display: flex;
@@ -74,8 +74,6 @@ body,
 }
 
 .event-layout {
-  align-items: center;
-  height: 100%;
   background: white;
 }
 
@@ -114,12 +112,10 @@ body,
 }
 .event-info-container {
   margin: 3vw 0px;
-  max-width: 1080px;
   width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: center;
 }
 .event-details-container {
   display: flex;
@@ -140,9 +136,17 @@ body,
 }
 .event-date-location-container {
   display: flex;
+  align-items: center;
+}
+.event-date-info {
+  width: 100%;
+}
+.event-main-cont {
+  margin: 50px;
 }
 .event-date-info-container {
   display: flex;
+  width: 100%;
   justify-content: center;
   align-items: center;
   flex-direction: row;
@@ -184,4 +188,14 @@ body,
 }
 .event-info-description-text {
   font-size: 24px;
+}
+
+
+
+@media only screen and (max-width: 750px) {
+  .event-info-container {
+    align-items: center;
+    flex-direction: column;
+
+  }
 }

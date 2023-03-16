@@ -5,7 +5,7 @@ export default function FooterComponent() {
   return (
     <Footer>
     <div className="footer">
-      <div>Footer</div>
+      <div>C 2023 Crevents</div>
     </div>
     </Footer>
   );

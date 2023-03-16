@@ -1,4 +1,4 @@
-import { Button, Layout } from 'antd';
+import { Button, Col, Layout, Row } from 'antd';
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
@@ -8,6 +8,7 @@ import EventCard from '../../components/EventCard/EventCard';
 import CreateEventCard from '../../components/EventCard/CreateEventCard';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
+import './HomePage.css';
 
 function CardsSkeleton() {
   return (
@@ -23,6 +24,7 @@ function HomePage() {
   const navigate = useNavigate();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [openEventEditModal, setOpenEventEditModal] = useState(false);
   const [showEventRegistration, setShowEventRegistration] = useState(false);
 
   const onAttendEvent = (address) => {
@@ -76,6 +78,7 @@ function HomePage() {
   }, []);
 
   return (
+    <>
     <Layout
       style={{
         backgroundColor: 'white',
@@ -89,11 +92,11 @@ function HomePage() {
         handleCancel={() => setShowEventRegistration(false)}
       />
       <div
+      className='main-cont'
         style={{
           display: 'flex',
           justifyContent: 'space-around',
           alignItems: 'center',
-          height: 'calc(100vh - 55px)',
         }}
       >
         {loading ? (
@@ -101,18 +104,24 @@ function HomePage() {
         ) : (
           <>
             <CreateEventCard onRegisterEvent={onRegisterEvent} />
-            {events.map((eventInfo) => (
-              <EventCard
-                key={eventInfo.address}
-                eventInfo={eventInfo}
-                onAttendEvent={onAttendEvent}
-              />
-            ))}
+            <Row gutter={[16, 16]} style={{height: '100%'}}>
+      {events.map((eventInfo) => (
+        <Col style={{ display: 'flex', justifyContent: 'center'}} key={eventInfo.address} xs={24} sm={24} md={12} lg={12} xl={8}>
+          <EventCard
+            eventInfo={eventInfo}
+            onAttendEvent={onAttendEvent}
+            setOpenEventEditModal={setOpenEventEditModal}
+          />
+        </Col>
+      ))}
+    </Row>
           </>
         )}
       </div>
       <Footer />
     </Layout>
+    <EventRegistrationModal editEvent open={openEventEditModal} handleCancel={()=>setOpenEventEditModal(false)} title='Edit event' actionTitle='Save event' />
+    </>
   );
 }
 
