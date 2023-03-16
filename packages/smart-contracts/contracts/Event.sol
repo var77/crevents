@@ -81,6 +81,7 @@ contract Event is Ownable, ERC721A_SBT {
   string public link;
   string public tokenUri;
   string public image;
+  string public location;
 
   mapping(address => bool) public participants;
   mapping(address => bool) public checkedParticipants;
@@ -108,6 +109,7 @@ contract Event is Ownable, ERC721A_SBT {
     end = eventData.end;
     ticketPrice = eventData.ticketPrice;
     preSaleTicketPrice = eventData.preSaleTicketPrice;
+    location = eventData.location;
 
     if (eventData.registrationEnd == 0) {
       registrationEnd = eventData.start;
