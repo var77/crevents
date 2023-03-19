@@ -43,6 +43,7 @@ declare global {
     web3Instance?: any,
     selectedAddress?: any,
     eventContract?: any,
+    creatorContract?: any,
   }
 }
 
@@ -80,7 +81,6 @@ export default function EventRegistrationModal({ editEvent = false, handleCancel
     };
 
     eventData = omitBy(eventData, isNil);
-
     setLoading(true);
     creatorContract.methods
       .createEvent(eventData)

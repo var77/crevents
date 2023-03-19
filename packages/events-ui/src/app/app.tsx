@@ -25,7 +25,7 @@ function App() {
     isWalletConnected,
     handleWalletConnect,
   } = useInitializeApp();
-
+  
   if (isLoading) {
     return (
       <CenterLayout>
@@ -50,18 +50,10 @@ function App() {
     )
   }
 
-  if(!isWalletConnected){
-    return (
-      <CenterLayout>
-        <img src={walletLoader} width="10%" alt="wallet-loader" />
-        <Button type="primary" onClick={handleWalletConnect}>Connect your wallet</Button>
-      </CenterLayout>
-    )
-  }
 
   return (
     <>
-      <Pages />
+     <Pages handleWalletConnect={handleWalletConnect} isWalletConnected={isWalletConnected} />
     </>
   )
 }

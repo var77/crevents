@@ -20,7 +20,7 @@ function CardsSkeleton() {
   );
 }
 
-function HomePage() {
+function HomePage({isWalletConnected}) {
   const navigate = useNavigate();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -32,7 +32,7 @@ function HomePage() {
   };
 
   const onRegisterEvent = () => {
-    setShowEventRegistration(true);
+    isWalletConnected ? setShowEventRegistration(true) : navigate('/connect-wallet');
   };
 
   const initialize = async () => {
@@ -76,7 +76,6 @@ function HomePage() {
   useEffect(() => {
     initialize();
   }, []);
-
   return (
     <>
     <Layout
@@ -104,8 +103,8 @@ function HomePage() {
         ) : (
           <>
             <CreateEventCard onRegisterEvent={onRegisterEvent} />
-            <Row gutter={[16, 16]} style={{height: '100%'}}>
-      {events.map((eventInfo) => (
+            {!!events.length && <Row gutter={[16, 16]} style={{height: '100%'}}>
+            {events.map((eventInfo) => (
         <Col style={{ display: 'flex', justifyContent: 'center'}} key={eventInfo.address} xs={24} sm={24} md={12} lg={12} xl={8}>
           <EventCard
             eventInfo={eventInfo}
@@ -114,7 +113,7 @@ function HomePage() {
           />
         </Col>
       ))}
-    </Row>
+    </Row>}
           </>
         )}
       </div>

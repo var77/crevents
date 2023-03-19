@@ -19,6 +19,15 @@ export const connectToMetamask = async (retry) => {
   return [true, accounts[0]];
 };
 
+export const checkProviderConnection = async () => {
+  const accounts = await window.web3Instance.eth.getAccounts();
+  if (accounts.length === 0) {
+    return [false, null]
+  }
+  window.selectedAddress = accounts[0];
+  return [true, accounts[0]];
+};
+
 export const loadContracts = async () => {
   const networkId = await window.web3Instance.eth.net.getId();
   const networkData = CreatorContract.networks[networkId];

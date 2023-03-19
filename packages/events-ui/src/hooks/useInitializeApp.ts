@@ -1,9 +1,10 @@
 /* eslint-disable no-unused-vars */
 import { useEffect, useState, useCallback } from 'react';
 import {
-    connectToMetamask,
-    loadContracts,
-    loadWeb3
+  loadWeb3,
+  loadContracts,
+  connectToMetamask,
+  checkProviderConnection
 } from '../utils/helpers';
 import { useDispatch } from 'react-redux'
 import { setEventContract } from '../store/eventContractSlice';
@@ -11,7 +12,7 @@ import { setCreatorContract } from '../store/creatorContractSlice';
 
 function useInitializeApp(){
     const dispatch = useDispatch()
-    const [isLoading, setLoading] = useState(false);
+    const [isLoading, setLoading] = useState(true);
     const [isWalletConnected, setWalletConnected] = useState(false);
     const [networkNotSupported, setNetworkNotSupported] = useState(false);
 
@@ -19,12 +20,8 @@ function useInitializeApp(){
       setLoading(true);
       try {
         await loadWeb3();
-        const [status] = await connectToMetamask(true);
+        const [status] = await checkProviderConnection()
         setWalletConnected(status);
-        if (!status) {
-          setLoading(false);
-          return;
-        }
         const [creatorContract, eventContract] = await loadContracts();
         if (!creatorContract) {
           setNetworkNotSupported(true);
@@ -41,13 +38,14 @@ function useInitializeApp(){
       }
     }, [dispatch]);
 
-    const handleWalletConnect = useCallback(async () => {
+    const handleWalletConnect = useCallback(async (callback) => {
         const [status, _address] = await connectToMetamask();
         console.log({ status, _address });
         setWalletConnected(status);
         if (status) {
           initializeApp();
         }
+        callback(status)
       }, [initializeApp]);
 
     useEffect(() => {
@@ -60,7 +58,7 @@ function useInitializeApp(){
             initializeApp();
             });
         }
-      }, [initializeApp]);
+      }, []);
 
     return {
         isWalletConnected,

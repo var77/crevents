@@ -1,11 +1,13 @@
+import { Routes, Route } from 'react-router-dom';
 import { AttendEvent } from './AttendEvent/AttendEvent';
 import { HomePage } from './HomePage/HomePage';
-import { Routes, Route } from 'react-router-dom';
+import { ConnectWallet } from './ConnectWallet/ConnectWallet';
 
-function Pages() {
+function Pages({handleWalletConnect, isWalletConnected}) {
   return (
     <Routes>
-      <Route path="/" element={<HomePage />} />
+      <Route path="/" element={<HomePage isWalletConnected={isWalletConnected} />} />
+      <Route path="/connect-wallet" element={<ConnectWallet handleWalletConnect={handleWalletConnect} />} />
       <Route path="/event/:address" element={<AttendEvent />} />
     </Routes>
   );
