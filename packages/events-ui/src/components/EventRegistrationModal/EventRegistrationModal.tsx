@@ -9,6 +9,7 @@ import {
   Spin,
   InputNumber,
   Modal,
+  Checkbox,
 } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import dayjs from 'dayjs';
@@ -35,6 +36,7 @@ const defaultEvent = {
   eventDates: [dayjs(Date.now() + 2000000), dayjs(Date.now() + 800000000)],
   ticketPrice: 0.001,
   preSaleTicketPrice: 0,
+  registrationOpen: true,
 };
 
 
@@ -48,7 +50,7 @@ declare global {
 }
 
 
-export default function EventRegistrationModal({ editEvent = false, handleCancel, open, title = "Create event", actionTitle="Create event" }) {
+export default function EventRegistrationModal({ editEvent = false, handleCancel, eventInfo, open, title = "Create event", actionTitle="Create event" }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const creatorContract = useSelector(selectCreatorContract);
@@ -78,6 +80,7 @@ export default function EventRegistrationModal({ editEvent = false, handleCancel
         : null,
       preSaleTicketPrice: data.preSaleTicketPrice || 0,
       location: data.location || null,
+      registrationOpen: data.registrationOpen,
     };
 
     eventData = omitBy(eventData, isNil);
@@ -98,6 +101,36 @@ export default function EventRegistrationModal({ editEvent = false, handleCancel
       });
   };
 
+  const saveEventEdit = async (data) => {
+    setLoading(true);
+    console.log(eventInfo, 'event');
+    
+    loadEventContract(eventInfo.address)
+    await window.eventContract.methods.changeEventInfo({
+    description: data.description,
+    link: data.link,
+    registrationEnd: data.eventDates[0] ? data.eventDates[0].unix() : 0,
+    start: data.eventDates[0].unix(),
+    end: data.eventDates[1].unix(),
+    ticketPrice: data.ticketPrice
+    ? window.web3Instance.utils.toWei(data.ticketPrice.toString())
+      : 0,
+    maxParticipants: data.maxParticipants,
+    onlyWhitelistRegistration: data.onlyWhitelistRegistration || false,
+    preSaleTicketPrice: data.preSaleTicketPrice || 0,
+    registrationOpen: data.registrationOpen,
+    location: data.location
+    }).send({ from: window.selectedAddress })
+    .on('confirmation', async (confirmationNumber, receipt) => {
+      console.log('confirmationNumber, receipt', confirmationNumber, receipt);
+      if (confirmationNumber === 1) {
+        setLoading(false);
+        dispatch(setEventContract(window.eventContract));
+        navigate(`/event/${eventInfo.address}`);
+      }
+    });
+  }
+
   const onFinish = (data) => {
     createEvent(data);
   };
@@ -106,7 +139,8 @@ export default function EventRegistrationModal({ editEvent = false, handleCancel
     setLoading(false);
     console.log('Failed:', errorInfo);
   };
-
+  console.log(eventInfo, defaultEvent, 'default');
+  
   return (
     <Modal
       open={open}
@@ -143,9 +177,9 @@ export default function EventRegistrationModal({ editEvent = false, handleCancel
           layout="horizontal"
           autoComplete="off"
           id="event-register-form"
-          onFinish={onFinish}
+          onFinish={editEvent ? saveEventEdit : onFinish}
           onFinishFailed={onFinishFailed}
-          initialValues={defaultEvent}
+          initialValues={eventInfo ? eventInfo : defaultEvent}
         >
           {!editEvent && <Form.Item
             label="Event name"
@@ -178,6 +212,13 @@ export default function EventRegistrationModal({ editEvent = false, handleCancel
           </Form.Item>
           <Form.Item label="Ticket price" name="ticketPrice">
             <InputNumber addonAfter="ETH" />
+          </Form.Item>
+          <Form.Item
+            label="Registration Open"
+            name="registrationOpen"
+            valuePropName="checked"
+          >
+            <Checkbox />
           </Form.Item>
         </Form>
       </Spin>

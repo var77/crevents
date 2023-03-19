@@ -9,6 +9,7 @@ import CreateEventCard from '../../components/EventCard/CreateEventCard';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import './HomePage.css';
+import dayjs from 'dayjs';
 
 function CardsSkeleton() {
   return (
@@ -24,6 +25,7 @@ function HomePage({isWalletConnected}) {
   const navigate = useNavigate();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [eventInfo, setEventInfo] = useState(null)
   const [openEventEditModal, setOpenEventEditModal] = useState(false);
   const [showEventRegistration, setShowEventRegistration] = useState(false);
 
@@ -46,19 +48,21 @@ function HomePage({isWalletConnected}) {
         link: info.link,
         maxParticipants: +info.maxParticipants,
         name: info.name,
+        location: info.location,
         onlyWhitelistRegistration: info.onlyWhitelistRegistration,
         preSaleTicketPrice: window.web3Instance.utils.fromWei(
           info.preSaleTicketPrice
         ),
-        registrationEnd: new Date(+info.registrationEnd),
+        registrationEnd: dayjs(+info.registrationEnd * 1000),
         registrationOpen: info.registrationOpen,
         registeredParticipantCount: info.registeredParticipantCount,
         checkedParticipantCount: info.checkedParticipantCount,
         isRegistered: info.isRegistered,
         isChecked: info.isChecked,
-        start: moment(new Date(+info.start * 1000)).format(
+        start: dayjs(+info.start * 1000).format(
           'MMMM DD YYYY HH:MM'
         ),
+        eventDates: [dayjs(+info.start * 1000), dayjs(+info.end * 1000)],
         ticketPrice: window.web3Instance.utils.fromWei(info.ticketPrice),
         address: info.addr,
         organizer: info.organizer,
@@ -109,6 +113,7 @@ function HomePage({isWalletConnected}) {
           <EventCard
             eventInfo={eventInfo}
             onAttendEvent={onAttendEvent}
+            setEventInfo={setEventInfo}
             setOpenEventEditModal={setOpenEventEditModal}
           />
         </Col>
@@ -119,7 +124,7 @@ function HomePage({isWalletConnected}) {
       </div>
       <Footer />
     </Layout>
-    <EventRegistrationModal editEvent open={openEventEditModal} handleCancel={()=>setOpenEventEditModal(false)} title='Edit event' actionTitle='Save event' />
+    <EventRegistrationModal editEvent eventInfo={eventInfo} open={openEventEditModal} handleCancel={()=>{setOpenEventEditModal(false); setEventInfo(null)}} title='Edit event' actionTitle='Save event' />
     </>
   );
 }

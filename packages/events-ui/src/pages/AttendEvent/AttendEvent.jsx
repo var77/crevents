@@ -61,7 +61,7 @@ function TicketModal({
   );
 }
 
-function AttendEvent() {
+function AttendEvent({ isWalletConnected }) {
   const navigate = useNavigate();
 
   const { address: contractAddress } = useParams();
@@ -110,6 +110,9 @@ function AttendEvent() {
 
   const attendEvent = async () => {
     try {
+      if(!isWalletConnected) {
+        return navigate('/connect-wallet')
+      }
       setLoading(true);
       await contract.methods
         .publicRegister()
@@ -136,7 +139,7 @@ function AttendEvent() {
       hash,
       window.web3Instance.utils.toChecksumAddress(window.selectedAddress)
     );
-    return { hash, signature };
+    return { hash, signature, address: eventInfo.address };
   };
 
   const showTicket = async () => {
@@ -251,7 +254,7 @@ function AttendEvent() {
             {eventInfo.isRegistered ? (
               <Button onClick={showTicket}>Show Ticket </Button>
             ) : (
-              <Button onClick={attendEvent} loading={loading}>
+              <Button disabled={!eventInfo.registrationOpen} onClick={attendEvent} loading={loading}>
                 Buy
               </Button>
             )}

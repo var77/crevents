@@ -1,13 +1,14 @@
 import { Avatar, Button, Card } from 'antd';
 const { Meta } = Card;
 
-export default function EventCard({ eventInfo, onAttendEvent, loading, setOpenEventEditModal }) {
-  const handleEditClick = (event) => {
-    console.log(event, 'mtav');
-    
-    event.stopPropagation();
+export default function EventCard({ eventInfo, setEventInfo, onAttendEvent, loading, setOpenEventEditModal }) {
+  const handleEditClick = (e, eventInfo) => {
+    setEventInfo(eventInfo)  
+    e.stopPropagation();
     setOpenEventEditModal(true);
   };
+  console.log(eventInfo, 'aaaaaaaa');
+  
   return (
     <Card
       loading={loading}
@@ -20,7 +21,7 @@ export default function EventCard({ eventInfo, onAttendEvent, loading, setOpenEv
        }}
       cover={<img alt={eventInfo.name} src={eventInfo.image} />}
       onClick={() => onAttendEvent(eventInfo.address)}
-      extra={<Button className='right-side' onClick={handleEditClick}>Edit</Button>}
+      extra={ eventInfo.organizer === window.selectedAddress && <Button className='right-side' onClick={(e) => handleEditClick(e, eventInfo)}>Edit</Button>}
     >
       <Meta
         avatar={<Avatar src={eventInfo.organizerIcon} />}
