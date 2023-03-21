@@ -55,6 +55,7 @@ export function getParameterByName(name, url = window.location.href) {
 export const getReferrer = () => getParameterByName('ref') || ZERO_ADDRESS;
 
 export const loadWeb3 = async () => {
+  //TODO::use infura for mobile
   if (window.ethereum) {
     window.web3Instance = new Web3(window.ethereum);
   } else {

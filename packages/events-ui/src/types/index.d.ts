@@ -1,3 +1,7 @@
 declare interface Window {
-    ethereum?: any
+  ethereum?: any;
+  web3Instance?: any;
+  selectedAddress?: string;
+  eventContract?: any;
+  creatorContract?: any;
 }

@@ -79,6 +79,7 @@
     "moment": "^2.29.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-qr-scanner": "^1.0.0-alpha.11",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.8.2",
     "tslib": "^2.3.0",

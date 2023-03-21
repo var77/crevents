@@ -18,7 +18,7 @@ npx nx build smart-contracts
 ```
 3. Start front end
 ```
-npx nx serve evnets-ui
+npx nx serve events-ui
 ```
 
 

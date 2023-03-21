@@ -104,14 +104,15 @@ function AttendEvent({ isWalletConnected }) {
         size: 16,
         scale: 8,
       }).toDataURL(),
+      address: info.addr,
     });
     setContract(eventContract);
   };
 
   const attendEvent = async () => {
     try {
-      if(!isWalletConnected) {
-        return navigate('/connect-wallet')
+      if (!isWalletConnected) {
+        return navigate('/connect-wallet');
       }
       setLoading(true);
       await contract.methods
@@ -145,6 +146,7 @@ function AttendEvent({ isWalletConnected }) {
   const showTicket = async () => {
     try {
       const data = await getMyTicket();
+      console.log(JSON.stringify(data));
       setTicketData(JSON.stringify(data));
     } catch (err) {
       console.error(err);
@@ -171,95 +173,104 @@ function AttendEvent({ isWalletConnected }) {
     <>
       <Navbar />
       <Layout className="event-layout">
-        <div className='event-main-cont'>
-
-        <div className="event-header-container">
-          <div
-            className="event-header-big"
-            style={{ backgroundImage: `url(${eventInfo.image})` }}
-          />
-          <img
-            src={eventInfo.image}
-            alt={eventInfo.name}
-            className="event-info-image"
-          />
-        </div>
-        <div className="event-info-container">
-          <div className="event-details-container">
-            <div className="event-title-info">
-              <Text className="event-title-text">{eventInfo.name}</Text>
-            </div>
-            <Divider />
-            <div className="event-organizer-info">
-              <Text className="event-info-section-title">Organizer</Text>
-              <div>
-                <Avatar src={eventInfo.organizerIcon} size={50} />
-                <Text className="event-organizer-text">
-                  {eventInfo.organizer}
-                </Text>
+        <div className="event-main-cont">
+          <div className="event-header-container">
+            <div
+              className="event-header-big"
+              style={{ backgroundImage: `url(${eventInfo.image})` }}
+            />
+            <img
+              src={eventInfo.image}
+              alt={eventInfo.name}
+              className="event-info-image"
+            />
+          </div>
+          <div className="event-info-container">
+            <div className="event-details-container">
+              <div className="event-title-info">
+                <Text className="event-title-text">{eventInfo.name}</Text>
               </div>
-            </div>
-            <Divider />
-            <Text className="event-info-section-title">When and Where</Text>
-            <div className="event-date-location-container">
-              <div className="event-date-info">
+              <Divider />
+              <div className="event-organizer-info">
+                <Text className="event-info-section-title">Organizer</Text>
+                <div>
+                  <Avatar src={eventInfo.organizerIcon} size={50} />
+                  <Text className="event-organizer-text">
+                    {eventInfo.organizer}
+                  </Text>
+                </div>
+              </div>
+              <Divider />
+              <Text className="event-info-section-title">When and Where</Text>
+              <div className="event-date-location-container">
+                <div className="event-date-info">
+                  <div className="event-date-info-container">
+                    <div>
+                      <CalendarOutlined style={{ fontSize: 50 }} />
+                    </div>
+                    <div className="event-date-text-container">
+                      <Text className="event-date-title">Date and time</Text>
+                      <Text className="event-date-text">
+                        {dayjs(eventInfo.start).format(
+                          'dddd MMM DD YYYY HH:mm'
+                        )}
+                      </Text>
+                    </div>
+                  </div>
+                </div>
+                <Divider className="event-date-divider" type="vertical" />
                 <div className="event-date-info-container">
                   <div>
-                    <CalendarOutlined style={{ fontSize: 50 }} />
+                    <img
+                      src="/assets/location.png"
+                      width={50}
+                      height={50}
+                      alt="location"
+                    />
                   </div>
                   <div className="event-date-text-container">
-                    <Text className="event-date-title">Date and time</Text>
-                    <Text className="event-date-text">
-                      {dayjs(eventInfo.start).format('dddd MMM DD YYYY HH:mm')}
+                    <Text className="event-date-title">Location</Text>
+                    <Text className="event-date-text event-location-info">
+                      {eventInfo.location || 'Not Specified'}
                     </Text>
                   </div>
                 </div>
               </div>
-              <Divider className="event-date-divider" type="vertical" />
-              <div className="event-date-info-container">
-                <div>
-                  <img
-                    src="/assets/location.png"
-                    width={50}
-                    height={50}
-                    alt="location"
+              <Divider />
+              <div className="event-about-container">
+                <Text className="event-info-section-title">
+                  About This Event
+                </Text>
+                <div className="event-duration-container">
+                  <ClockCircleOutlined
+                    style={{ fontSize: 40, color: 'gray', marginRight: '10px' }}
                   />
-                </div>
-                <div className="event-date-text-container">
-                  <Text className="event-date-title">Location</Text>
-                  <Text className="event-date-text event-location-info">
-                    {eventInfo.location || 'Not Specified'}
+                  <Text className="event-duration-text">
+                    {eventInfo.duration}
                   </Text>
                 </div>
+                <Paragraph>{eventInfo.description}</Paragraph>
               </div>
             </div>
-            <Divider />
-            <div className="event-about-container">
-              <Text className="event-info-section-title">About This Event</Text>
-              <div className="event-duration-container">
-                <ClockCircleOutlined style={{ fontSize: 40, color: 'gray', marginRight: '10px' }} />
-                <Text className="event-duration-text">
-                  {eventInfo.duration}
-                </Text>
-              </div>
-              <Paragraph>{eventInfo.description}</Paragraph>
-            </div>
-          </div>
-          <div className="event-checkout-section">
-            <Text className="event-checkout-section-title">
-              {!eventInfo.isRegistered && (
-                <Text>Avaialble tickets {availableTickets} </Text>
+            <div className="event-checkout-section">
+              <Text className="event-checkout-section-title">
+                {!eventInfo.isRegistered && (
+                  <Text>Avaialble tickets {availableTickets} </Text>
+                )}
+              </Text>
+              {eventInfo.isRegistered ? (
+                <Button onClick={showTicket}>Show Ticket </Button>
+              ) : (
+                <Button
+                  disabled={!eventInfo.registrationOpen}
+                  onClick={attendEvent}
+                  loading={loading}
+                >
+                  Buy
+                </Button>
               )}
-            </Text>
-            {eventInfo.isRegistered ? (
-              <Button onClick={showTicket}>Show Ticket </Button>
-            ) : (
-              <Button disabled={!eventInfo.registrationOpen} onClick={attendEvent} loading={loading}>
-                Buy
-              </Button>
-            )}
+            </div>
           </div>
-        </div>
         </div>
 
         <Footer />

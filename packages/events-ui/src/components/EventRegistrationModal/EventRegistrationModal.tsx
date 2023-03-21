@@ -39,17 +39,6 @@ const defaultEvent = {
   registrationOpen: true,
 };
 
-
-declare global {
-  interface Window { 
-    web3Instance?: any,
-    selectedAddress?: any,
-    eventContract?: any,
-    creatorContract?: any,
-  }
-}
-
-
 export default function EventRegistrationModal({ editEvent = false, handleCancel, eventInfo, open, title = "Create event", actionTitle="Create event" }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
