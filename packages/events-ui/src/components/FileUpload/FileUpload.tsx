@@ -9,21 +9,33 @@ type FileUploadTypes = {
   setImageUrl: (el: string) => void;
 };
 
+const UPLOAD_URL = 'https://image-uploader.crevents-images.workers.dev/upload';
+const headers = new Headers({
+  // just to avoid crawlers and scanners
+  Authorization: `Basic ${btoa('cr3vents:cr3v3nts!')}`,
+});
+
 const FileUpload: React.FC<FileUploadTypes> = ({ imageUrl, setImageUrl }) => {
   const [loading, setLoading] = useState(false);
 
-  const handleChange: UploadProps['onChange'] = (
-    info: UploadChangeParam<UploadFile>
-  ) => {
-    if (info.file.status === 'uploading') {
+  const onUpload = (options): Promise<string> => {
+    return new Promise((resolve, reject) => {
       setLoading(true);
-      return;
-    } else {
+      const reader = new FileReader();
+      reader.readAsDataURL(options.file);
+      reader.onload = async () => {
+        const result = await fetch(UPLOAD_URL, {
+          headers,
+          method: 'PUT',
+          body: JSON.stringify({ body: (reader.result as string).split('base64,')[1] }),
+        });
+        const url = await result.text();
+        setImageUrl(url);
+        resolve(url);
       setLoading(false);
-      setImageUrl(
-        'https://image-hots-crevent.s3.us-east-1.amazonaws.com/D4RK7ET_background_for_website_where_you_create_events_and_user_b3e46a28-3201-4bad-8655-c9e019954a06.png'
-      );
-    }
+      };
+      reader.onerror = (error) => reject(error);
+    });
   };
 
   const uploadButton = (
@@ -39,8 +51,7 @@ const FileUpload: React.FC<FileUploadTypes> = ({ imageUrl, setImageUrl }) => {
       listType="picture-card"
       className="avatar-uploader"
       showUploadList={false}
-      action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-      onChange={handleChange}
+      customRequest={onUpload}
     >
       {imageUrl ? (
         <img src={imageUrl} alt="avatar" style={{ width: '100%' }} />

@@ -2,6 +2,7 @@ import { Hono } from 'hono';
 import { cache } from 'hono/cache';
 import { sha256 } from 'hono/utils/crypto';
 import { basicAuth } from 'hono/basic-auth';
+import { cors } from 'hono/cors';
 import { detectType } from './utils';
 
 interface Env {
@@ -18,7 +19,17 @@ interface Data {
 const maxAge = 60 * 60 * 24 * 30;
 
 const app = new Hono<Env>();
-
+app.use(
+  '*',
+  cors({
+    origin: 'http://localhost:4200',
+    allowHeaders: ['Content-Type', 'Authorization', 'x-requested-with'],
+    maxAge: 600,
+  })
+);
+app.options('*', (c) => {
+  return c.text('', 204);
+});
 app.put('/upload', async (c, next) => {
   const auth = basicAuth({ username: c.env.USER, password: c.env.PASS });
   await auth(c, next);
@@ -38,7 +49,7 @@ app.put('/upload', async (c) => {
   if (sizeInMB >= 5) return c.notFound();
 
   const key = (await sha256(body)) + '.' + type?.suffix;
-  const object = await c.env.BUCKET.get(key);
+  const object = await c.env.BUCKET.head(key);
   if (!object) {
     await c.env.BUCKET.put(key, body, {
       httpMetadata: { contentType: type.mimeType },
@@ -48,12 +59,12 @@ app.put('/upload', async (c) => {
   return c.text(`${c.env.HOST}/${key}`);
 });
 
-app.get(
-  '*',
-  cache({
-    cacheName: 'r2-image-worker',
-  })
-);
+//app.get(
+//  '*',
+//  cache({
+//    cacheName: 'r2-image-worker',
+//  })
+//);
 
 app.get('/:key', async (c) => {
   const key = c.req.param('key');

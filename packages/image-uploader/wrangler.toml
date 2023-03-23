@@ -5,12 +5,14 @@ compatibility_date = "2023-03-22"
 [vars]
 USER = "cr3vents"
 PASS = "cr3v3nts!"
-HOST = "http://localhost:8787"
+HOST = "https://image-uploader.crevents-images.workers.dev"
 
 [env.production.vars]
-HOST = "https://image-uploader.workers.dev"
+HOST = "https://image-uploader.crevents-images.workers.dev"
 
 [[r2_buckets]]
 binding = 'BUCKET'
 bucket_name = 'images'
 preview_bucket_name = 'images'
+
+
