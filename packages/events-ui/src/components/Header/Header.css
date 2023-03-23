@@ -33,6 +33,12 @@
   text-align: center;
   margin: 0;
   font-family: 'Noto Sans Bassa Vah', sans-serif;
+  cursor: pointer;
+  transition: color 0.5s ease;
+}
+
+.navbar-logo:hover {
+  color: #f9b55b;
 }
 
 .navbar-btn {
@@ -43,6 +49,7 @@
   color: #212025;
   font-size: 17px;
   font-weight: 600;
+  transition: 0.5s ease;
   background: rgb(238,203,70);
   background: linear-gradient(180deg, rgba(238,203,70,1) 0%, rgba(217,157,81,1) 100%);
 }
