@@ -5,10 +5,8 @@ export default function CreateEventCard({ onRegisterEvent }) {
   return (
     <Card
       hoverable
-      title="Create Event"
-      style={{ width: 300 }}
+      style={{ width: 300, margin: '32px 0px' }}
       bodyStyle={{
-        height: 300,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',

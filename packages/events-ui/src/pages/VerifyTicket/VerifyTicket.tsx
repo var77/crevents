@@ -12,7 +12,6 @@ const verifyTicket = async (str: string) => {
       hash,
       signature
     );
-    console.log(signer);
     if (!signer) return false;
     const contract = loadEventContract(address);
     const isVerified = await contract.methods.verifyTicket(signer).call();

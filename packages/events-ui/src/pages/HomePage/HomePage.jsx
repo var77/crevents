@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import { createIcon } from '@download/blockies';
 import EventRegistrationModal from '../../components/EventRegistrationModal/EventRegistrationModal';
 import EventCard from '../../components/EventCard/EventCard';
-import CreateEventCard from '../../components/EventCard/CreateEventCard';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import './HomePage.css';
@@ -84,12 +83,12 @@ function HomePage({isWalletConnected}) {
     <>
     <Layout
       style={{
-        backgroundColor: 'white',
+        background: 'transparent',
         width: '100%',
         height: '100vh',
       }}
     >
-      <Header onRegisterEvent={onRegisterEvent} />
+      <Header isWalletConnected={isWalletConnected} onRegisterEvent={onRegisterEvent} />
       <EventRegistrationModal
         open={showEventRegistration}
         handleCancel={() => setShowEventRegistration(false)}
@@ -106,10 +105,9 @@ function HomePage({isWalletConnected}) {
           <CardsSkeleton />
         ) : (
           <>
-            <CreateEventCard onRegisterEvent={onRegisterEvent} />
             {!!events.length && <Row gutter={[16, 16]} style={{height: '100%'}}>
             {events.map((eventInfo) => (
-        <Col style={{ display: 'flex', justifyContent: 'center'}} key={eventInfo.address} xs={24} sm={24} md={12} lg={12} xl={8}>
+        <Col style={{ display: 'flex', justifyContent: 'center'}} key={eventInfo.address} xs={24} sm={24} md={12} lg={8} xl={8}>
           <EventCard
             eventInfo={eventInfo}
             onAttendEvent={onAttendEvent}
