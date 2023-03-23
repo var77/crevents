@@ -1,0 +1,29 @@
+{
+  "name": "metadata-server",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/metadata-server/src",
+  "projectType": "application",
+  "targets": {
+    "deploy": {
+      "command": "cd packages/metadata-server && npx wrangler publish"
+    },
+    "serve": {
+      "command": "cd packages/metadata-server && npx wrangler dev --local"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "packages/metadata-server/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    }
+  },
+  "tags": []
+}

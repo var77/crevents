@@ -1,0 +1,29 @@
+{
+  "name": "image-uploader",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/image-uploader/src",
+  "projectType": "application",
+  "targets": {
+    "deploy": {
+      "command": "cd packages/image-uploader && npx wrangler publish"
+    },
+    "serve": {
+      "command": "cd packages/image-uploader && npx wrangler dev --local"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "packages/image-uploader/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    }
+  },
+  "tags": []
+}

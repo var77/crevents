@@ -7,7 +7,7 @@ import './Event.sol';
 
 contract EventCreator is Ownable {
   uint256 public fee = 1;
-  string private tokenUriServer = 'http://localhost:3333';
+  string public tokenUriServer = 'http://localhost:8787/';
   address[] public events;
 
   event EventCreated(address addr);
@@ -16,7 +16,7 @@ contract EventCreator is Ownable {
     Utils.EventStruct calldata _eventData
   ) external returns (address) {
     address eventContractAddress = address(
-      new Event(_eventData, msg.sender, fee, tokenUriServer)
+      new Event(_eventData, msg.sender, fee)
     );
     events.push(eventContractAddress);
     emit EventCreated(eventContractAddress);

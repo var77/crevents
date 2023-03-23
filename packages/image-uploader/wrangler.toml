@@ -1,0 +1,16 @@
+name = "image-uploader"
+main = "src/index.ts"
+compatibility_date = "2023-03-22"
+
+[vars]
+USER = "cr3vents"
+PASS = "cr3v3nts!"
+HOST = "http://localhost:8787"
+
+[env.production.vars]
+HOST = "https://image-uploader.workers.dev"
+
+[[r2_buckets]]
+binding = 'BUCKET'
+bucket_name = 'images'
+preview_bucket_name = 'images'

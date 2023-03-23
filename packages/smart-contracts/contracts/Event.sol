@@ -1,9 +1,15 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.17;
 import '@openzeppelin/contracts/access/Ownable.sol';
+import '@openzeppelin/contracts/utils/Strings.sol';
 import '@openzeppelin/contracts/utils/cryptography/MerkleProof.sol';
 import 'hardhat/console.sol';
 import 'erc721a-sbt/ERC721A-SBT.sol';
+import 'hardhat/console.sol';
+
+contract IEventCreator {
+  string public tokenUriServer;
+}
 
 library Utils {
   struct EventStruct {
@@ -43,7 +49,8 @@ library Utils {
     bool onlyWhitelistRegistration;
     bool isRegistered;
     bool isChecked;
-    uint256 maxParticipants; uint256 registrationEnd;
+    uint256 maxParticipants;
+    uint256 registrationEnd;
     uint256 start;
     uint256 end;
     uint256 ticketPrice;
@@ -96,7 +103,6 @@ contract Event is Ownable, ERC721A_SBT {
 
   string public description;
   string public link;
-  string public tokenUri;
   string public image;
   string public location;
 
@@ -110,8 +116,7 @@ contract Event is Ownable, ERC721A_SBT {
   constructor(
     Utils.EventStruct memory eventData,
     address owner,
-    uint256 fee,
-    string memory _tokenUri
+    uint256 fee
   ) ERC721A_SBT(eventData.name, 'CREV') {
     if (eventData.start == 0 || eventData.end == 0) {
       revert ProvideRequiredArguments();
@@ -119,7 +124,6 @@ contract Event is Ownable, ERC721A_SBT {
 
     description = eventData.description;
     link = eventData.link;
-    tokenUri = _tokenUri;
     image = eventData.image;
     maxParticipants = eventData.maxParticipants;
     start = eventData.start;
@@ -215,10 +219,11 @@ contract Event is Ownable, ERC721A_SBT {
   function changeEventInfo(
     Utils.EventUpdateStruct memory eventData
   ) external onlyOwner {
-    if (eventData.start < block.timestamp)
-      revert CanNotModifyStartedEvent();
-    if (eventData.maxParticipants < registeredParticipantCount || eventData.start > eventData.end) 
-      revert BadRequest();
+    if (eventData.start < block.timestamp) revert CanNotModifyStartedEvent();
+    if (
+      eventData.maxParticipants < registeredParticipantCount ||
+      eventData.start > eventData.end
+    ) revert BadRequest();
 
     description = eventData.description;
     link = eventData.link;
@@ -297,8 +302,19 @@ contract Event is Ownable, ERC721A_SBT {
   function tokenURI(
     uint256 tokenId
   ) public view virtual override returns (string memory) {
-    if (!_exists(tokenId)) revert URIQueryForNonexistentToken();
+    if (!_exists(tokenId)) {
+      revert URIQueryForNonexistentToken();
+    }
 
-    return tokenUri;
+    string memory tokenUri = IEventCreator(parentContractAddr).tokenUriServer();
+    bytes memory encodedData = abi.encodePacked(
+      tokenUri,
+      Strings.toString(block.chainid),
+      '/',
+      Strings.toHexString(uint256(uint160(address(this))), 20),
+      '/',
+      Strings.toString(tokenId)
+    );
+    return string(encodedData);
   }
 }

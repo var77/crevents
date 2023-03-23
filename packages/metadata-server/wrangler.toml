@@ -1,0 +1,6 @@
+name = "metadata-server"
+main = "src/index.ts"
+compatibility_date = "2023-03-22"
+kv_namespaces = [
+  { binding = "METADATA_STORE", id = "c1643f2254834c89ace3029ac6aa2a5f",  preview_id = "843dc0ce5fcb4472bfbdc84c1e56729c" }
+]
