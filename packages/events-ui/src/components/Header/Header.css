@@ -1,9 +1,9 @@
 .header {
-  justify-content: center;
+  justify-content: space-between;
   display: flex;
-  flex-direction: column;
-  background: #f5f5f5;
   align-items: center;
+  margin: 50px;
+  height: 50px;
 }
 
 .header .ant-carousel {
@@ -23,4 +23,32 @@
 
 .page-title {
   font-family: 'Noto Sans Bassa Vah', sans-serif;
+}
+
+
+.navbar-logo {
+  color: #d99d51;
+  font-size: 30px;
+  color: '#fff';
+  text-align: center;
+  margin: 0;
+  font-family: 'Noto Sans Bassa Vah', sans-serif;
+}
+
+.navbar-btn {
+  border: none;
+  height: 50px;
+  border-radius: 30px;
+  width: 150px;
+  color: #212025;
+  font-size: 17px;
+  font-weight: 600;
+  background: rgb(238,203,70);
+  background: linear-gradient(180deg, rgba(238,203,70,1) 0%, rgba(217,157,81,1) 100%);
+}
+
+.navbar-btn:hover {
+  color: black !important;
+  background: rgb(255,216,70);
+  background: linear-gradient(180deg, rgba(255,216,70,1) 0%, rgba(249,180,94,1) 100%);
 }

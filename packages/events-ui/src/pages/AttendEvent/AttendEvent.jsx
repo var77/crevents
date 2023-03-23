@@ -20,6 +20,7 @@ import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import Footer from '../../components/Footer/Footer';
+import Header from '../../components/Header/Header';
 
 const { Text, Paragraph } = Typography;
 
@@ -169,15 +170,16 @@ function AttendEvent({ isWalletConnected }) {
     eventInfo.maxParticipants - eventInfo.registeredParticipantCount;
   return (
     <>
-      <Navbar />
+      <Header isWalletConnected={isWalletConnected} hideCreateEventBtn/>
       <Layout className="event-layout">
         <div className='event-main-cont'>
 
         <div className="event-header-container">
           <div
-            className="event-header-big"
-            style={{ backgroundImage: `url(${eventInfo.image})` }}
-          />
+            className="event-header-big-cont"
+          >
+            <div className="event-header-big-img" style={{backgroundImage: `url(${eventInfo.image})`}}/>
+          </div>
           <img
             src={eventInfo.image}
             alt={eventInfo.name}

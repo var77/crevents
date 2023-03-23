@@ -1,6 +1,6 @@
 .main-cont { 
-padding: 16px;
-height: 100%;
+padding: 0px 50px 50px;
+flex-direction: column;
 }
 
 @media only screen and (max-width: 750px) {

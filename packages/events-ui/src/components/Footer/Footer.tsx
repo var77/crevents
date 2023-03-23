@@ -3,7 +3,11 @@ import './Footer.css';
 
 export default function FooterComponent() {
   return (
-    <Footer>
+    <Footer style={{ 
+      backgroundColor: 'transparent',
+      color: 'white',
+      fontWeight: 700,
+  }}>
     <div className="footer">
       <div>C 2023 Crevents</div>
     </div>
