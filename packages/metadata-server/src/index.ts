@@ -1,66 +1,18 @@
-import Web3 from 'web3';
-
-const abi = [
-  {
-    inputs: [
-      { internalType: 'uint256', name: 'currTimestamp', type: 'uint256' },
-    ],
-    name: 'getEventInfo',
-    outputs: [
-      {
-        components: [
-          { internalType: 'address', name: 'addr', type: 'address' },
-          { internalType: 'address', name: 'organizer', type: 'address' },
-          { internalType: 'bool', name: 'registrationOpen', type: 'bool' },
-          {
-            internalType: 'bool',
-            name: 'onlyWhitelistRegistration',
-            type: 'bool',
-          },
-          { internalType: 'bool', name: 'isRegistered', type: 'bool' },
-          { internalType: 'bool', name: 'isChecked', type: 'bool' },
-          { internalType: 'uint256', name: 'maxParticipants', type: 'uint256' },
-          { internalType: 'uint256', name: 'registrationEnd', type: 'uint256' },
-          { internalType: 'uint256', name: 'start', type: 'uint256' },
-          { internalType: 'uint256', name: 'end', type: 'uint256' },
-          { internalType: 'uint256', name: 'ticketPrice', type: 'uint256' },
-          {
-            internalType: 'uint256',
-            name: 'preSaleTicketPrice',
-            type: 'uint256',
-          },
-          {
-            internalType: 'uint256',
-            name: 'registeredParticipantCount',
-            type: 'uint256',
-          },
-          {
-            internalType: 'uint256',
-            name: 'checkedParticipantCount',
-            type: 'uint256',
-          },
-          { internalType: 'string', name: 'name', type: 'string' },
-          { internalType: 'string', name: 'description', type: 'string' },
-          { internalType: 'string', name: 'link', type: 'string' },
-          { internalType: 'string', name: 'image', type: 'string' },
-          { internalType: 'string', name: 'location', type: 'string' },
-        ],
-        internalType: 'struct Utils.EventInfoStruct',
-        name: '',
-        type: 'tuple',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-];
-
 export interface Env {
   METADATA_STORE: KVNamespace;
 }
 
+const SIGNATURES = {
+  name: '0x06fdde03',
+  image: '0xf3ccaac0',
+  ticketPrice: '0x1209b1f6',
+  start: '0xbe9a6555',
+};
+
 const RPS_LIST = {
   31337: 'http://127.0.0.1:8545/',
+  80001: MUMBAI_RPC_URL, // this is from secrets
+  137: 'https://polygon-rpc.com/',
 };
 
 const isValidChain = (chain: string) => {
@@ -84,6 +36,7 @@ const corsHeaders = {
   'Access-Control-Allow-Methods': 'GET,HEAD,POST,OPTIONS',
   'Access-Control-Max-Age': '86400',
 };
+
 function handleOptions(request: Request) {
   let headers = request.headers;
   if (
@@ -109,6 +62,66 @@ function handleOptions(request: Request) {
   }
 }
 
+function decodeParameter(type, value) {
+  switch (type) {
+    case 'string':
+      const strLen = parseInt(value.substring(64, 128), 16) * 2; // get string length from hex string
+      const hexStr = value.substring(128, 128 + strLen); // get hex string representation of the string
+      return hexToString(hexStr).slice(1); // decode hex string to string
+    case 'uint256':
+      return parseInt(value, 16); // parse hex string to integer
+    default:
+      throw new Error(`Unsupported type: ${type}`);
+  }
+}
+
+function hexToString(hex) {
+  let str = '';
+  for (let i = 0; i < hex.length; i += 2) {
+    const charCode = parseInt(hex.substr(i, 2), 16);
+    if (charCode === 0) break; // stop decoding when null character is encountered
+    str += String.fromCharCode(charCode);
+  }
+  return str;
+}
+
+const doRPCCall = async (url: string, address: string, data: string) => {
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({
+      jsonrpc: '2.0',
+      id: 1,
+      method: 'eth_call',
+      params: [
+        {
+          to: address,
+          data,
+        },
+        'latest',
+      ],
+    }),
+  });
+  const json = await response.json();
+  return json.result;
+};
+
+const getEventInfo = async (url: string, address: string) => {
+  const [nameHex, imageHex, priceHex, startHex] = await Promise.all([
+    doRPCCall(url, address, SIGNATURES.name),
+    doRPCCall(url, address, SIGNATURES.image),
+    doRPCCall(url, address, SIGNATURES.ticketPrice),
+    doRPCCall(url, address, SIGNATURES.start),
+  ]);
+
+  return {
+    name: decodeParameter('string', nameHex),
+    image: decodeParameter('string', imageHex),
+    ticketPrice: decodeParameter('uint256', priceHex),
+    start: decodeParameter('uint256', startHex),
+  };
+};
+
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     if (request.method === 'OPTIONS') {
@@ -124,31 +137,21 @@ export default {
       return new Response('Bad request', { status: 400 });
     }
 
-    const provider = new Web3.providers.HttpProvider(RPS_LIST[chain]);
-    const web3 = new Web3(provider);
     const cachedJson = await env.METADATA_STORE.get(address);
     if (cachedJson)
       return successResponse({ ...JSON.parse(cachedJson), tokenId });
 
-    const contract = new web3.eth.Contract(abi, address);
-    const info = await contract.methods
-      .getEventInfo(Math.floor(Date.now() / 1000))
-      .call();
+    const info = await getEventInfo(RPS_LIST[chain], address);
+    console.log(info);
+
     const metadataJson = {
       name: info.name,
       image: info.image,
       attributes: [
-        { trait_type: 'location', value: info.location },
-        { trait_type: 'description', value: info.description },
-        { trait_type: 'link', value: info.link },
         { trait_type: 'price', value: info.ticketPrice },
         {
           trait_type: 'start',
           value: new Date(+info.start * 1000).toLocaleDateString(),
-        },
-        {
-          trait_type: 'end',
-          value: new Date(+info.end * 1000).toLocaleDateString(),
         },
       ],
     };

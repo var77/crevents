@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { Upload } from 'antd';
-import type { UploadChangeParam } from 'antd/es/upload';
-import type { UploadFile, UploadProps } from 'antd/es/upload/interface';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 type FileUploadTypes = {
   imageUrl: string;
   setImageUrl: (el: string) => void;
 };
 
-const UPLOAD_URL = 'https://image-uploader.crevents-images.workers.dev/upload';
+const UPLOAD_URL = 'https://upload.crevents.xyz/upload';
+//const UPLOAD_URL = 'http://localhost:8787/upload';
 const headers = new Headers({
   // just to avoid crawlers and scanners
   Authorization: `Basic ${btoa('cr3vents:cr3v3nts!')}`,
@@ -17,6 +17,7 @@ const headers = new Headers({
 
 const FileUpload: React.FC<FileUploadTypes> = ({ imageUrl, setImageUrl }) => {
   const [loading, setLoading] = useState(false);
+  const { executeRecaptcha } = useGoogleReCaptcha();
 
   const onUpload = (options): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -24,15 +25,18 @@ const FileUpload: React.FC<FileUploadTypes> = ({ imageUrl, setImageUrl }) => {
       const reader = new FileReader();
       reader.readAsDataURL(options.file);
       reader.onload = async () => {
+        const img = (reader.result as string).split('base64,')[1];
+        const recaptchaToken = await executeRecaptcha('upload');
+
         const result = await fetch(UPLOAD_URL, {
           headers,
           method: 'PUT',
-          body: JSON.stringify({ body: (reader.result as string).split('base64,')[1] }),
+          body: JSON.stringify({ body: img, recaptchaToken }),
         });
         const url = await result.text();
         setImageUrl(url);
         resolve(url);
-      setLoading(false);
+        setLoading(false);
       };
       reader.onerror = (error) => reject(error);
     });

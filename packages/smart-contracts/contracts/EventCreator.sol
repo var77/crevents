@@ -6,8 +6,8 @@ import '@openzeppelin/contracts/access/Ownable.sol';
 import './Event.sol';
 
 contract EventCreator is Ownable {
-  uint256 public fee = 1;
-  string public tokenUriServer = 'http://localhost:8787/';
+  uint8 public fee = 1;
+  string public tokenUriServer = 'https://metadata.cryvents.xyz/';
   address[] public events;
 
   event EventCreated(address addr);

@@ -7,6 +7,9 @@
     "build": {
       "command": "cd packages/smart-contracts && npx hardhat run --network localhost scripts/deploy.ts"
     },
+    "build:mumbai": {
+      "command": "cd packages/smart-contracts && npx hardhat run --network mumbai scripts/deploy.ts"
+    },
     "serve": {
       "command": "cd packages/smart-contracts &&  npx hardhat node"
     },

@@ -21,6 +21,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Event__factory>;
     getContractFactory(
+      name: "IEventCreator",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IEventCreator__factory>;
+    getContractFactory(
       name: "EventCreator",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.EventCreator__factory>;
@@ -47,6 +51,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.Event>;
+    getContractAt(
+      name: "IEventCreator",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IEventCreator>;
     getContractAt(
       name: "EventCreator",
       address: string,

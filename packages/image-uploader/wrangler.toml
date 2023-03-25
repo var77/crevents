@@ -1,14 +1,19 @@
 name = "image-uploader"
 main = "src/index.ts"
 compatibility_date = "2023-03-22"
+node_compat = true
+routes = [
+	{ pattern = "upload.crevents.xyz", custom_domain = true },
+]
+
 
 [vars]
 USER = "cr3vents"
 PASS = "cr3v3nts!"
-HOST = "https://image-uploader.crevents-images.workers.dev"
-
-[env.production.vars]
-HOST = "https://image-uploader.crevents-images.workers.dev"
+HOST = "https://upload.crevents.xyz"
+# The necessary secrets are:
+# - RECAPTCHA_SECRET
+# Run `echo <VALUE> | wrangler secret put <NAME>` for each of these
 
 [[r2_buckets]]
 binding = 'BUCKET'

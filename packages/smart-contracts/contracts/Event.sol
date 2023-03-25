@@ -13,23 +13,23 @@ contract IEventCreator {
 
 library Utils {
   struct EventStruct {
-    uint256 maxParticipants;
+    uint32 maxParticipants;
     uint256 registrationEnd;
     uint256 start;
     uint256 end;
     uint256 ticketPrice;
     uint256 preSaleTicketPrice;
     string name;
-    string description;
     string link;
     string image;
     string location;
+    string description;
     bool registrationOpen;
     bool onlyWhitelistRegistration;
   }
 
   struct EventUpdateStruct {
-    uint256 maxParticipants;
+    uint32 maxParticipants;
     uint256 registrationEnd;
     uint256 start;
     uint256 end;
@@ -49,7 +49,7 @@ library Utils {
     bool onlyWhitelistRegistration;
     bool isRegistered;
     bool isChecked;
-    uint256 maxParticipants;
+    uint32 maxParticipants;
     uint256 registrationEnd;
     uint256 start;
     uint256 end;
@@ -57,9 +57,9 @@ library Utils {
     uint256 preSaleTicketPrice;
     uint256 registeredParticipantCount;
     uint256 checkedParticipantCount;
-    string name;
     string description;
     string link;
+    string name;
     string image;
     string location;
   }
@@ -86,9 +86,9 @@ error CanNotModifyStartedEvent();
 contract Event is Ownable, ERC721A_SBT {
   bool public onlyWhitelistRegistration;
   bool public registrationOpen = true;
+  uint32 public maxParticipants;
   address public parentContractAddr;
 
-  uint256 public maxParticipants;
   uint256 public registrationEnd;
   uint256 public start;
   uint256 public end;
@@ -96,7 +96,7 @@ contract Event is Ownable, ERC721A_SBT {
   uint256 public checkedParticipantCount;
   uint256 public ticketPrice;
   uint256 public preSaleTicketPrice;
-  uint256 public parentContractFee;
+  uint8 public parentContractFee;
 
   bytes32 public whitelistRoot =
     0x16d95910a21726a3e7b59a8c6166b355396434419809cb902e2063555b8d60de;
@@ -116,7 +116,7 @@ contract Event is Ownable, ERC721A_SBT {
   constructor(
     Utils.EventStruct memory eventData,
     address owner,
-    uint256 fee
+    uint8 fee
   ) ERC721A_SBT(eventData.name, 'CREV') {
     if (eventData.start == 0 || eventData.end == 0) {
       revert ProvideRequiredArguments();

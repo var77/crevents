@@ -24,7 +24,7 @@ interface EventInterface extends ethers.utils.Interface {
   functions: {
     "addModerator(address,bool)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
-    "changeEventInfo((uint256,uint256,uint256,uint256,uint256,uint256,string,string,string,bool,bool))": FunctionFragment;
+    "changeEventInfo((uint32,uint256,uint256,uint256,uint256,uint256,string,string,string,bool,bool))": FunctionFragment;
     "changeWhitelistRoot(bytes32)": FunctionFragment;
     "checkIn(address)": FunctionFragment;
     "checkedParticipantCount()": FunctionFragment;
@@ -56,7 +56,6 @@ interface EventInterface extends ethers.utils.Interface {
     "symbol()": FunctionFragment;
     "ticketPrice()": FunctionFragment;
     "tokenURI(uint256)": FunctionFragment;
-    "tokenUri()": FunctionFragment;
     "totalSupply()": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "verifyTicket(address)": FunctionFragment;
@@ -182,7 +181,6 @@ interface EventInterface extends ethers.utils.Interface {
     functionFragment: "tokenURI",
     values: [BigNumberish]
   ): string;
-  encodeFunctionData(functionFragment: "tokenUri", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "totalSupply",
     values?: undefined
@@ -302,7 +300,6 @@ interface EventInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "tokenURI", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "tokenUri", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "totalSupply",
     data: BytesLike
@@ -456,7 +453,7 @@ export class Event extends BaseContract {
           boolean,
           boolean,
           boolean,
-          BigNumber,
+          number,
           BigNumber,
           BigNumber,
           BigNumber,
@@ -476,7 +473,7 @@ export class Event extends BaseContract {
           onlyWhitelistRegistration: boolean;
           isRegistered: boolean;
           isChecked: boolean;
-          maxParticipants: BigNumber;
+          maxParticipants: number;
           registrationEnd: BigNumber;
           start: BigNumber;
           end: BigNumber;
@@ -484,9 +481,9 @@ export class Event extends BaseContract {
           preSaleTicketPrice: BigNumber;
           registeredParticipantCount: BigNumber;
           checkedParticipantCount: BigNumber;
-          name: string;
           description: string;
           link: string;
+          name: string;
           image: string;
           location: string;
         }
@@ -504,7 +501,7 @@ export class Event extends BaseContract {
 
     location(overrides?: CallOverrides): Promise<[string]>;
 
-    maxParticipants(overrides?: CallOverrides): Promise<[BigNumber]>;
+    maxParticipants(overrides?: CallOverrides): Promise<[number]>;
 
     moderators(arg0: string, overrides?: CallOverrides): Promise<[boolean]>;
 
@@ -521,7 +518,7 @@ export class Event extends BaseContract {
 
     parentContractAddr(overrides?: CallOverrides): Promise<[string]>;
 
-    parentContractFee(overrides?: CallOverrides): Promise<[BigNumber]>;
+    parentContractFee(overrides?: CallOverrides): Promise<[number]>;
 
     participants(arg0: string, overrides?: CallOverrides): Promise<[boolean]>;
 
@@ -556,8 +553,6 @@ export class Event extends BaseContract {
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[string]>;
-
-    tokenUri(overrides?: CallOverrides): Promise<[string]>;
 
     totalSupply(overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -637,7 +632,7 @@ export class Event extends BaseContract {
       boolean,
       boolean,
       boolean,
-      BigNumber,
+      number,
       BigNumber,
       BigNumber,
       BigNumber,
@@ -657,7 +652,7 @@ export class Event extends BaseContract {
       onlyWhitelistRegistration: boolean;
       isRegistered: boolean;
       isChecked: boolean;
-      maxParticipants: BigNumber;
+      maxParticipants: number;
       registrationEnd: BigNumber;
       start: BigNumber;
       end: BigNumber;
@@ -665,9 +660,9 @@ export class Event extends BaseContract {
       preSaleTicketPrice: BigNumber;
       registeredParticipantCount: BigNumber;
       checkedParticipantCount: BigNumber;
-      name: string;
       description: string;
       link: string;
+      name: string;
       image: string;
       location: string;
     }
@@ -684,7 +679,7 @@ export class Event extends BaseContract {
 
   location(overrides?: CallOverrides): Promise<string>;
 
-  maxParticipants(overrides?: CallOverrides): Promise<BigNumber>;
+  maxParticipants(overrides?: CallOverrides): Promise<number>;
 
   moderators(arg0: string, overrides?: CallOverrides): Promise<boolean>;
 
@@ -698,7 +693,7 @@ export class Event extends BaseContract {
 
   parentContractAddr(overrides?: CallOverrides): Promise<string>;
 
-  parentContractFee(overrides?: CallOverrides): Promise<BigNumber>;
+  parentContractFee(overrides?: CallOverrides): Promise<number>;
 
   participants(arg0: string, overrides?: CallOverrides): Promise<boolean>;
 
@@ -730,8 +725,6 @@ export class Event extends BaseContract {
   ticketPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
   tokenURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
-
-  tokenUri(overrides?: CallOverrides): Promise<string>;
 
   totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -808,7 +801,7 @@ export class Event extends BaseContract {
         boolean,
         boolean,
         boolean,
-        BigNumber,
+        number,
         BigNumber,
         BigNumber,
         BigNumber,
@@ -828,7 +821,7 @@ export class Event extends BaseContract {
         onlyWhitelistRegistration: boolean;
         isRegistered: boolean;
         isChecked: boolean;
-        maxParticipants: BigNumber;
+        maxParticipants: number;
         registrationEnd: BigNumber;
         start: BigNumber;
         end: BigNumber;
@@ -836,9 +829,9 @@ export class Event extends BaseContract {
         preSaleTicketPrice: BigNumber;
         registeredParticipantCount: BigNumber;
         checkedParticipantCount: BigNumber;
-        name: string;
         description: string;
         link: string;
+        name: string;
         image: string;
         location: string;
       }
@@ -855,7 +848,7 @@ export class Event extends BaseContract {
 
     location(overrides?: CallOverrides): Promise<string>;
 
-    maxParticipants(overrides?: CallOverrides): Promise<BigNumber>;
+    maxParticipants(overrides?: CallOverrides): Promise<number>;
 
     moderators(arg0: string, overrides?: CallOverrides): Promise<boolean>;
 
@@ -869,7 +862,7 @@ export class Event extends BaseContract {
 
     parentContractAddr(overrides?: CallOverrides): Promise<string>;
 
-    parentContractFee(overrides?: CallOverrides): Promise<BigNumber>;
+    parentContractFee(overrides?: CallOverrides): Promise<number>;
 
     participants(arg0: string, overrides?: CallOverrides): Promise<boolean>;
 
@@ -897,8 +890,6 @@ export class Event extends BaseContract {
     ticketPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
     tokenURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
-
-    tokenUri(overrides?: CallOverrides): Promise<string>;
 
     totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1087,8 +1078,6 @@ export class Event extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    tokenUri(overrides?: CallOverrides): Promise<BigNumber>;
-
     totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
     transferOwnership(
@@ -1244,8 +1233,6 @@ export class Event extends BaseContract {
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
-
-    tokenUri(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     totalSupply(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

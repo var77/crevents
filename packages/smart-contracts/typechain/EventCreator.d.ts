@@ -21,13 +21,14 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface EventCreatorInterface extends ethers.utils.Interface {
   functions: {
-    "createEvent((uint256,uint256,uint256,uint256,uint256,uint256,string,string,string,string,string,bool,bool))": FunctionFragment;
+    "createEvent((uint32,uint256,uint256,uint256,uint256,uint256,string,string,string,string,string,bool,bool))": FunctionFragment;
     "events(uint256)": FunctionFragment;
     "fee()": FunctionFragment;
     "getEvents(uint256,uint256,uint256)": FunctionFragment;
     "owner()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "setTokenUri(string)": FunctionFragment;
+    "tokenUriServer()": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "withdraw()": FunctionFragment;
   };
@@ -43,10 +44,10 @@ interface EventCreatorInterface extends ethers.utils.Interface {
         ticketPrice: BigNumberish;
         preSaleTicketPrice: BigNumberish;
         name: string;
-        description: string;
         link: string;
         image: string;
         location: string;
+        description: string;
         registrationOpen: boolean;
         onlyWhitelistRegistration: boolean;
       }
@@ -68,6 +69,10 @@ interface EventCreatorInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "setTokenUri", values: [string]): string;
   encodeFunctionData(
+    functionFragment: "tokenUriServer",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "transferOwnership",
     values: [string]
   ): string;
@@ -87,6 +92,10 @@ interface EventCreatorInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "setTokenUri",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "tokenUriServer",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -163,10 +172,10 @@ export class EventCreator extends BaseContract {
         ticketPrice: BigNumberish;
         preSaleTicketPrice: BigNumberish;
         name: string;
-        description: string;
         link: string;
         image: string;
         location: string;
+        description: string;
         registrationOpen: boolean;
         onlyWhitelistRegistration: boolean;
       },
@@ -175,7 +184,7 @@ export class EventCreator extends BaseContract {
 
     events(arg0: BigNumberish, overrides?: CallOverrides): Promise<[string]>;
 
-    fee(overrides?: CallOverrides): Promise<[BigNumber]>;
+    fee(overrides?: CallOverrides): Promise<[number]>;
 
     getEvents(
       offset: BigNumberish,
@@ -191,7 +200,7 @@ export class EventCreator extends BaseContract {
           boolean,
           boolean,
           boolean,
-          BigNumber,
+          number,
           BigNumber,
           BigNumber,
           BigNumber,
@@ -211,7 +220,7 @@ export class EventCreator extends BaseContract {
           onlyWhitelistRegistration: boolean;
           isRegistered: boolean;
           isChecked: boolean;
-          maxParticipants: BigNumber;
+          maxParticipants: number;
           registrationEnd: BigNumber;
           start: BigNumber;
           end: BigNumber;
@@ -219,9 +228,9 @@ export class EventCreator extends BaseContract {
           preSaleTicketPrice: BigNumber;
           registeredParticipantCount: BigNumber;
           checkedParticipantCount: BigNumber;
-          name: string;
           description: string;
           link: string;
+          name: string;
           image: string;
           location: string;
         })[]
@@ -238,6 +247,8 @@ export class EventCreator extends BaseContract {
       uri: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    tokenUriServer(overrides?: CallOverrides): Promise<[string]>;
 
     transferOwnership(
       newOwner: string,
@@ -258,10 +269,10 @@ export class EventCreator extends BaseContract {
       ticketPrice: BigNumberish;
       preSaleTicketPrice: BigNumberish;
       name: string;
-      description: string;
       link: string;
       image: string;
       location: string;
+      description: string;
       registrationOpen: boolean;
       onlyWhitelistRegistration: boolean;
     },
@@ -270,7 +281,7 @@ export class EventCreator extends BaseContract {
 
   events(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
-  fee(overrides?: CallOverrides): Promise<BigNumber>;
+  fee(overrides?: CallOverrides): Promise<number>;
 
   getEvents(
     offset: BigNumberish,
@@ -285,7 +296,7 @@ export class EventCreator extends BaseContract {
       boolean,
       boolean,
       boolean,
-      BigNumber,
+      number,
       BigNumber,
       BigNumber,
       BigNumber,
@@ -305,7 +316,7 @@ export class EventCreator extends BaseContract {
       onlyWhitelistRegistration: boolean;
       isRegistered: boolean;
       isChecked: boolean;
-      maxParticipants: BigNumber;
+      maxParticipants: number;
       registrationEnd: BigNumber;
       start: BigNumber;
       end: BigNumber;
@@ -313,9 +324,9 @@ export class EventCreator extends BaseContract {
       preSaleTicketPrice: BigNumber;
       registeredParticipantCount: BigNumber;
       checkedParticipantCount: BigNumber;
-      name: string;
       description: string;
       link: string;
+      name: string;
       image: string;
       location: string;
     })[]
@@ -331,6 +342,8 @@ export class EventCreator extends BaseContract {
     uri: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  tokenUriServer(overrides?: CallOverrides): Promise<string>;
 
   transferOwnership(
     newOwner: string,
@@ -351,10 +364,10 @@ export class EventCreator extends BaseContract {
         ticketPrice: BigNumberish;
         preSaleTicketPrice: BigNumberish;
         name: string;
-        description: string;
         link: string;
         image: string;
         location: string;
+        description: string;
         registrationOpen: boolean;
         onlyWhitelistRegistration: boolean;
       },
@@ -363,7 +376,7 @@ export class EventCreator extends BaseContract {
 
     events(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
-    fee(overrides?: CallOverrides): Promise<BigNumber>;
+    fee(overrides?: CallOverrides): Promise<number>;
 
     getEvents(
       offset: BigNumberish,
@@ -378,7 +391,7 @@ export class EventCreator extends BaseContract {
         boolean,
         boolean,
         boolean,
-        BigNumber,
+        number,
         BigNumber,
         BigNumber,
         BigNumber,
@@ -398,7 +411,7 @@ export class EventCreator extends BaseContract {
         onlyWhitelistRegistration: boolean;
         isRegistered: boolean;
         isChecked: boolean;
-        maxParticipants: BigNumber;
+        maxParticipants: number;
         registrationEnd: BigNumber;
         start: BigNumber;
         end: BigNumber;
@@ -406,9 +419,9 @@ export class EventCreator extends BaseContract {
         preSaleTicketPrice: BigNumber;
         registeredParticipantCount: BigNumber;
         checkedParticipantCount: BigNumber;
-        name: string;
         description: string;
         link: string;
+        name: string;
         image: string;
         location: string;
       })[]
@@ -419,6 +432,8 @@ export class EventCreator extends BaseContract {
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
     setTokenUri(uri: string, overrides?: CallOverrides): Promise<void>;
+
+    tokenUriServer(overrides?: CallOverrides): Promise<string>;
 
     transferOwnership(
       newOwner: string,
@@ -462,10 +477,10 @@ export class EventCreator extends BaseContract {
         ticketPrice: BigNumberish;
         preSaleTicketPrice: BigNumberish;
         name: string;
-        description: string;
         link: string;
         image: string;
         location: string;
+        description: string;
         registrationOpen: boolean;
         onlyWhitelistRegistration: boolean;
       },
@@ -494,6 +509,8 @@ export class EventCreator extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    tokenUriServer(overrides?: CallOverrides): Promise<BigNumber>;
+
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -514,10 +531,10 @@ export class EventCreator extends BaseContract {
         ticketPrice: BigNumberish;
         preSaleTicketPrice: BigNumberish;
         name: string;
-        description: string;
         link: string;
         image: string;
         location: string;
+        description: string;
         registrationOpen: boolean;
         onlyWhitelistRegistration: boolean;
       },
@@ -548,6 +565,8 @@ export class EventCreator extends BaseContract {
       uri: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
+
+    tokenUriServer(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     transferOwnership(
       newOwner: string,
