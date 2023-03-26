@@ -27,8 +27,8 @@ const { RangePicker } = DatePicker;
 
 const dateFormat = 'YYYY/MM/DD';
 const defaultEvent = {
-  name: 'Test event',
-  description: 'test description',
+  name: 'My first event',
+  description: '',
   location: 'Yerevan',
   link: 'https://example.com',
   maxParticipants: 10,
@@ -151,6 +151,10 @@ export default function EventRegistrationModal({ editEvent = false, handleCancel
             type="primary"
             htmlType="submit"
             disabled={loading}
+            style={{
+              backgroundColor: "#f3aa40",
+              color: "#212025"
+            }}
           >
             {actionTitle}
           </Button>
@@ -180,6 +184,7 @@ export default function EventRegistrationModal({ editEvent = false, handleCancel
             label="Image"
             name="image"
             getValueFromEvent={updateImageUrl}
+            rules={[{ required: true, message: 'Please upload an image for your event' }]}
           >
             <FileUpload imageUrl={imageUrl} setImageUrl={updateImageUrl} />
           </Form.Item>}

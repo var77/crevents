@@ -134,7 +134,6 @@ body,
 }
 .event-organizer-text {
   font-size: 16px;
-  margin-left: 10px;
 }
 .event-title-text {
   font-weight: bold;
@@ -157,7 +156,6 @@ body,
 .event-date-info-container {
   display: flex;
   width: 100%;
-  justify-content: center;
   align-items: center;
   flex-direction: row;
 }
@@ -200,6 +198,14 @@ body,
   font-size: 24px;
 }
 
+.event-location-container {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+
 
 
 @media only screen and (max-width: 750px) {
@@ -207,5 +213,42 @@ body,
     align-items: center;
     flex-direction: column;
 
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .event-info-section-title {
+    font-size: 20px;
+  }
+  .event-title-text {
+    font-size: 30px;
+    line-height: normal;
+  }
+
+  .event-organizer-text {
+    margin-left: auto;
+    margin-top: 8px;
+  }
+
+  .event-date-location-container {
+    flex-direction: column;
+  }
+
+
+  .event-location-container {
+    margin-top: 16px;
+    justify-content: initial;
+  }
+
+  .event-date-title {
+    font-size: 15px;
+  }
+
+  .event-date-text {
+    font-size: 13px;
+  }
+
+  .event-checkout-section {
+    width: 100%;
   }
 }
