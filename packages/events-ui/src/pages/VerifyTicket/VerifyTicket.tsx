@@ -1,25 +1,36 @@
+import {
+  bufferToHex,
+  ecrecover,
+  fromRpcSig,
+  hashPersonalMessage,
+  pubToAddress,
+} from '@ethereumjs/util';
 import { Layout, Modal } from 'antd';
 import { useState } from 'react';
 import QrReader from 'react-qr-scanner';
+import FooterComponent from '../../components/Footer/Footer';
 import { loadEventContract } from '../../utils/helpers';
 
 const verifyTicket = async (data) => {
   try {
-    alert(data.text);
     const { hash, signature, address } = JSON.parse(data.text);
     if (!address || !hash || !signature) return false;
-    const signer = await window.web3Instance.eth.personal.ecRecover(
-      hash,
-      signature
+
+    const res = fromRpcSig(signature);
+    const pub = ecrecover(
+      hashPersonalMessage(Buffer.from(hash)),
+      res.v,
+      res.r,
+      res.s
     );
-    alert(`signer:: ${signer}`);
+    const addrBuf = pubToAddress(pub);
+    const signer = bufferToHex(addrBuf);
     if (!signer) return false;
     const contract = loadEventContract(address);
     const isVerified = await contract.methods.verifyTicket(signer).call();
 
     return isVerified;
   } catch (err) {
-    alert(err.message);
     console.error(err);
     return false;
   }
@@ -47,15 +58,18 @@ const VerifyTicket = () => {
   };
   return (
     <Layout>
-      <QrReader
-        constraints={{
-          video: { facingMode: 'environment' },
-        }}
-        onError={(e) => alert(e.message)}
-        delay={2000}
-        style={{ width: '100%', height: '100%' }}
-        onScan={handleTicketVerify}
-      />
+      {!isPopupOpen && (
+        <QrReader
+          constraints={{
+            video: { facingMode: 'environment' },
+          }}
+          onError={(e) => alert(e.message)}
+          delay={100}
+          style={{ width: '100%', height: '100%' }}
+          onScan={handleTicketVerify}
+        />
+      )}
+      <FooterComponent />
     </Layout>
   );
 };

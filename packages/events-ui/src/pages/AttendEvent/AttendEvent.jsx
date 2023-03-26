@@ -135,12 +135,11 @@ function AttendEvent({ isWalletConnected }) {
 
   const getMyTicket = async () => {
     const nonce = Date.now().toString();
-    const hash = window.web3Instance.utils.sha3(nonce);
     const signature = await window.web3Instance.eth.personal.sign(
-      hash,
+      nonce,
       window.web3Instance.utils.toChecksumAddress(window.selectedAddress)
     );
-    return { hash, signature, address: eventInfo.address };
+    return { hash: nonce, signature, address: eventInfo.address };
   };
 
   const showTicket = async () => {
