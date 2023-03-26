@@ -72,7 +72,6 @@ function AttendEvent({ isWalletConnected }) {
   const [loading, setLoading] = useState(false);
 
   const initialize = async () => {
-    console.log(dayjs);
     const eventContract = loadEventContract(contractAddress);
     const info = await eventContract.methods
       .getEventInfo(Math.floor(Date.now() / 1000))

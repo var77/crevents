@@ -142,7 +142,6 @@ export default {
       return successResponse({ ...JSON.parse(cachedJson), tokenId });
 
     const info = await getEventInfo(RPS_LIST[chain], address);
-    console.log(info);
 
     const metadataJson = {
       name: info.name,

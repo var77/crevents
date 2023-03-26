@@ -7,7 +7,6 @@ export default function EventCard({ eventInfo, setEventInfo, onAttendEvent, load
     e.stopPropagation();
     setOpenEventEditModal(true);
   };
-  console.log(eventInfo, 'aaaaaaaa');
   
   return (
     <Card

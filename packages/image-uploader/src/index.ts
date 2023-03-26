@@ -27,7 +27,6 @@ interface Data {
 const maxAge = 60 * 60 * 24 * 30;
 
 const verifyRecaptcha = async (env: Env, token: string) => {
-  console.log(env.RECAPTCHA_SECRET, token);
   // for dev
   if (!env.RECAPTCHA_SECRET) return true;
 
@@ -52,7 +51,7 @@ const app = new Hono<Env>();
 app.use(
   '*',
   cors({
-    origin: 'http://localhost:4200',
+    origin: ['http://localhost:4200', 'https://cryvents.xyz', 'https://crevents.pages.dev'],
     allowHeaders: ['Content-Type', 'Authorization', 'x-requested-with'],
     maxAge: 600,
   })

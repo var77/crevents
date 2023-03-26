@@ -4,4 +4,5 @@ declare interface Window {
   selectedAddress?: string;
   eventContract?: any;
   creatorContract?: any;
+  isInjectedProvider?: boolean;
 }

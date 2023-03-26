@@ -5,8 +5,6 @@ import { ConnectWallet } from './ConnectWallet/ConnectWallet';
 import { VerifyTicket } from './VerifyTicket/VerifyTicket';
 
 function Pages({ handleWalletConnect, isWalletConnected }) {
-  console.log(handleWalletConnect, isWalletConnected, 'wallet');
-
   return (
     <Routes>
       <Route

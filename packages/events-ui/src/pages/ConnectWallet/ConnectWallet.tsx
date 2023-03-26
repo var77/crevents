@@ -1,7 +1,8 @@
 import React from 'react'
 import { Button, Layout } from 'antd';
-import walletLoader from '../../wallet-loader.gif'
 import { useNavigate } from 'react-router-dom';
+import { CONNECTORS } from '../../utils/helpers'
+import walletLoader from '../../wallet-loader.gif'
 
 const CenterLayout = ({ children }) => {
     return (
@@ -20,13 +21,14 @@ const CenterLayout = ({ children }) => {
 
 const ConnectWallet = ({ handleWalletConnect }) => {
     const navigate = useNavigate()
-    const handleConnect = () => {
-        handleWalletConnect((status) => status && navigate(-1))
+    const handleConnect = (connector) => {
+        handleWalletConnect(connector, (status) => status && navigate(-1))
     }
     return (      
         <CenterLayout>
             <img src={walletLoader} width="10%" alt="wallet-loader" />
-            <Button type="primary" onClick={handleConnect}>Connect your wallet</Button>
+            <Button type="primary" onClick={() => handleConnect(CONNECTORS.METAMASK)}>Metamask</Button>
+            <Button type="primary" onClick={() => handleConnect(CONNECTORS.WALLET_CONNECT)}>Wallet Connect</Button>
         </CenterLayout>)
 }
 

@@ -78,7 +78,6 @@ export default function EventRegistrationModal({ editEvent = false, handleCancel
       .createEvent(eventData)
       .send({ from: window.selectedAddress })
       .on('confirmation', async (confirmationNumber, receipt) => {
-        console.log('confirmationNumber, receipt', confirmationNumber, receipt);
         if (confirmationNumber === 1) {
           setLoading(false);
           const eventAddress = receipt.events.EventCreated.returnValues.addr;
@@ -92,7 +91,6 @@ export default function EventRegistrationModal({ editEvent = false, handleCancel
 
   const saveEventEdit = async (data) => {
     setLoading(true);
-    console.log(eventInfo, 'event');
     
     loadEventContract(eventInfo.address)
     await window.eventContract.methods.changeEventInfo({
@@ -111,7 +109,6 @@ export default function EventRegistrationModal({ editEvent = false, handleCancel
     location: data.location
     }).send({ from: window.selectedAddress })
     .on('confirmation', async (confirmationNumber, receipt) => {
-      console.log('confirmationNumber, receipt', confirmationNumber, receipt);
       if (confirmationNumber === 1) {
         setLoading(false);
         dispatch(setEventContract(window.eventContract));
@@ -128,7 +125,6 @@ export default function EventRegistrationModal({ editEvent = false, handleCancel
     setLoading(false);
     console.log('Failed:', errorInfo);
   };
-  console.log(eventInfo, defaultEvent, 'default');
   
   return (
     <Modal

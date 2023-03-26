@@ -2,6 +2,7 @@ import { Pages } from '../pages/Pages';
 import { useInitializeApp } from '../hooks/useInitializeApp';
 import { Button, Layout } from 'antd';
 import walletLoader from '../wallet-loader.gif'
+import FooterComponent from '../components/Footer/Footer';
 
 const CenterLayout = ({ children }) => {
   return (
@@ -37,24 +38,14 @@ function App() {
   if (networkNotSupported) {
     return (
       <CenterLayout>
-        <p style={{ color: 'red' }}>Network not supported please change it from MetaMask</p>
+        <p style={{ color: 'red' }}>Network not supported please select different network</p>
+        <FooterComponent />
       </CenterLayout>
     );
   }
 
-  if(networkNotSupported){
-    return (
-      <CenterLayout>
-        <p style={{ color: 'red' }}>Network not supported</p>
-      </CenterLayout>
-    )
-  }
-
-
   return (
-    <>
      <Pages handleWalletConnect={handleWalletConnect} isWalletConnected={isWalletConnected} />
-    </>
   )
 }
 
