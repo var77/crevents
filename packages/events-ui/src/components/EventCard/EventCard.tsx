@@ -1,7 +1,7 @@
 import { Avatar, Button, Card } from 'antd';
 const { Meta } = Card;
 
-export default function EventCard({ eventInfo, setEventInfo, onAttendEvent, loading, setOpenEventEditModal }) {
+export default function EventCard({ eventInfo, setEventInfo, onAttendEvent, loading, setOpenEventEditModal, }) {
   const handleEditClick = (e, eventInfo) => {
     setEventInfo(eventInfo)  
     e.stopPropagation();
@@ -16,7 +16,10 @@ export default function EventCard({ eventInfo, setEventInfo, onAttendEvent, load
       className='event-card'
       style={{ 
         width: 300,
-        minHeight: 300,
+        height: loading && 'fit-content',
+        minHeight: 418,
+        margin: 'auto'
+
        }}
       cover={<img alt={eventInfo.name} src={eventInfo.image} />}
       onClick={() => onAttendEvent(eventInfo.address)}

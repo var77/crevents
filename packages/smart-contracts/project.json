@@ -4,10 +4,10 @@
   "sourceRoot": "packages/smart-contracts/src",
   "projectType": "application",
   "targets": {
-    "build": {
+    "deploy": {
       "command": "cd packages/smart-contracts && npx hardhat run --network localhost scripts/deploy.ts"
     },
-    "build:mumbai": {
+    "deploy:mumbai": {
       "command": "cd packages/smart-contracts && npx hardhat run --network mumbai scripts/deploy.ts"
     },
     "serve": {

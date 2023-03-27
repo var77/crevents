@@ -1,5 +1,6 @@
 export interface Env {
   METADATA_STORE: KVNamespace;
+  MUMBAI_RPC_URL: string;
 }
 
 const SIGNATURES = {
@@ -9,14 +10,13 @@ const SIGNATURES = {
   start: '0xbe9a6555',
 };
 
-const RPS_LIST = {
+const RPC_LIST = {
   31337: 'http://127.0.0.1:8545/',
-  80001: MUMBAI_RPC_URL, // this is from secrets
   137: 'https://polygon-rpc.com/',
 };
 
 const isValidChain = (chain: string) => {
-  return !!RPS_LIST[chain];
+  return !!RPC_LIST[chain];
 };
 const isValidTokenId = (tokenId: string) => Number.isFinite(+tokenId);
 const isValidAddress = (address: string) => {
@@ -117,10 +117,12 @@ const getEventInfo = async (url: string, address: string) => {
   return {
     name: decodeParameter('string', nameHex),
     image: decodeParameter('string', imageHex),
-    ticketPrice: decodeParameter('uint256', priceHex),
+    ticketPrice: decodeParameter('uint256', priceHex) as number,
     start: decodeParameter('uint256', startHex),
   };
 };
+
+const decimals = 10 ** 18;
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
@@ -128,6 +130,7 @@ export default {
       return handleOptions(request);
     }
 
+    RPC_LIST[80001] = env.MUMBAI_RPC_URL; // this is from secrets
     const [chain, address, tokenId] = request.url.split('/').slice(-3);
     if (
       !isValidChain(chain) ||
@@ -141,13 +144,13 @@ export default {
     if (cachedJson)
       return successResponse({ ...JSON.parse(cachedJson), tokenId });
 
-    const info = await getEventInfo(RPS_LIST[chain], address);
+    const info = await getEventInfo(RPC_LIST[chain], address);
 
     const metadataJson = {
       name: info.name,
       image: info.image,
       attributes: [
-        { trait_type: 'price', value: info.ticketPrice },
+        { trait_type: 'price', value: info.ticketPrice / decimals },
         {
           trait_type: 'start',
           value: new Date(+info.start * 1000).toLocaleDateString(),

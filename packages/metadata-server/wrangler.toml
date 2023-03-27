@@ -7,3 +7,8 @@ kv_namespaces = [
 routes = [
 	{ pattern = "metadata.crevents.xyz", custom_domain = true },
 ]
+
+[vars]
+# The necessary secrets are:
+# - MUMBAI_RPC_URL
+# Run `echo <VALUE> | wrangler secret put <NAME>` for each of these

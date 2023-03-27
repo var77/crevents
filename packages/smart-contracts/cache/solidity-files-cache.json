@@ -181,8 +181,8 @@
       ]
     },
     "/Users/varikmatevosyan/Documents/projects/web3-events/packages/smart-contracts/contracts/EventCreator.sol": {
-      "lastModificationDate": 1679772435150,
-      "contentHash": "db0c4a1567f4db0ff6e622ddf1d96841",
+      "lastModificationDate": 1679937688870,
+      "contentHash": "0b5bd8c033c0e10ec7d673fb82ac3657",
       "sourceName": "contracts/EventCreator.sol",
       "solcConfig": {
         "version": "0.8.17",
@@ -208,7 +208,6 @@
         }
       },
       "imports": [
-        "hardhat/console.sol",
         "@openzeppelin/contracts/access/Ownable.sol",
         "./Event.sol"
       ],
@@ -220,8 +219,8 @@
       ]
     },
     "/Users/varikmatevosyan/Documents/projects/web3-events/packages/smart-contracts/contracts/Event.sol": {
-      "lastModificationDate": 1679769757691,
-      "contentHash": "1a855b107fd32c1108562b7dce9521ee",
+      "lastModificationDate": 1679937727973,
+      "contentHash": "7ae7728165c1bb7748fd4c5b5637ca1f",
       "sourceName": "contracts/Event.sol",
       "solcConfig": {
         "version": "0.8.17",
@@ -250,9 +249,7 @@
         "@openzeppelin/contracts/access/Ownable.sol",
         "@openzeppelin/contracts/utils/Strings.sol",
         "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol",
-        "hardhat/console.sol",
-        "erc721a-sbt/ERC721A-SBT.sol",
-        "hardhat/console.sol"
+        "erc721a-sbt/ERC721A-SBT.sol"
       ],
       "versionPragmas": [
         "^0.8.17"
