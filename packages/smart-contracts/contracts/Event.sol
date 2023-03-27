@@ -167,7 +167,7 @@ contract Event is Ownable, ERC721A_SBT {
 
   /**
    * @dev Modifier to check if registration is currently open for the event
-   * @return Throws an error if registration is not open or if the caller is already registered or if the event has already started or if no seats are available.
+   * Throws an error if registration is not open or if the caller is already registered or if the event has already started or if no seats are available.
    */
   modifier isRegistrationOpen() {
     uint8 status = getRegistrationOpen(block.timestamp);
@@ -209,7 +209,6 @@ contract Event is Ownable, ERC721A_SBT {
    * @dev Registers the given address as a participant in the event by setting their `participants` mapping to true.
    * Also increments the `registeredParticipantCount` variable and mints a new NFT to the participant.
    * @param addr The address to register as a participant.
-   * @private
    */
   function _register(address addr) private {
     participants[addr] = true;
@@ -345,7 +344,7 @@ contract Event is Ownable, ERC721A_SBT {
     uint256 contractBalance = address(this).balance;
     if (contractBalance == 0) revert TransferFailed();
 
-    bool success = true;
+    bool success = false;
     uint256 ownerFee = 100 - parentContractFee;
 
     if (parentContractFee > 0) {

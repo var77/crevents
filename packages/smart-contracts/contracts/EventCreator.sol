@@ -48,6 +48,7 @@ contract EventCreator is Ownable {
     // If the contract balance is 0, throw an exception
     if (contractBalance == 0) revert TransferFailed();
 
+    bool success = false;
     // Transfer the contract balance to the owner
     (success, ) = payable(owner()).call{value: contractBalance}('');
 

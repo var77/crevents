@@ -107,16 +107,22 @@ interface EventCreatorInterface extends ethers.utils.Interface {
   events: {
     "EventCreated(address)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
+    "Received(address,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "EventCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Received"): EventFragment;
 }
 
 export type EventCreatedEvent = TypedEvent<[string] & { addr: string }>;
 
 export type OwnershipTransferredEvent = TypedEvent<
   [string, string] & { previousOwner: string; newOwner: string }
+>;
+
+export type ReceivedEvent = TypedEvent<
+  [string, BigNumber] & { arg0: string; arg1: BigNumber }
 >;
 
 export class EventCreator extends BaseContract {
@@ -465,6 +471,16 @@ export class EventCreator extends BaseContract {
       [string, string],
       { previousOwner: string; newOwner: string }
     >;
+
+    "Received(address,uint256)"(
+      undefined?: null,
+      undefined?: null
+    ): TypedEventFilter<[string, BigNumber], { arg0: string; arg1: BigNumber }>;
+
+    Received(
+      undefined?: null,
+      undefined?: null
+    ): TypedEventFilter<[string, BigNumber], { arg0: string; arg1: BigNumber }>;
   };
 
   estimateGas: {
