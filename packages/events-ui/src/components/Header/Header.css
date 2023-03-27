@@ -1,3 +1,12 @@
+body {
+  margin: 0px;
+  background: url("../../assets/background2.jpg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
 .header {
   justify-content: space-between;
   display: flex;
