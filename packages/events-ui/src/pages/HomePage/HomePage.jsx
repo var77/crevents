@@ -1,4 +1,4 @@
-import { Button, Col, Layout, Row } from 'antd';
+import { Grid, Layout, List, Typography, useBreakpoint } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createIcon } from '@download/blockies';
@@ -10,13 +10,26 @@ import './HomePage.css';
 import dayjs from 'dayjs';
 
 function CardsSkeleton() {
+  const items = [
+    {},
+    {},
+    {},
+    {},
+  ]
   return (
-    <>
-      <EventCard eventInfo={{}} loading={true} />
-      <EventCard eventInfo={{}} loading={true} />
-      <EventCard eventInfo={{}} loading={true} />
-    </>
-  );
+      <List
+      grid={{ gutter: 32, xs: 1, sm: 1, md: 2, lg: 3, xl: 4 }}
+      dataSource={items}
+      renderItem={(eventInfo) => (
+        <List.Item>
+          <EventCard
+            eventInfo={{}}
+            loading={true}
+          />
+        </List.Item>
+      )}
+    />
+  )
 }
 
 function HomePage({ isWalletConnected }) {
@@ -26,11 +39,11 @@ function HomePage({ isWalletConnected }) {
   const [eventInfo, setEventInfo] = useState(null);
   const [openEventEditModal, setOpenEventEditModal] = useState(false);
   const [showEventRegistration, setShowEventRegistration] = useState(false);
-
+  const { useBreakpoint } = Grid;
+  const breakpoints = useBreakpoint();
   const onAttendEvent = (address) => {
     navigate(`/event/${address}`);
   };
-
   const onRegisterEvent = () => {
     isWalletConnected
       ? setShowEventRegistration(true)
@@ -79,73 +92,79 @@ function HomePage({ isWalletConnected }) {
     initialize();
   }, []);
   return (
-    <>
-      <Layout
+    <div style={{
+      minHeight: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+    }}>
+      <Header isWalletConnected={isWalletConnected} onRegisterEvent={onRegisterEvent} />
+    <Layout
+      style={{
+        background: 'transparent',
+        width: '100%',
+      }}
+    >
+       {/*///////////////////      TO DO HERO SECTION    ///////////////////*/}
+
+
+      {/* <Layout 
+      style={{
+        background: 'transparent',
+        width: '100%',
+        padding: '0px 50px 50px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
+      }}>
+        <Typography style={{ fontSize: 65, fontWeight: 700 }} >
+            Create Events with Crevents
+        </Typography>
+        <div style={{ width: 700 }}>
+         Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eligendi sit necessitatibus quasi odit veritatis nisi accusamus aliquam neque suscipit esse! Aperiam eius similique deserunt tenetur quidem temporibus laborum velit illum. 
+        </div>
+      </Layout> */}
+
+
+
+      <EventRegistrationModal
+        open={showEventRegistration}
+        handleCancel={() => setShowEventRegistration(false)}
+      />
+      <div
+      className='main-cont'
         style={{
-          background: 'transparent',
-          width: '100%',
-          height: '100vh',
+          display: 'flex',
         }}
       >
-        <Header
-          isWalletConnected={isWalletConnected}
-          onRegisterEvent={onRegisterEvent}
-        />
-        <EventRegistrationModal
-          open={showEventRegistration}
-          handleCancel={() => setShowEventRegistration(false)}
-        />
-        <div
-          className="main-cont"
-          style={{
-            display: 'flex',
-            justifyContent: 'space-around',
-            alignItems: 'center',
-          }}
-        >
-          {loading ? (
-            <CardsSkeleton />
-          ) : (
-            <>
-              {!!events.length && (
-                <Row gutter={[16, 16]} style={{ height: '100%' }}>
-                  {events.map((eventInfo) => (
-                    <Col
-                      style={{ display: 'flex', justifyContent: 'center' }}
-                      key={eventInfo.address}
-                      xs={24}
-                      sm={24}
-                      md={12}
-                      lg={8}
-                      xl={8}
-                    >
-                      <EventCard
-                        eventInfo={eventInfo}
-                        onAttendEvent={onAttendEvent}
-                        setEventInfo={setEventInfo}
-                        setOpenEventEditModal={setOpenEventEditModal}
-                      />
-                    </Col>
-                  ))}
-                </Row>
+        {loading ? (
+          <CardsSkeleton />
+        ) : (
+          <>
+            {!!events.length &&
+              <List
+              grid={{
+                gutter: 32, xs: 1, sm: 1, md: 2, lg: 3, xl: 3
+              }}
+              loadMore
+              dataSource={events}
+              renderItem={(eventInfo) => (
+                <List.Item>
+                  <EventCard
+                    eventInfo={eventInfo}
+                    onAttendEvent={onAttendEvent}
+                    setEventInfo={setEventInfo}
+                    setOpenEventEditModal={setOpenEventEditModal}
+                  />
+                </List.Item>
               )}
-            </>
-          )}
-        </div>
-        <Footer />
-      </Layout>
-      <EventRegistrationModal
-        editEvent
-        eventInfo={eventInfo}
-        open={openEventEditModal}
-        handleCancel={() => {
-          setOpenEventEditModal(false);
-          setEventInfo(null);
-        }}
-        title="Edit event"
-        actionTitle="Save event"
-      />
-    </>
+            />}
+          </>
+        )}
+      </div>
+    </Layout>
+    <Footer />
+    <EventRegistrationModal editEvent eventInfo={eventInfo} open={openEventEditModal} handleCancel={()=>{setOpenEventEditModal(false); setEventInfo(null)}} title='Edit event' actionTitle='Save event' />
+    </div>
   );
 }
 

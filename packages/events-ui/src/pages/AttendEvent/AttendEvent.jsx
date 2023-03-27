@@ -12,7 +12,6 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { loadEventContract } from '../../utils/helpers';
 import { createIcon } from '@download/blockies';
-import Navbar from '../../components/Navbar/Navbar';
 import domtoimage from 'dom-to-image';
 import saveAs from 'file-saver';
 import './AttendEvent.css';
@@ -194,7 +193,7 @@ function AttendEvent({ isWalletConnected }) {
             <div className="event-organizer-info">
               <Text className="event-info-section-title">Organizer</Text>
               <div>
-                <Avatar src={eventInfo.organizerIcon} size={50} />
+                <Avatar src={eventInfo.organizerIcon} size={50} style={{ marginRight: '16px'}} />
                 <Text className="event-organizer-text">
                   {eventInfo.organizer}
                 </Text>
@@ -216,8 +215,7 @@ function AttendEvent({ isWalletConnected }) {
                   </div>
                 </div>
               </div>
-              <Divider className="event-date-divider" type="vertical" />
-              <div className="event-date-info-container">
+              <div className="event-location-container">
                 <div>
                   <img
                     src="/assets/location.png"
