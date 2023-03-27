@@ -66,9 +66,11 @@ Crevents is a decentralized event management system compatible with EVM blockcha
 [![Product Name Screen Shot][product-screenshot]](https://crevents.xyz)
 
 Crevetns is an open source project demonstrating a usecase of blockchain for organizing and attending events.
-Crevents allows event organizers to create and manage events using a decentralized platform. 
-The system uses a token-based ticketing system that allows event organizers to sell tickets directly to attendees, eliminating the need for intermediaries.
-And attendees will get [SBT](https://github.com/var77/erc721a-sbt) tokens which are like NFTs, but can not be transferred.
+
+
+Crevents allows event organizers to create and manage events using a decentralized platform.  
+The system uses a token-based ticketing system that allows event organizers to sell tickets directly to attendees, eliminating the need for intermediaries.  
+And attendees will get [SBT](https://github.com/var77/erc721a-sbt) tokens which are like NFTs, but can not be transferred.  
 
 ### Features
 
@@ -122,8 +124,11 @@ npx nx serve events-ui
 ```
 4. Run Cloudflare workers [optional]
 ```
-npx nx run-many --target=server --projects="image-uploader,metadata-server"
+npx nx run-many --target=serve --projects="image-uploader,metadata-server"
 ```
+Then you should change `tokenUriServer` in `Creator.sol` to `http://localhost:8989/` for metadata server.
+
+For image uploader you should update `UPLOAD_URL` in `FileUpload.tsx` to `http://localhost:8787/upload` and `HOST` variable in `packages/image-uploader/wrangler.toml`
 
 ### Cloudflare Workers
 There are two workers `image-uploader` and `metadata-server`
@@ -134,11 +139,12 @@ This cloudflare worker is used to store event images. It is using R2 buckets to 
 **Metadata Server Worker**
 This cloudflare worker is used to dynamically get data for event **SBT** tokens. Event smart contract is returning this workers URI + chainId + contractId + tokenId as `tokenUri` 
 so it will look something like `https://metadata.crevents.xyz/137/0x05242D4AC717Cdf38C36AF290F2b0DA99AA82c67/1`.
-This metadata server will call smart contract from corresponding RPC detected from chainId and take event information.
-Then it will construct `ERC721` standard json returning it to client, so wallets like metamask may show the event image for the token.
-The json then will be cached in `KV` store.
 
-Some RPCs URIs needs to be stored on secrets, check `wrangler.toml` for more information.
+
+This metadata server will call smart contract from corresponding RPC detected from chainId and take event information.  
+Then it will construct `ERC721` standard json returning it to client, so wallets like metamask may show the event image for the token.  
+The json then will be cached in `KV` store.  
+Some RPCs URIs needs to be stored on secrets, check `wrangler.toml` for more information.  
 
 **Change network on metamask**
 1. If there's no `localhost:8545` network, click add network and manually set address to `localhost:8545`
@@ -179,7 +185,9 @@ Varik Matevosyan - [@D4RK7ET](https://twitter.com/D4RK7ET) - varikmatevosyan@gma
 
 Project Link: [https://github.com/var77/crevents](https://github.com/var77/crevents)
 
-
+## Donate
+ETH: 0xB34F830271Bb5aF65E52D72f8E4E8307A16537E1  
+BTC: bc1qnxegen679nz6e6854xw89tgfgcd94sadz8yrc7  
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [contributors-shield]: https://img.shields.io/github/contributors/var77/crevents.svg?style=for-the-badge

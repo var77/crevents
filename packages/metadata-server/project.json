@@ -8,7 +8,7 @@
       "command": "cd packages/metadata-server && npx wrangler publish"
     },
     "serve": {
-      "command": "cd packages/metadata-server && npx wrangler dev --local"
+      "command": "cd packages/metadata-server && npx wrangler dev --local --port 8989"
     },
     "test": {
       "executor": "@nrwl/jest:jest",
