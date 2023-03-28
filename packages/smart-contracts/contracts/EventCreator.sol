@@ -65,6 +65,12 @@ contract EventCreator is Ownable {
     tokenUriServer = uri;
   }
 
+  // For censoring purposes we may need to hide events from homepage
+  function removeEventFromHomepage(uint index) external onlyOwner {
+    events[index] = events[events.length - 1];
+    events.pop();
+  }
+
   // Function for getting an array of event info structs, with an offset, limit, and current timestamp
   function getEvents(
     uint256 offset,

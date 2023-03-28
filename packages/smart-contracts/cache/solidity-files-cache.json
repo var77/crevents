@@ -181,8 +181,8 @@
       ]
     },
     "/Users/varikmatevosyan/Documents/projects/web3-events/packages/smart-contracts/contracts/EventCreator.sol": {
-      "lastModificationDate": 1679937688870,
-      "contentHash": "0b5bd8c033c0e10ec7d673fb82ac3657",
+      "lastModificationDate": 1680023317560,
+      "contentHash": "8a79fd9f1d32fcb5b7a48cce5c2c8da0",
       "sourceName": "contracts/EventCreator.sol",
       "solcConfig": {
         "version": "0.8.17",

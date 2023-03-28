@@ -26,6 +26,7 @@ interface EventCreatorInterface extends ethers.utils.Interface {
     "fee()": FunctionFragment;
     "getEvents(uint256,uint256,uint256)": FunctionFragment;
     "owner()": FunctionFragment;
+    "removeEventFromHomepage(uint256)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "setTokenUri(string)": FunctionFragment;
     "tokenUriServer()": FunctionFragment;
@@ -64,6 +65,10 @@ interface EventCreatorInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
+    functionFragment: "removeEventFromHomepage",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "renounceOwnership",
     values?: undefined
   ): string;
@@ -86,6 +91,10 @@ interface EventCreatorInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "fee", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getEvents", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "removeEventFromHomepage",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
     data: BytesLike
@@ -245,6 +254,11 @@ export class EventCreator extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
+    removeEventFromHomepage(
+      index: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -339,6 +353,11 @@ export class EventCreator extends BaseContract {
   >;
 
   owner(overrides?: CallOverrides): Promise<string>;
+
+  removeEventFromHomepage(
+    index: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   renounceOwnership(
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -435,6 +454,11 @@ export class EventCreator extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<string>;
 
+    removeEventFromHomepage(
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
     setTokenUri(uri: string, overrides?: CallOverrides): Promise<void>;
@@ -516,6 +540,11 @@ export class EventCreator extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
+    removeEventFromHomepage(
+      index: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -572,6 +601,11 @@ export class EventCreator extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    removeEventFromHomepage(
+      index: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
