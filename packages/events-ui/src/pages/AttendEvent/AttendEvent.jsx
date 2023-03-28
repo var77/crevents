@@ -69,12 +69,14 @@ function AttendEvent({ isWalletConnected }) {
   const [eventInfo, setEventInfo] = useState({});
   const [ticketData, setTicketData] = useState('');
   const [loading, setLoading] = useState(false);
+  const [withdrawLoading, setWithdrawLoading] = useState(false);
 
   const initialize = async () => {
     const eventContract = loadEventContract(contractAddress);
     const info = await eventContract.methods
       .getEventInfo(Math.floor(Date.now() / 1000))
       .call({ from: window.selectedAddress });
+    const balance = window.web3Instance.utils.fromWei(await window.web3Instance.eth.getBalance(eventContract.options.address));
     setEventInfo({
       description: info.description,
       end: new Date(+info.end * 1000).toDateString(),
@@ -89,6 +91,7 @@ function AttendEvent({ isWalletConnected }) {
       registrationOpen: info.registrationOpen,
       registeredParticipantCount: info.registeredParticipantCount,
       checkedParticipantCount: info.checkedParticipantCount,
+      location: info.location,
       isRegistered: info.isRegistered,
       isChecked: info.isChecked,
       start: new Date(+info.start * 1000),
@@ -103,7 +106,9 @@ function AttendEvent({ isWalletConnected }) {
         size: 16,
         scale: 8,
       }).toDataURL(),
-      address: info.addr
+      address: info.addr,
+      balance,
+      isOwner: info.organizer === window.selectedAddress
     });
     setContract(eventContract);
   };
@@ -129,6 +134,31 @@ function AttendEvent({ isWalletConnected }) {
     } catch (err) {
       console.error(err);
       setLoading(false);
+    }
+  };
+
+
+  const withdrawBalance = async () => {
+    try {
+      if(!isWalletConnected) {
+        return navigate('/connect-wallet')
+      }
+      setWithdrawLoading(true);
+      await contract.methods
+        .withdraw()
+        .send({
+          from: window.selectedAddress,
+          value: 0,
+        })
+        .on('confirmation', async (confirmationNumber) => {
+          if (confirmationNumber === 1) {
+            await initialize();
+            setWithdrawLoading(false);
+          }
+        });
+    } catch (err) {
+      console.error(err);
+      setWithdrawLoading(false);
     }
   };
 
@@ -164,8 +194,7 @@ function AttendEvent({ isWalletConnected }) {
     navigate('/');
   };
 
-  const availableTickets =
-    eventInfo.maxParticipants - eventInfo.registeredParticipantCount;
+  const availableTickets = eventInfo.maxParticipants === 0 ? '∞' : eventInfo.maxParticipants - eventInfo.registeredParticipantCount;
   return (
     <>
       <Header isWalletConnected={isWalletConnected} hideCreateEventBtn/>
@@ -244,20 +273,30 @@ function AttendEvent({ isWalletConnected }) {
               <Paragraph>{eventInfo.description}</Paragraph>
             </div>
           </div>
-          <div className="event-checkout-section">
+          <div >
+          <div className="event-checkout-section" style={{ marginBottom: 16 }}>
             <Text className="event-checkout-section-title">
               {!eventInfo.isRegistered && (
-                <Text>Avaialble tickets {availableTickets} </Text>
-              )}
+                <Text>Available tickets {availableTickets} </Text>
+                )}
             </Text>
             {eventInfo.isRegistered ? (
               <Button onClick={showTicket}>Show Ticket </Button>
-            ) : (
-              <Button disabled={!eventInfo.registrationOpen} onClick={attendEvent} loading={loading}>
-                Buy
+              ) : (
+                <Button disabled={!eventInfo.registrationOpen} onClick={attendEvent} loading={loading}>
+                Buy {eventInfo.ticketPrice} {window.currency}
               </Button>
             )}
           </div>
+          {eventInfo.isOwner && (<div className="event-checkout-section">
+            <Text className="event-checkout-section-title">
+                <Text>Contract balance {eventInfo.balance} {window.currency} </Text>
+            </Text>
+              <Button disabled={!eventInfo.registrationOpen} onClick={withdrawBalance} loading={withdrawLoading}>
+                Withdraw
+              </Button>
+          </div>)}
+            </div>
         </div>
         </div>
 

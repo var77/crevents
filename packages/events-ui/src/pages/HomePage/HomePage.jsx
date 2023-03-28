@@ -107,22 +107,23 @@ function HomePage({ isWalletConnected }) {
        {/*///////////////////      TO DO HERO SECTION    ///////////////////*/}
 
 
-      {/* <Layout 
+      <Layout 
       style={{
         background: 'transparent',
         width: '100%',
-        padding: '0px 50px 50px',
+        padding: '50px 50px 50px',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center'
+        alignItems: 'center',
+        minHeight: 300,
       }}>
-        <Typography style={{ fontSize: 65, fontWeight: 700 }} >
+        <Typography style={{ fontSize: 65, fontWeight: 700, color: '#d99c51' }} >
             Create Events with Crevents
         </Typography>
-        <div style={{ width: 700 }}>
-         Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eligendi sit necessitatibus quasi odit veritatis nisi accusamus aliquam neque suscipit esse! Aperiam eius similique deserunt tenetur quidem temporibus laborum velit illum. 
+        <div style={{ width: 900, color: 'white', fontStyle: 'italic', textAlign: 'center', fontSize: 18 }}>
+        Crevents is the ultimate event management solution for both organizers and attendees. Our platform allows you to create, manage, and attend events with ease, all powered by the security and transparency of blockchain technology. Join Crevents today and take your event experience to the next level. 
         </div>
-      </Layout> */}
+      </Layout>
 
 
 

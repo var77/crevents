@@ -33,8 +33,16 @@ const config: HardhatUserConfig = {
     },
   },
   networks: {
+    matic: {
+      url: process.env.MATIC_URL || '',
+      chainId: 137,
+      from: process.env.MATIC_ACC_ADDRESS,
+      accounts: process.env.MATIC_ACC_PRIV_KEY
+        ? [process.env.MATIC_ACC_PRIV_KEY]
+        : [],
+    },
     mumbai: {
-      url: process.env.MUMBAI_URL,
+      url: process.env.MUMBAI_URL || '',
       chainId: 80001,
       from: process.env.MUMBAI_ACC_ADDRESS,
       accounts: process.env.MUMBAI_ACC_PRIV_KEY
@@ -48,7 +56,7 @@ const config: HardhatUserConfig = {
     },
   },
   gasReporter: {
-    enabled: process.env.REPORT_GAS !== undefined,
+    enabled: true,
     currency: 'USD',
   },
   etherscan: {

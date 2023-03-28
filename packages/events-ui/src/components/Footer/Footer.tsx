@@ -7,6 +7,7 @@ import {
 } from '../../utils/helpers';
 import './Footer.css';
 
+const year = new Date().getFullYear();
 export default function FooterComponent() {
   return (
     <Footer
@@ -27,7 +28,7 @@ export default function FooterComponent() {
         />
       )}
       <div className="footer">
-        <div>C 2023 Crevents</div>
+        <div>C {year} Crevents</div>
       </div>
     </Footer>
   );

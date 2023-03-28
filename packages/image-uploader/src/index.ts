@@ -51,7 +51,7 @@ const app = new Hono<Env>();
 app.use(
   '*',
   cors({
-    origin: ['http://localhost:4200', 'https://cryvents.xyz', 'https://crevents.pages.dev'],
+    origin: ['http://localhost:4200', 'https://crevents.xyz', 'https://develop.crevents.pages.dev'],
     allowHeaders: ['Content-Type', 'Authorization', 'x-requested-with'],
     maxAge: 600,
   })

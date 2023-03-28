@@ -10,6 +10,9 @@
     "deploy:mumbai": {
       "command": "cd packages/smart-contracts && npx hardhat run --network mumbai scripts/deploy.ts"
     },
+    "deploy:polygon": {
+      "command": "cd packages/smart-contracts && npx hardhat run --network matic scripts/deploy.ts"
+    },
     "serve": {
       "command": "cd packages/smart-contracts &&  npx hardhat node"
     },

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { Upload } from 'antd';
+import { Modal, Upload } from 'antd';
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 type FileUploadTypes = {
@@ -25,18 +25,31 @@ const FileUpload: React.FC<FileUploadTypes> = ({ imageUrl, setImageUrl }) => {
       const reader = new FileReader();
       reader.readAsDataURL(options.file);
       reader.onload = async () => {
+        try {
         const img = (reader.result as string).split('base64,')[1];
         const recaptchaToken = await executeRecaptcha('upload');
 
         const result = await fetch(UPLOAD_URL, {
           headers,
-          method: 'PUT',
-          body: JSON.stringify({ body: img, recaptchaToken }),
-        });
-        const url = await result.text();
-        setImageUrl(url);
-        resolve(url);
-        setLoading(false);
+            method: 'PUT',
+            body: JSON.stringify({ body: img, recaptchaToken }),
+          });
+          const url = await result.text(); 
+          if(!(result.status === 200)) {            
+            throw new Error(url);
+          } 
+          setImageUrl(url);
+          resolve(url);
+          setLoading(false);
+          console.log(url, result.status, 'url');
+          
+        }  catch(e) {
+          setLoading(false)
+          return Modal.error({
+            title: e.message,
+          });
+          
+        }
       };
       reader.onerror = (error) => reject(error);
     });

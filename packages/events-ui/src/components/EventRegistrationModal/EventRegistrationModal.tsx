@@ -26,20 +26,28 @@ dayjs.extend(customParseFormat);
 const { RangePicker } = DatePicker;
 
 const dateFormat = 'YYYY/MM/DD';
+const ONE_DAY = 1000 * 60 * 60 * 24;
 const defaultEvent = {
   name: 'My first event',
   description: '',
-  location: 'Yerevan',
-  link: 'https://example.com',
-  maxParticipants: 10,
-  registrationEnd: dayjs(Date.now() + 1000000),
-  eventDates: [dayjs(Date.now() + 2000000), dayjs(Date.now() + 800000000)],
-  ticketPrice: 0.001,
+  location: 'Online',
+  link: '',
+  maxParticipants: 0,
+  registrationEnd: dayjs(Date.now() + ONE_DAY),
+  eventDates: [dayjs(Date.now() + ONE_DAY), dayjs(Date.now() + ONE_DAY * 2)],
+  ticketPrice: 0,
   preSaleTicketPrice: 0,
   registrationOpen: true,
 };
 
-export default function EventRegistrationModal({ editEvent = false, handleCancel, eventInfo, open, title = "Create event", actionTitle="Create event" }) {
+export default function EventRegistrationModal({
+  editEvent = false,
+  handleCancel,
+  eventInfo,
+  open,
+  title = 'Create event',
+  actionTitle = 'Create event',
+}) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const creatorContract = useSelector(selectCreatorContract);
@@ -57,22 +65,23 @@ export default function EventRegistrationModal({ editEvent = false, handleCancel
     }
     let eventData = {
       name: data.name,
-      description: data.description || "",
-      link: data.link || "",
-      image: imageUrl, //TODO
+      description: data.description || '',
+      link: data.link || '',
+      image: imageUrl,
       maxParticipants: data.maxParticipants || 0,
       registrationEnd: data.eventDates[0] ? data.eventDates[0].unix() : 0,
       start: data.eventDates[0].unix(),
       end: data.eventDates[1].unix(),
       ticketPrice: data.ticketPrice
-      ? window.web3Instance.utils.toWei(data.ticketPrice.toString())
-        : null,
+        ? window.web3Instance.utils.toWei(data.ticketPrice.toString())
+        : 0,
       preSaleTicketPrice: data.preSaleTicketPrice || 0,
       location: data.location || null,
       registrationOpen: data.registrationOpen,
     };
 
     eventData = omitBy(eventData, isNil);
+    console.log(eventData);
     setLoading(true);
     creatorContract.methods
       .createEvent(eventData)
@@ -91,31 +100,33 @@ export default function EventRegistrationModal({ editEvent = false, handleCancel
 
   const saveEventEdit = async (data) => {
     setLoading(true);
-    
-    loadEventContract(eventInfo.address)
-    await window.eventContract.methods.changeEventInfo({
-    description: data.description,
-    link: data.link,
-    registrationEnd: data.eventDates[0] ? data.eventDates[0].unix() : 0,
-    start: data.eventDates[0].unix(),
-    end: data.eventDates[1].unix(),
-    ticketPrice: data.ticketPrice
-    ? window.web3Instance.utils.toWei(data.ticketPrice.toString())
-      : 0,
-    maxParticipants: data.maxParticipants,
-    onlyWhitelistRegistration: data.onlyWhitelistRegistration || false,
-    preSaleTicketPrice: data.preSaleTicketPrice || 0,
-    registrationOpen: data.registrationOpen,
-    location: data.location
-    }).send({ from: window.selectedAddress })
-    .on('confirmation', async (confirmationNumber, receipt) => {
-      if (confirmationNumber === 1) {
-        setLoading(false);
-        dispatch(setEventContract(window.eventContract));
-        navigate(`/event/${eventInfo.address}`);
-      }
-    });
-  }
+
+    loadEventContract(eventInfo.address);
+    await window.eventContract.methods
+      .changeEventInfo({
+        description: data.description,
+        link: data.link,
+        registrationEnd: data.eventDates[0] ? data.eventDates[0].unix() : 0,
+        start: data.eventDates[0].unix(),
+        end: data.eventDates[1].unix(),
+        ticketPrice: data.ticketPrice
+          ? window.web3Instance.utils.toWei(data.ticketPrice.toString())
+          : 0,
+        maxParticipants: data.maxParticipants,
+        onlyWhitelistRegistration: data.onlyWhitelistRegistration || false,
+        preSaleTicketPrice: data.preSaleTicketPrice || 0,
+        registrationOpen: data.registrationOpen,
+        location: data.location,
+      })
+      .send({ from: window.selectedAddress })
+      .on('confirmation', async (confirmationNumber, receipt) => {
+        if (confirmationNumber === 1) {
+          setLoading(false);
+          dispatch(setEventContract(window.eventContract));
+          navigate(`/event/${eventInfo.address}`);
+        }
+      });
+  };
 
   const onFinish = (data) => {
     createEvent(data);
@@ -125,11 +136,11 @@ export default function EventRegistrationModal({ editEvent = false, handleCancel
     setLoading(false);
     console.log('Failed:', errorInfo);
   };
-  
+
   return (
     <Modal
       open={open}
-      title={title} 
+      title={title}
       onCancel={handleCancel}
       bodyStyle={{
         padding: 50,
@@ -152,8 +163,8 @@ export default function EventRegistrationModal({ editEvent = false, handleCancel
             htmlType="submit"
             disabled={loading}
             style={{
-              backgroundColor: "#f3aa40",
-              color: "#212025"
+              backgroundColor: '#f3aa40',
+              color: '#212025',
             }}
           >
             {actionTitle}
@@ -170,38 +181,53 @@ export default function EventRegistrationModal({ editEvent = false, handleCancel
           onFinishFailed={onFinishFailed}
           initialValues={eventInfo ? eventInfo : defaultEvent}
         >
-          {!editEvent && <Form.Item
-            label="Event name"
-            name="name"
-            rules={[{ required: true, message: 'Please input event name' }]}
-          >
-            <Input />
-          </Form.Item>}
+          {!editEvent && (
+            <Form.Item
+              label="Event name"
+              name="name"
+              rules={[{ required: true, message: 'Please input event name' }]}
+            >
+              <Input />
+            </Form.Item>
+          )}
           <Form.Item label="Description" name="description">
-            <Input />
+            <Input placeholder="My event description" />
           </Form.Item>
-          {!editEvent && <Form.Item
-            label="Image"
-            name="image"
-            getValueFromEvent={updateImageUrl}
-            rules={[{ required: true, message: 'Please upload an image for your event' }]}
-          >
-            <FileUpload imageUrl={imageUrl} setImageUrl={updateImageUrl} />
-          </Form.Item>}
+          {!editEvent && (
+            <Form.Item
+              label="Image"
+              name="image"
+              getValueFromEvent={updateImageUrl}
+              rules={[
+                () => ({
+                  validator() {
+                    if (imageUrl) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(
+                      new Error('Please upload an image for your event')
+                    );
+                  },
+                }),
+              ]}
+            >
+              <FileUpload imageUrl={imageUrl} setImageUrl={updateImageUrl} />
+            </Form.Item>
+          )}
           <Form.Item label="Link" name="link">
-            <Input />
+            <Input placeholder="https://example.com" />
           </Form.Item>
           <Form.Item label="Location" name="location">
-            <Input />
+            <Input placeholder="Blockchain!" />
           </Form.Item>
           <Form.Item label="Max participants" name="maxParticipants">
             <InputNumber min={0} />
           </Form.Item>
-          <Form.Item label="Start and end event date" name="eventDates">
+          <Form.Item label="Start and end dates" name="eventDates">
             <RangePicker format={dateFormat} />
           </Form.Item>
           <Form.Item label="Ticket price" name="ticketPrice">
-            <InputNumber addonAfter="ETH" />
+            <InputNumber addonAfter={window.currency} placeholder="0.001" step={0.001} />
           </Form.Item>
           <Form.Item
             label="Registration Open"

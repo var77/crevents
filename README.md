@@ -15,7 +15,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/var77/crevents">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="images/logo.png" alt="Logo" width="200" height="80">
   </a>
 
   <h3 align="center">Crevents</h3>
@@ -116,7 +116,7 @@ npx nx serve smart-contracts
 ```
 2. Deploy smart contract on local hardhat blockchain
 ```
-npx nx build smart-contracts
+npx nx deploy smart-contracts
 ```
 3. Start front end
 ```

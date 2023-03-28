@@ -4,6 +4,9 @@ flex-direction: column;
 height: 100%;
 }
 
+.grecaptcha-badge {
+    visibility: hidden;
+}
 @media only screen and (max-width: 750px) {
     .main-cont {
       align-items: center;

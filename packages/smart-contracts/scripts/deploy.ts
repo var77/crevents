@@ -11,7 +11,8 @@ const NETWORK = process.env.HARDHAT_NETWORK;
 const NETWORK_IDS = {
   localhost: 31337,
   mumbai: 80001,
-  rinkeby: 4,
+  goerly: 5,
+  matic: 137,
 };
 
 async function main() {
@@ -55,10 +56,6 @@ function moveAbis(contractAddress: string) {
       [NETWORK_IDS[NETWORK]]: { address: contractAddress },
     },
   });
-  fs.writeFileSync(
-    path.resolve(__dirname, `../../events-ui/src/abis/Creator-${NETWORK}.json`),
-    contractData
-  );
   fs.writeFileSync(
     path.resolve(__dirname, '../../events-ui/src/abis/Creator.json'),
     contractData
