@@ -6,4 +6,5 @@ declare interface Window {
   eventContract?: any;
   creatorContract: any;
   isInjectedProvider?: boolean;
+  opera?: any;
 }
