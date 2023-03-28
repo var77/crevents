@@ -21,6 +21,13 @@ export const AVAILABLE_NETWORKS = [
   { label: 'Mumbai', value: '80001' },
 ];
 
+const CURRENCY_LIST = {
+  1: 'ETH',
+  31337: 'ETH',
+  80001: 'MATIC',
+  137: 'MATIC',
+}
+
 export const RPC_LIST = {
   31337: 'http://127.0.0.1:8545/',
   80001:
@@ -58,6 +65,7 @@ export const loadContracts = async () => {
     CreatorContract.abi,
     networkData.address
   );
+  window.currency = CURRENCY_LIST[networkId];
 
   return [window.creatorContract];
 };
