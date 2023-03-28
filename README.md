@@ -116,7 +116,7 @@ npx nx serve smart-contracts
 ```
 2. Deploy smart contract on local hardhat blockchain
 ```
-npx nx build smart-contracts
+npx nx deploy smart-contracts
 ```
 3. Start front end
 ```

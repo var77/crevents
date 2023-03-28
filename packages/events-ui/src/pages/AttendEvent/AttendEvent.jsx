@@ -273,16 +273,17 @@ function AttendEvent({ isWalletConnected }) {
               <Paragraph>{eventInfo.description}</Paragraph>
             </div>
           </div>
-          <div className="event-checkout-section">
+          <div >
+          <div className="event-checkout-section" style={{ marginBottom: 16 }}>
             <Text className="event-checkout-section-title">
               {!eventInfo.isRegistered && (
                 <Text>Available tickets {availableTickets} </Text>
-              )}
+                )}
             </Text>
             {eventInfo.isRegistered ? (
               <Button onClick={showTicket}>Show Ticket </Button>
-            ) : (
-              <Button disabled={!eventInfo.registrationOpen} onClick={attendEvent} loading={loading}>
+              ) : (
+                <Button disabled={!eventInfo.registrationOpen} onClick={attendEvent} loading={loading}>
                 Buy {eventInfo.ticketPrice} {window.currency}
               </Button>
             )}
@@ -295,6 +296,7 @@ function AttendEvent({ isWalletConnected }) {
                 Withdraw
               </Button>
           </div>)}
+            </div>
         </div>
         </div>
 
