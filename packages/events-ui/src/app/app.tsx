@@ -31,7 +31,7 @@ function App() {
     handleWalletConnect,
   } = useInitializeApp();
 
-  if (true) {
+  if (isLoading) {
     return (
       <CenterLayout>
         <Spin size="large" tip="Loading..."></Spin>
