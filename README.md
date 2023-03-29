@@ -93,8 +93,8 @@ And attendees will get [SBT](https://github.com/var77/erc721a-sbt) tokens which 
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-TODO
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+https://user-images.githubusercontent.com/17221195/228606262-6a416152-6253-4ed9-be34-72294554d3d1.mp4
 
 
 <!-- GETTING STARTED -->
@@ -190,11 +190,11 @@ ETH: 0xB34F830271Bb5aF65E52D72f8E4E8307A16537E1
 BTC: bc1qnxegen679nz6e6854xw89tgfgcd94sadz8yrc7  
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/var77/crevents.svg?style=for-the-badge
+[contributors-shield]: https://img.shields.io/github/contributors/var77/crevents.svg?style=for-the-badge&v=1
 [contributors-url]: https://github.com/var77/crevents/graphs/contributors
-[stars-shield]: https://img.shields.io/github/stars/var77/crevents.svg?style=for-the-badge
+[stars-shield]: https://img.shields.io/github/stars/var77/crevents.svg?style=for-the-badge&v=1
 [stars-url]: https://github.com/var77/crevents
-[license-shield]: https://img.shields.io/github/license/var77/crevents.svg?style=for-the-badge
+[license-shield]: https://img.shields.io/github/license/var77/crevents.svg?style=for-the-badge&v=1
 [license-url]: https://github.com/var77/crevents/blob/master/LICENSE.txt
 [product-screenshot]: images/screenshot.png
 [Solidity]: https://img.shields.io/badge/Solidity-e6e6e6?style=for-the-badge&logo=solidity&logoColor=black
