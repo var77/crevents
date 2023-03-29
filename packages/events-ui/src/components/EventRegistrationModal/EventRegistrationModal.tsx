@@ -16,7 +16,7 @@ import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import omitBy from 'lodash/omitBy';
 import isNil from 'lodash/isNil';
-import { loadEventContract } from '../../utils/helpers';
+import { loadEventContract, getGasPrice } from '../../utils/helpers';
 import { selectCreatorContract } from '../../store/creatorContractSlice';
 import { setEventContract } from '../../store/eventContractSlice';
 import FileUpload from '../../components/FileUpload/FileUpload';
@@ -59,7 +59,7 @@ export default function EventRegistrationModal({
     return url;
   };
 
-  const createEvent = (data) => {
+  const createEvent = async (data) => {
     if (!creatorContract) {
       return;
     }
@@ -81,11 +81,11 @@ export default function EventRegistrationModal({
     };
 
     eventData = omitBy(eventData, isNil);
-    console.log(eventData);
     setLoading(true);
+    const gasInfo = await getGasPrice();
     creatorContract.methods
       .createEvent(eventData)
-      .send({ from: window.selectedAddress })
+      .send({ from: window.selectedAddress, ...gasInfo })
       .on('confirmation', async (confirmationNumber, receipt) => {
         if (confirmationNumber === 1) {
           setLoading(false);
@@ -102,6 +102,7 @@ export default function EventRegistrationModal({
     setLoading(true);
 
     loadEventContract(eventInfo.address);
+    const gasInfo = await getGasPrice();
     await window.eventContract.methods
       .changeEventInfo({
         description: data.description,
@@ -118,7 +119,7 @@ export default function EventRegistrationModal({
         registrationOpen: data.registrationOpen,
         location: data.location,
       })
-      .send({ from: window.selectedAddress })
+      .send({ from: window.selectedAddress, ...gasInfo })
       .on('confirmation', async (confirmationNumber, receipt) => {
         if (confirmationNumber === 1) {
           setLoading(false);
