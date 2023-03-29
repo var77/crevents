@@ -23,7 +23,7 @@ export default function EventCard({ eventInfo, setEventInfo, onAttendEvent, load
        }}
       cover={<img alt={eventInfo.name} src={eventInfo.image} />}
       onClick={() => onAttendEvent(eventInfo.address)}
-      extra={ eventInfo.organizer === window.selectedAddress && <Button className='right-side' onClick={(e) => handleEditClick(e, eventInfo)}>Edit</Button>}
+      extra={ (!loading && eventInfo.organizer === window.selectedAddress) && <Button className='right-side' onClick={(e) => handleEditClick(e, eventInfo)}>Edit</Button>}
     >
       <Meta
         avatar={<Avatar src={eventInfo.organizerIcon} />}

@@ -15,6 +15,7 @@ function CardsSkeleton() {
     {},
     {},
     {},
+    {},
   ]
   return (
       <List
@@ -117,11 +118,11 @@ function HomePage({ isWalletConnected }) {
         alignItems: 'center',
         minHeight: 300,
       }}>
-        <Typography style={{ fontSize: 65, fontWeight: 700, color: '#d99c51' }} >
+        <Typography className='hero-section-header' >
             Create Events with Crevents
-        </Typography>
-        <div style={{ width: 900, color: 'white', fontStyle: 'italic', textAlign: 'center', fontSize: 18 }}>
-        Crevents is the ultimate event management solution for both organizers and attendees. Our platform allows you to create, manage, and attend events with ease, all powered by the security and transparency of blockchain technology. Join Crevents today and take your event experience to the next level. 
+        </Typography >
+        <div className='hero-section-subheader' style={{ }}>
+        Crevents is an ultimate event management solution for both organizers and attendees. Our platform allows you to create, manage, and attend events with ease, all powered by the security and transparency of blockchain technology. Join Crevents today and take your event experience to the next level. 
         </div>
       </Layout>
 
