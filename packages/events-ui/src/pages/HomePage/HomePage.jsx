@@ -10,27 +10,18 @@ import './HomePage.css';
 import dayjs from 'dayjs';
 
 function CardsSkeleton() {
-  const items = [
-    {},
-    {},
-    {},
-    {},
-    {},
-  ]
+  const items = [{}, {}, {}, {}, {}];
   return (
-      <List
+    <List
       grid={{ gutter: 32, xs: 1, sm: 1, md: 2, lg: 3, xl: 4 }}
       dataSource={items}
       renderItem={(eventInfo) => (
         <List.Item>
-          <EventCard
-            eventInfo={{}}
-            loading={true}
-          />
+          <EventCard eventInfo={{}} loading={true} />
         </List.Item>
       )}
     />
-  )
+  );
 }
 
 function HomePage({ isWalletConnected }) {
@@ -93,79 +84,103 @@ function HomePage({ isWalletConnected }) {
     initialize();
   }, []);
   return (
-    <div style={{
-      minHeight: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-    }}>
-      <Header isWalletConnected={isWalletConnected} onRegisterEvent={onRegisterEvent} />
-    <Layout
+    <div
       style={{
-        background: 'transparent',
-        width: '100%',
-      }}
-    >
-       {/*///////////////////      TO DO HERO SECTION    ///////////////////*/}
-
-
-      <Layout 
-      style={{
-        background: 'transparent',
-        width: '100%',
-        padding: '50px 50px 50px',
+        minHeight: '100%',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
-        minHeight: 300,
-      }}>
-        <Typography className='hero-section-header' >
-            Create Events with Crevents
-        </Typography >
-        <div className='hero-section-subheader' style={{ }}>
-        Crevents is an ultimate event management solution for both organizers and attendees. Our platform allows you to create, manage, and attend events with ease, all powered by the security and transparency of blockchain technology. Join Crevents today and take your event experience to the next level. 
-        </div>
-      </Layout>
-
-
-
-      <EventRegistrationModal
-        open={showEventRegistration}
-        handleCancel={() => setShowEventRegistration(false)}
+      }}
+    >
+      <Header
+        isWalletConnected={isWalletConnected}
+        onRegisterEvent={onRegisterEvent}
       />
-      <div
-      className='main-cont'
+      <Layout
         style={{
-          display: 'flex',
+          background: 'transparent',
+          width: '100%',
         }}
       >
-        {loading ? (
-          <CardsSkeleton />
-        ) : (
-          <>
-            {!!events.length &&
-              <List
-              grid={{
-                gutter: 32, xs: 1, sm: 1, md: 2, lg: 3, xl: 3
-              }}
-              loadMore
-              dataSource={events}
-              renderItem={(eventInfo) => (
-                <List.Item>
-                  <EventCard
-                    eventInfo={eventInfo}
-                    onAttendEvent={onAttendEvent}
-                    setEventInfo={setEventInfo}
-                    setOpenEventEditModal={setOpenEventEditModal}
-                  />
-                </List.Item>
+        {/*///////////////////      TO DO HERO SECTION    ///////////////////*/}
+
+        <Layout
+          style={{
+            background: 'transparent',
+            width: '100%',
+            padding: '50px 50px 50px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            minHeight: 300,
+            flex: 0.3,
+          }}
+        >
+          <Typography className="hero-section-header">
+            Create Events with Crevents
+          </Typography>
+          <div className="hero-section-subheader" style={{}}>
+            Crevents is an ultimate event management solution for both
+            organizers and attendees. Our platform allows you to create, manage,
+            and attend events with ease, all powered by the security and
+            transparency of blockchain technology. Join Crevents today and take
+            your event experience to the next level.
+          </div>
+        </Layout>
+
+        <EventRegistrationModal
+          open={showEventRegistration}
+          handleCancel={() => setShowEventRegistration(false)}
+        />
+        <div
+          className="main-cont"
+          style={{
+            display: 'flex',
+          }}
+        >
+          {loading ? (
+            <CardsSkeleton />
+          ) : (
+            <>
+              {!!events.length && (
+                <List
+                  grid={{
+                    gutter: 32,
+                    xs: 1,
+                    sm: 1,
+                    md: 2,
+                    lg: 3,
+                    xl: 3,
+                  }}
+                  loadMore
+                  dataSource={events}
+                  renderItem={(eventInfo) => (
+                    <List.Item>
+                      <EventCard
+                        eventInfo={eventInfo}
+                        onAttendEvent={onAttendEvent}
+                        setEventInfo={setEventInfo}
+                        setOpenEventEditModal={setOpenEventEditModal}
+                      />
+                    </List.Item>
+                  )}
+                />
               )}
-            />}
-          </>
-        )}
-      </div>
-    </Layout>
-    <Footer />
-    <EventRegistrationModal editEvent eventInfo={eventInfo} open={openEventEditModal} handleCancel={()=>{setOpenEventEditModal(false); setEventInfo(null)}} title='Edit event' actionTitle='Save event' />
+            </>
+          )}
+        </div>
+      </Layout>
+      <Footer />
+      <EventRegistrationModal
+        editEvent
+        eventInfo={eventInfo}
+        open={openEventEditModal}
+        handleCancel={() => {
+          setOpenEventEditModal(false);
+          setEventInfo(null);
+        }}
+        title="Edit event"
+        actionTitle="Save event"
+      />
     </div>
   );
 }
