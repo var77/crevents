@@ -86,3 +86,23 @@ body {
   align-items: center;
   justify-content: center;
 }
+
+
+@media only screen and (max-width: 800px) {
+  .navbar-logo {
+    margin-bottom: 16px;
+  }
+
+  .header {
+    height: initial;
+    display: initial;
+    margin: 50px 0px 0px,
+  }
+  
+  .button-container { 
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+  }
+}

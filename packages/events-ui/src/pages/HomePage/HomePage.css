@@ -7,10 +7,34 @@ height: 100%;
 .grecaptcha-badge {
     visibility: hidden;
 }
+
+.hero-section-header {
+  font-size: 65px;
+  font-weight: 700;
+  color: '#d99c51';
+}
+
+.hero-section-subheader {
+  width: 900px;
+  color: white;
+  font-style: italic;
+  text-align: center;
+  font-size: 18px;
+}
 @media only screen and (max-width: 750px) {
     .main-cont {
       align-items: center;
       flex-direction: column;
         
+    }
+
+    .hero-section-header {
+      line-height: inherit;
+      text-align: center;
+    }
+    
+    .hero-section-subheader {
+      width: auto;
+      margin-top: 24px;
     }
   }
