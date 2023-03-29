@@ -9,6 +9,8 @@ height: 100%;
 }
 
 .hero-section-header {
+  line-height: normal;
+  text-align: center;
   font-size: 65px;
   font-weight: 700;
   color: '#d99c51';
@@ -20,6 +22,7 @@ height: 100%;
   font-style: italic;
   text-align: center;
   font-size: 18px;
+  margin-top: 24px;
 }
 @media only screen and (max-width: 750px) {
     .main-cont {
@@ -27,14 +30,12 @@ height: 100%;
       flex-direction: column;
         
     }
-
-    .hero-section-header {
-      line-height: inherit;
-      text-align: center;
-    }
     
+  }
+
+  @media only screen and (max-width: 1000px) {
+
     .hero-section-subheader {
       width: auto;
-      margin-top: 24px;
     }
   }
