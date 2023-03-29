@@ -8,7 +8,7 @@ import CreatorContract from '../abis/Creator.json';
 import EventContract from '../abis/Event.json';
 
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
-export const DEFAULT_CHAIN_ID = 80001;
+export const DEFAULT_CHAIN_ID = 137;
 export const CONNECTORS = {
   METAMASK: 'metamask',
   WALLET_CONNECT: 'wallet_connect',

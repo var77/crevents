@@ -15,6 +15,7 @@ function CardsSkeleton() {
     {},
     {},
     {},
+    {},
   ]
   return (
       <List
@@ -121,7 +122,7 @@ function HomePage({ isWalletConnected }) {
             Create Events with Crevents
         </Typography >
         <div className='hero-section-subheader' style={{ }}>
-        Crevents is the ultimate event management solution for both organizers and attendees. Our platform allows you to create, manage, and attend events with ease, all powered by the security and transparency of blockchain technology. Join Crevents today and take your event experience to the next level. 
+        Crevents is an ultimate event management solution for both organizers and attendees. Our platform allows you to create, manage, and attend events with ease, all powered by the security and transparency of blockchain technology. Join Crevents today and take your event experience to the next level. 
         </div>
       </Layout>
 
