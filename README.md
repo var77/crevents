@@ -93,8 +93,8 @@ And attendees will get [SBT](https://github.com/var77/erc721a-sbt) tokens which 
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-TODO
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+https://user-images.githubusercontent.com/17221195/228606262-6a416152-6253-4ed9-be34-72294554d3d1.mp4
 
 
 <!-- GETTING STARTED -->
