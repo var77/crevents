@@ -2,10 +2,6 @@ import { Spin, Layout, Alert } from 'antd';
 import { Pages } from '../pages/Pages';
 import { useInitializeApp } from '../hooks/useInitializeApp';
 import FooterComponent from '../components/Footer/Footer';
-import { AVAILABLE_NETWORKS } from '../utils/helpers';
-
-
-const SUPPORTED_NETWORKS = AVAILABLE_NETWORKS.map(network => network.label).join(', ');
 
 const CenterLayout = ({ children }) => {
   return (
@@ -44,7 +40,7 @@ function App() {
       <CenterLayout>
       <Alert
         message="Network not supported"
-        description={`Please select different network. Supported networks (${SUPPORTED_NETWORKS})`}
+        description={`Please select network from list.`}
         type="error"
       />
         <FooterComponent />

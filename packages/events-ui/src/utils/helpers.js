@@ -15,25 +15,35 @@ export const CONNECTORS = {
 };
 const isProduction = window.location.host === 'crevents.xyz';
 
-export const AVAILABLE_NETWORKS = [
-  ...(isProduction ? [] : [{ label: 'Localhost', value: '31337' }]),
-  { label: 'Polygon', value: '137' },
-  { label: 'Mumbai', value: '80001' },
-];
-
-const CURRENCY_LIST = {
-  1: 'ETH',
-  31337: 'ETH',
-  80001: 'MATIC',
-  137: 'MATIC',
+const HARDHAT_NETWORK = {
+  chainId: '0x7a69',
+  chainName: 'Hardhat',
+  nativeCurrency: { name: 'ETH', symbol: 'ETH', decimals: 18 },
+  rpcUrls: ['http://localhost:8545'],
 };
-
-export const RPC_LIST = {
-  31337: 'http://127.0.0.1:8545/',
-  80001:
-    'https://polygon-mumbai.g.alchemy.com/v2/h6Egv6VKYsaWPleDnM8sBBC5xO_Tl6EI',
-  137: 'https://polygon-rpc.com/',
+export const AVAILABLE_NETWORKS = {
+  ...(isProduction ? {} : { 31337: HARDHAT_NETWORK }),
+  137: {
+    chainId: '0x89',
+    chainName: 'Matic(Polygon) Mainnet',
+    nativeCurrency: { name: 'MATIC', symbol: 'MATIC', decimals: 18 },
+    rpcUrls: ['https://polygon-rpc.com'],
+    blockExplorerUrls: ['https://www.polygonscan.com/'],
+    gasTracker: 'https://gasstation-mainnet.matic.network/v2',
+  },
+  80001: {
+    chainId: '0x13881',
+    chainName: 'Matic(Polygon) Mumbai Testnet',
+    nativeCurrency: { name: 'tMATIC', symbol: 'tMATIC', decimals: 18 },
+    rpcUrls: ['https://rpc-mumbai.maticvigil.com'],
+    blockExplorerUrls: ['https://mumbai.polygonscan.com/'],
+    gasTracker: 'https://gasstation-mumbai.matic.today/v2',
+  },
 };
+const RPC_LIST = Object.entries(AVAILABLE_NETWORKS).reduce((acc, el) => {
+  acc[el[0]] = el[1].rpcUrls[0];
+  return acc;
+}, {});
 
 export const connectWallet = async (connector, retry) => {
   await loadWeb3(connector);
@@ -65,7 +75,7 @@ export const loadContracts = async () => {
     CreatorContract.abi,
     networkData.address
   );
-  window.currency = CURRENCY_LIST[networkId];
+  window.currency = AVAILABLE_NETWORKS[networkId].nativeCurrency.symbol;
 
   return [window.creatorContract];
 };
@@ -89,15 +99,35 @@ export function getParameterByName(name, url = window.location.href) {
 
 export const getReferrer = () => getParameterByName('ref') || ZERO_ADDRESS;
 
-export const changeNetwork = (chainId) => {
-  if (!RPC_LIST[chainId]) return;
+export const changeNetwork = async (chainId) => {
+  if (!AVAILABLE_NETWORKS[chainId]) return;
 
-  localStorage.setItem('CHAIN_ID', chainId.toString());
+  if (!window.isInjectedProvider) {
+    localStorage.setItem('CHAIN_ID', chainId.toString());
+    return window.location.reload();
+  }
 
-  return window.location.reload();
+  try {
+    await window.ethereum.request({
+      method: 'wallet_switchEthereumChain',
+      params: [{ chainId: AVAILABLE_NETWORKS[chainId].chainId }],
+    });
+  } catch (err) {
+    const networkParam = { ...AVAILABLE_NETWORKS[chainId] };
+    delete networkParam.gasTracker;
+    await window.ethereum.request({
+      method: 'wallet_addEthereumChain',
+      params: [networkParam],
+    });
+  } finally {
+    window.location.reload();
+  }
 };
 
-export const getSelectedNetwork = () => localStorage.getItem('CHAIN_ID');
+export const getSelectedNetwork = async () => {
+  if (window.isInjectedProvider) return window.web3Instance.eth.net.getId();
+  return localStorage.getItem('CHAIN_ID');
+};
 
 export const getDefaultProvider = () => {
   const selectedChainId = localStorage.getItem('CHAIN_ID');
@@ -107,7 +137,7 @@ export const getDefaultProvider = () => {
     return getDefaultProvider();
   }
 
-  const rpcUrl = RPC_LIST[selectedChainId];
+  const rpcUrl = AVAILABLE_NETWORKS[selectedChainId]?.rpcUrls[0];
 
   if (!rpcUrl) {
     localStorage.removeItem('CHAIN_ID');
@@ -144,29 +174,15 @@ export const loadWeb3 = async (connector) => {
   window.web3Instance = new Web3(provider);
 };
 
-export const hashSha256 = async (str) => {
-  const utf8 = new TextEncoder().encode(str);
-  return crypto.subtle.digest('SHA-256', utf8).then((hashBuffer) => {
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray
-      .map((bytes) => bytes.toString(16).padStart(2, '0'))
-      .join('');
-  });
-};
-
-// get max fees from gas station
-const GAS_TRACKERS = {
-  137: 'https://gasstation-mainnet.matic.network/v2',
-  80001: 'https://gasstation-mumbai.matic.today/v2',
-};
 export const getGasPrice = async () => {
   let maxFeePerGas = window.web3Instance.utils.BN(40000000000); // fallback to 40 gwei
   let maxPriorityFeePerGas = window.web3Instance.utils.BN(40000000000); // fallback to 40 gwei
   try {
     const networkId = await window.web3Instance.eth.net.getId();
-    if (!GAS_TRACKERS[networkId]) return {};
+    const gasTrackerUrl = AVAILABLE_NETWORKS[networkId]?.gasTracker;
+    if (!gasTrackerUrl) return {};
 
-    const response = await fetch(GAS_TRACKERS[networkId]);
+    const response = await fetch(gasTrackerUrl);
     const data = await response.json();
 
     maxFeePerGas = window.web3Instance.utils.toWei(
