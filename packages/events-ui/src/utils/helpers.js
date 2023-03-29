@@ -26,7 +26,7 @@ const CURRENCY_LIST = {
   31337: 'ETH',
   80001: 'MATIC',
   137: 'MATIC',
-}
+};
 
 export const RPC_LIST = {
   31337: 'http://127.0.0.1:8545/',
@@ -152,4 +152,34 @@ export const hashSha256 = async (str) => {
       .map((bytes) => bytes.toString(16).padStart(2, '0'))
       .join('');
   });
+};
+
+// get max fees from gas station
+const GAS_TRACKERS = {
+  137: 'https://gasstation-mainnet.matic.network/v2',
+  80001: 'https://gasstation-mumbai.matic.today/v2',
+};
+export const getGasPrice = async () => {
+  let maxFeePerGas = window.web3Instance.utils.BN(40000000000); // fallback to 40 gwei
+  let maxPriorityFeePerGas = window.web3Instance.utils.BN(40000000000); // fallback to 40 gwei
+  try {
+    const networkId = await window.web3Instance.eth.net.getId();
+    if (!GAS_TRACKERS[networkId]) return {};
+
+    const response = await fetch(GAS_TRACKERS[networkId]);
+    const data = await response.json();
+
+    maxFeePerGas = window.web3Instance.utils.toWei(
+      Math.ceil(data.fast.maxFee).toString(),
+      'gwei'
+    );
+    maxPriorityFeePerGas = window.web3Instance.utils.toWei(
+      Math.ceil(data.fast.maxPriorityFee).toString(),
+      'gwei'
+    );
+    return { maxFeePerGas, maxPriorityFeePerGas };
+  } catch (err) {
+    console.error(err);
+    return {};
+  }
 };

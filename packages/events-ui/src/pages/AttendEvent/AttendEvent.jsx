@@ -20,6 +20,7 @@ import duration from 'dayjs/plugin/duration';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import Footer from '../../components/Footer/Footer';
 import Header from '../../components/Header/Header';
+import { getGasPrice } from '../../utils/helpers';
 
 const { Text, Paragraph } = Typography;
 
@@ -119,11 +120,13 @@ function AttendEvent({ isWalletConnected }) {
         return navigate('/connect-wallet')
       }
       setLoading(true);
+      const gasInfo = await getGasPrice();
       await contract.methods
         .publicRegister()
         .send({
           from: window.selectedAddress,
           value: window.web3Instance.utils.toWei(eventInfo.ticketPrice),
+          ...gasInfo
         })
         .on('confirmation', async (confirmationNumber, receipt) => {
           if (confirmationNumber === 1) {
