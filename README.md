@@ -94,7 +94,8 @@ And attendees will get [SBT](https://github.com/var77/erc721a-sbt) tokens which 
 ## Usage
 
 
-https://user-images.githubusercontent.com/17221195/228606262-6a416152-6253-4ed9-be34-72294554d3d1.mp4
+
+https://user-images.githubusercontent.com/17221195/228614808-571ff0e4-61fe-485a-a163-b0a8afd989fb.mp4
 
 
 <!-- GETTING STARTED -->
