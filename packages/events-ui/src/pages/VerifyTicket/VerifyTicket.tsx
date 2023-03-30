@@ -52,8 +52,8 @@ const VerifyTicket = () => {
   const handleTicketVerify = async (data) => {
     if (!data || isPopupOpen) return;
     const isValid = await verifyTicket(data);
+    setPopupOpen(true);
     if (isValid) {
-      setPopupOpen(true);
       return Modal.success({
         title: 'Ticket is valid',
         onOk: closePopup,

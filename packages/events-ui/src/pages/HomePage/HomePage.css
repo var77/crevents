@@ -24,6 +24,12 @@ height: 100%;
   font-size: 18px;
   margin-top: 24px;
 }
+.event-card .ant-card-cover {
+  min-height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 @media only screen and (max-width: 750px) {
     .main-cont {
       align-items: center;
