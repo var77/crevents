@@ -65,7 +65,7 @@ Crevents is a decentralized event management system compatible with EVM blockcha
 
 [![Product Name Screen Shot][product-screenshot]](https://crevents.xyz)
 
-Crevetns is an open source project demonstrating a usecase of blockchain for organizing and attending events.
+Crevents is an open source project demonstrating a usecase of blockchain for organizing and attending events.
 
 
 Crevents allows event organizers to create and manage events using a decentralized platform.  
