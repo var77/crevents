@@ -27,6 +27,13 @@ const { Text, Paragraph } = Typography;
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
 
+function NewlineText(props) {
+  const text = props.text || '';
+  const newText = text.split('\n').map(str => <Paragraph>{str}</Paragraph>);
+  
+  return newText;
+}
+
 function TicketModal({
   ticketData,
   setTicketData,
@@ -291,7 +298,7 @@ function AttendEvent({ isWalletConnected }) {
                     {eventInfo.duration}
                   </Text>
                 </div>
-                <Paragraph>{eventInfo.description}</Paragraph>
+                  <NewlineText text={eventInfo.description} />
               </div>
             </div>
             <div>

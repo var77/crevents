@@ -4,7 +4,6 @@ import {
   Button,
   Form,
   Input,
-  Card,
   DatePicker,
   Spin,
   InputNumber,
@@ -24,8 +23,9 @@ import FileUpload from '../../components/FileUpload/FileUpload';
 dayjs.extend(customParseFormat);
 
 const { RangePicker } = DatePicker;
+const { TextArea } = Input;
 
-const dateFormat = 'YYYY/MM/DD';
+const dateFormat = 'YYYY/MM/DD HH:mm';
 const ONE_DAY = 1000 * 60 * 60 * 24;
 const defaultEvent = {
   name: 'My first event',
@@ -192,7 +192,10 @@ export default function EventRegistrationModal({
             </Form.Item>
           )}
           <Form.Item label="Description" name="description">
-            <Input placeholder="My event description" />
+            <TextArea
+              placeholder="My event description"
+              autoSize={{ minRows: 2, maxRows: 10 }}
+            />
           </Form.Item>
           {!editEvent && (
             <Form.Item
@@ -225,10 +228,14 @@ export default function EventRegistrationModal({
             <InputNumber min={0} />
           </Form.Item>
           <Form.Item label="Start and end dates" name="eventDates">
-            <RangePicker format={dateFormat} />
+            <RangePicker format={dateFormat} showTime />
           </Form.Item>
           <Form.Item label="Ticket price" name="ticketPrice">
-            <InputNumber addonAfter={window.currency} placeholder="0.001" step={0.001} />
+            <InputNumber
+              addonAfter={window.currency}
+              placeholder="0.001"
+              step={0.001}
+            />
           </Form.Item>
           <Form.Item
             label="Registration Open"
