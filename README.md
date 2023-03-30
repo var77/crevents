@@ -65,7 +65,7 @@ Crevents is a decentralized event management system compatible with EVM blockcha
 
 [![Product Name Screen Shot][product-screenshot]](https://crevents.xyz)
 
-Crevetns is an open source project demonstrating a usecase of blockchain for organizing and attending events.
+Crevents is an open source project demonstrating a usecase of blockchain for organizing and attending events.
 
 
 Crevents allows event organizers to create and manage events using a decentralized platform.  
@@ -93,8 +93,9 @@ And attendees will get [SBT](https://github.com/var77/erc721a-sbt) tokens which 
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-TODO
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+https://user-images.githubusercontent.com/17221195/228614808-571ff0e4-61fe-485a-a163-b0a8afd989fb.mp4
 
 
 <!-- GETTING STARTED -->
@@ -190,11 +191,11 @@ ETH: 0xB34F830271Bb5aF65E52D72f8E4E8307A16537E1
 BTC: bc1qnxegen679nz6e6854xw89tgfgcd94sadz8yrc7  
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/var77/crevents.svg?style=for-the-badge
+[contributors-shield]: https://img.shields.io/github/contributors/var77/crevents.svg?style=for-the-badge&v=1
 [contributors-url]: https://github.com/var77/crevents/graphs/contributors
-[stars-shield]: https://img.shields.io/github/stars/var77/crevents.svg?style=for-the-badge
+[stars-shield]: https://img.shields.io/github/stars/var77/crevents.svg?style=for-the-badge&v=1
 [stars-url]: https://github.com/var77/crevents
-[license-shield]: https://img.shields.io/github/license/var77/crevents.svg?style=for-the-badge
+[license-shield]: https://img.shields.io/github/license/var77/crevents.svg?style=for-the-badge&v=1
 [license-url]: https://github.com/var77/crevents/blob/master/LICENSE.txt
 [product-screenshot]: images/screenshot.png
 [Solidity]: https://img.shields.io/badge/Solidity-e6e6e6?style=for-the-badge&logo=solidity&logoColor=black
