@@ -18,7 +18,7 @@ export default function Header({
   return (
     <div className="header">
       <div className="navbar-logo" onClick={redirectToHomePage}>
-        Crevents
+        <img src='../../assets/logo.png' alt="Crevents" style={{ width: 80 }} />
       </div>
       <div className='button-container'>
         {!hideCreateEventBtn && (
