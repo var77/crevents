@@ -13,6 +13,12 @@
     "deploy:polygon": {
       "command": "cd packages/smart-contracts && npx hardhat run --network matic scripts/deploy.ts"
     },
+    "deploy:zksynctest": {
+      "command": "cd packages/smart-contracts && npx hardhat run --network zkTestnet deploy/deploy-zk.ts && npx hardhat --network zkTestnet deploy-zk"
+    },
+    "deploy:zksync": {
+      "command": "cd packages/smart-contracts && npx hardhat run --network zkMainnet deploy/deploy-zk.ts && npx hardhat --network zkMainnet deploy-zk"
+    },
     "serve": {
       "command": "cd packages/smart-contracts &&  npx hardhat node"
     },

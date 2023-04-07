@@ -38,3 +38,7 @@ testem.log
 .DS_Store
 Thumbs.db
 .env
+cache
+artifacts
+cache-zk
+artifacts-zk

@@ -1,5 +1,6 @@
 import * as dotenv from 'dotenv';
-
+import '@matterlabs/hardhat-zksync-deploy';
+import '@matterlabs/hardhat-zksync-solc';
 import { HardhatUserConfig, task } from 'hardhat/config';
 import '@nomiclabs/hardhat-etherscan';
 import '@nomiclabs/hardhat-waffle';
@@ -32,6 +33,11 @@ const config: HardhatUserConfig = {
       },
     },
   },
+  zksolc: {
+    version: '1.3.8',
+    compilerSource: 'binary',
+    settings: {},
+  },
   networks: {
     matic: {
       url: process.env.MATIC_URL || '',
@@ -53,6 +59,16 @@ const config: HardhatUserConfig = {
       url: process.env.ROPSTEN_URL || '',
       accounts:
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+    },
+    zkTestnet: {
+      url: 'https://testnet.era.zksync.dev', // URL of the zkSync network RPC
+      ethNetwork: 'goerli', // Can also be the RPC URL of the Ethereum network (e.g. `https://goerli.infura.io/v3/<API_KEY>`)
+      zksync: true,
+    },
+    zkMainnet: {
+      url: 'https://mainnet.era.zksync.io', // URL of the zkSync network RPC
+      ethNetwork: 'https://mainnet.infura.io/v3',
+      zksync: true,
     },
   },
   gasReporter: {
